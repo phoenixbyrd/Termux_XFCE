@@ -125,7 +125,7 @@ cp ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc ~/.bashr
 echo "pulseaudio --start --exit-idle-time=-1
 pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1
 " > .sound
-echo "source .sound" >> .bashrc
+echo "source ~/.sound" >> .bashrc
 
 #XFCE Terminal Settings
 
