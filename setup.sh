@@ -131,7 +131,8 @@ echo "source ~/.sound" >> .bashrc
 #Setup Fancybash
 
 wget https://raw.githubusercontent.com/ChrisTitusTech/scripts/master/fancy-bash-promt.sh
-echo "source ~/.fancy-bash-prompt.sh" >> .bashrc
+mv fancy-bash-promt.sh .fancybash.sh
+echo "source ~/.fancybash.sh" >> .bashrc
 
 #XFCE Terminal Settings
 
