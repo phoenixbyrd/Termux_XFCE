@@ -127,6 +127,11 @@ pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymou
 " > .sound
 echo "source ~/.sound" >> .bashrc
 
+#Setup Fancybash
+
+wget https://raw.githubusercontent.com/ChrisTitusTech/scripts/master/fancy-bash-promt.sh
+echo "source ~/.fancy-bash-prompt.sh" >> .bashrc
+
 #XFCE Terminal Settings
 
 mkdir -p ~/ .config/xfce4/terminal/
