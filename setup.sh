@@ -1,4 +1,7 @@
 #!/bin/bash
+
+cd
+
 echo "This install script will set up Termux with an XFCE4 Desktop and a Debian proot-distro install"
 
 # Prompt for username
@@ -10,7 +13,7 @@ termux-setup-storage
 
 #Setup XFCE4 in Termux
 
-apt update && apt upgrade -y && apt install x11-repo wget git neofetch proot-distro papirus-icon-theme virglrenderer-android tigervnc xfce4 xfce4-goodies xfce4-whiskermenu-plugin pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious -y && vncserver  && vncserver -kill :1
+apt update && apt upgrade -y && apt install x11-repo && apt install wget git neofetch proot-distro papirus-icon-theme virglrenderer-android tigervnc xfce4 xfce4-goodies xfce4-whiskermenu-plugin pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious -y && vncserver  && vncserver -kill :1
 
 #Create XFCE Desktop file for vnc
 
