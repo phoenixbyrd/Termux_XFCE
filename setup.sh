@@ -4,8 +4,6 @@ echo "This install script will set up Termux with an XFCE4 Desktop and a Debian 
 # Prompt for username
 read -p "Please enter a username: " varname
 
-cd
-
 #Setup phone storage access
 
 termux-setup-storage
