@@ -12,7 +12,7 @@ termux-setup-storage
 
 #Setup XFCE4 in Termux
 
-pkg update && pkg upgrade -y && pkg install x11-repo wget git neofetch proot-distro papirus-icon-theme virglrenderer-android tigervnc xfce4 xfce4-goodies xfce4-whiskermenu-plugin pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious -y && vncserver  && vncserver -kill :1
+apt update && apt upgrade -y && apt install x11-repo wget git neofetch proot-distro papirus-icon-theme virglrenderer-android tigervnc xfce4 xfce4-goodies xfce4-whiskermenu-plugin pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious -y && vncserver  && vncserver -kill :1
 
 #Create XFCE Desktop file for vnc
 
