@@ -134,6 +134,15 @@ wget https://raw.githubusercontent.com/ChrisTitusTech/scripts/master/fancy-bash-
 mv fancy-bash-promt.sh .fancybash.sh
 echo "source ~/.fancybash.sh" >> .bashrc
 
+#Setup Fonts
+
+wget https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
+mkdir .fonts 
+unzip CascadiaCode-2111.01.zip fonts
+mv otf/static/* .fonts/ && rm -rf otf
+mv ttf/* .fonts/ && rm -rf ttf/
+rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
+
 #XFCE Terminal Settings
 
 mkdir -p ~/ .config/xfce4/terminal/
