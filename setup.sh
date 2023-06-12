@@ -118,7 +118,8 @@ cp ~/Desktop/vivaldi.desktop ../usr/share/applications/vivaldi.desktop
 #Install Tor Browser
 
 proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 wget https://sourceforge.net/projects/tor-browser-ports/files/12.0.6/tor-browser-linux-arm64-12.0.6_ALL.tar.xz/download -O tor.tar.xz
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0  tar -xvf tor.tar.xz
+proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 tar -xvf tor.tar.xz 
+proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 rm tor.tar.xz
 
 #Create Desktop Launcher
 
