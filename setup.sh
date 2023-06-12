@@ -1,10 +1,49 @@
 #!/bin/bash
 
-cd
+# Function to print centered text with margin and color
+print_centered_text() {
+  local text="$1"
+  local margin_width=5  # Desired margin width
+  local terminal_width=$(tput cols 2>/dev/null)  # Get the width of the terminal
 
-echo "This install script will set up Termux with an XFCE4 Desktop and a Debian proot-distro install"
+  # Check if tput is available
+  if [[ -z $terminal_width ]]; then
+    terminal_width=80  # Default terminal width if tput is not available
+  fi
+
+  # Calculate the available width for the centered text
+  local available_width=$((terminal_width - (2 * margin_width)))
+
+  # Wrap the text to fit the available width
+  local wrapped_text=$(echo "$text" | fold -s -w "$available_width")
+
+  # Split the wrapped text into lines
+  IFS=$'\n' read -d '' -r -a lines <<< "$wrapped_text"
+
+  # Print the centered and wrapped lines with margin and color
+  for line in "${lines[@]}"; do
+    local indent=$(( (terminal_width - ${#line}) / 2 ))
+    printf "%*s\e[1m%s\e[0m%*s\n" $margin_width "" "$line" $((margin_width + indent)) ""
+  done
+}
+
+# Change to home directory and clear the screen
+cd
+clear
+
+# Install ncurses-utils package
+apt update > /dev/null 2>&1
+apt install ncurses-utils -y > /dev/null 2>&1
+
+echo ""
+echo ""
+print_centered_text ""
+print_centered_text ""
+print_centered_text "This install script will set up Termux with an XFCE4 Desktop and a Debian proot-distro install"
 
 # Prompt for username
+echo ""
+echo ""
 read -p "Please enter a username: " varname
 
 #Setup phone storage access
@@ -13,7 +52,7 @@ termux-setup-storage
 
 #Setup XFCE4 in Termux
 
-apt update && apt upgrade -y && apt install x11-repo && apt install wget git neofetch proot-distro papirus-icon-theme virglrenderer-android tigervnc xfce4 xfce4-goodies xfce4-whiskermenu-plugin pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious -y && vncserver  && vncserver -kill :1
+apt install x11-repo && apt install wget git neofetch proot-distro papirus-icon-theme virglrenderer-android tigervnc xfce4 xfce4-goodies xfce4-whiskermenu-plugin pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious wmctrl -y && vncserver  && vncserver -kill :1 && wmctrl -n 1
 
 #Create XFCE Desktop file for vnc
 
@@ -34,11 +73,11 @@ chmod u-w ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 
 #Install Additional Software as user
 
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1 sudo apt install onboard firefox-esr libreoffice -y
+proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1 sudo apt install zenity onboard firefox-esr libreoffice wget apt-utils -y
 
 #Set localtime to EST
 
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/EST /etc/localtime
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/America/New_York /etc/localtime
 
 #Add Programs to Menu
 
@@ -53,7 +92,7 @@ cp ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/on
 
 #Install Vivaldi Web Browser
 
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 wget https://downloads.vivaldi.com/stable/vivaldi-stable_6.0.2979.22-1_arm64.deb && proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./vivaldi-stable_6.0.2979.22-1_arm64.deb -y && proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 rm vivaldi-stable_6.0.2979.22-1_arm64.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://downloads.vivaldi.com/stable/vivaldi-stable_6.0.2979.22-1_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./vivaldi-stable_6.0.2979.22-1_arm64.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm vivaldi-stable_6.0.2979.22-1_arm64.deb
 
 #Create Desktop Folder
 
@@ -76,9 +115,34 @@ MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xht
 chmod +x ~/Desktop/vivaldi.desktop
 cp ~/Desktop/vivaldi.desktop ../usr/share/applications/vivaldi.desktop 
 
+#Install Tor Browser
+
+proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 wget https://sourceforge.net/projects/tor-browser-ports/files/12.0.6/tor-browser-linux-arm64-12.0.6_ALL.tar.xz/download -O tor.tar.xz
+proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0  tar -xvf tor.tar.xz
+
+#Create Desktop Launcher
+
+echo "[Desktop Entry]
+Type=Application
+Name=Tor Browser
+GenericName=Web Browser
+Comment=Tor Browser  is +1 for privacy and −1 for mass surveillance
+Categories=Network;WebBrowser;Security;
+Exec=proot-distro login debian --user phoenixbyrd --shared-tmp -- env DISPLAY=:1.0 tor-browser/Browser/start-tor-browser
+X-TorBrowser-ExecShell=./Browser/start-tor-browser --detach
+Icon=tor
+StartupWMClass=Tor Browser
+Path=
+Terminal=false
+StartupNotify=false
+" > ~/Desktop/tor.desktop
+
+chmod +x ~/Desktop/tor.desktop
+cp ~/Desktop/code.desktop ../usr/share/applications/tor.desktop 
+
 #Install Webcord
 
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb && proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./webcord_4.2.0_arm64.deb -y && proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 rm webcord_4.2.0_arm64.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./webcord_4.2.0_arm64.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm webcord_4.2.0_arm64.deb
 
 #Create Desktop Launcher
 
@@ -95,6 +159,31 @@ Categories=Network;InstantMessaging;
 
 chmod +x ~/Desktop/webcord.desktop
 cp ~/Desktop/webcord.desktop ../usr/share/applications/webcord.desktop 
+
+#Install Visual Studio Code
+
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://packages.microsoft.com/repos/code/pool/main/c/code/code_1.79.0-1686148160_arm64.deb -O code.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./code.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm code.deb
+
+#Create Desktop Launcher
+
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Visual Studio Code
+Comment=Code Editing. Redefined.
+Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /usr/share/code/code --no-sandbox
+Icon=visual-studio-code
+Path=
+Terminal=false
+StartupNotify=false
+
+" > ~/Desktop/code.desktop
+
+chmod +x ~/Desktop/code.desktop
+cp ~/Desktop/code.desktop ../usr/share/applications/code.desktop 
+
+#update and upgrade 
+apt update && apt upgrade -y
 
 #Install Fluent Cursor Icon Theme
 
@@ -126,13 +215,24 @@ cp ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc ~/.bashr
 echo "pulseaudio --start --exit-idle-time=-1
 pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1
 " > .sound
-echo "source ~/.sound" >> .bashrc
+echo "source ~/.sound" >> ~/.bashrc
 
-#Setup Fancybash
+#Setup Fancybash Termux
 
 wget https://raw.githubusercontent.com/ChrisTitusTech/scripts/master/fancy-bash-promt.sh
 mv fancy-bash-promt.sh .fancybash.sh
 echo "source ~/.fancybash.sh" >> .bashrc
+sed -i "326s/\\\u/$varname/" ~/.fancybash.sh
+sed -i "327s/\\\h/termux/" ~/.fancybash.sh
+
+#Setup Fancybash Proot
+cp .fancybash.sh ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname
+echo "source ~/.fancybash.sh" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bashrc
+sed -i "327s/\\\h/proot/" ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.fancybash.sh
+
+#Set Display in proot .bashrc
+
+echo "export DISPLAY=:1" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bashrc
 
 #Setup Fonts
 
@@ -145,7 +245,7 @@ rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
 
 #XFCE Terminal Settings
 
-mkdir -p ~/ .config/xfce4/terminal/
+mkdir -p ~/.config/xfce4/terminal/
 
 cat <<EOF > .config/xfce4/terminal/terminalrc
 [Configuration]
@@ -496,7 +596,123 @@ cat <<EOF > .config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
 
 EOF
 
+mkdir -p .config/Mousepad
+
+cat <<EOF > .config/Mousepad/accels.scm
+; mousepad GtkAccelMap rc-file         -*- scheme -*-
+; this file is an automated accelerator map dump
+;
+; (gtk_accel_path "<Actions>/app.mousepad-plugin-shortcuts" "")
+; (gtk_accel_path "<Actions>/win.edit.convert.spaces-to-tabs" "")
+; (gtk_accel_path "<Actions>/app.preferences.view.smart-backspace" "")
+; (gtk_accel_path "<Actions>/app.preferences.view.highlight-current-line" "")
+; (gtk_accel_path "<Actions>/app.preferences.file.make-backup" "")
+; (gtk_accel_path "<Actions>/win.preferences.window.toolbar-visible" "")
+; (gtk_accel_path "<Actions>/app.preferences.window.client-side-decorations" "")
+; (gtk_accel_path "<Actions>/win.search.find-and-replace" "<Primary>r")
+; (gtk_accel_path "<Actions>/win.file.save-all" "")
+; (gtk_accel_path "<Actions>/win.edit.duplicate-line-selection" "")
+; (gtk_accel_path "<Actions>/win.edit.move.line-up" "<Alt>Up")
+; (gtk_accel_path "<Actions>/win.edit.convert.transpose" "<Primary>t")
+; (gtk_accel_path "<Actions>/win.document.go-to-tab(4)" "<Alt>5")
+; (gtk_accel_path "<Actions>/win.edit.undo" "<Primary>z")
+; (gtk_accel_path "<Actions>/win.file.save-as" "<Primary><Shift>s")
+; (gtk_accel_path "<Actions>/app.preferences.window.remember-size" "")
+; (gtk_accel_path "<Actions>/app.preferences" "")
+; (gtk_accel_path "<Actions>/win.edit.convert.tabs-to-spaces" "")
+; (gtk_accel_path "<Actions>/app.preferences.window.remember-state" "")
+; (gtk_accel_path "<Actions>/app.preferences.window.path-in-title" "")
+; (gtk_accel_path "<Actions>/win.view.fullscreen" "F11")
+; (gtk_accel_path "<Actions>/win.document.previous-tab" "<Primary>Page_Up")
+; (gtk_accel_path "<Actions>/app.preferences.view.show-whitespace.inside" "")
+; (gtk_accel_path "<Actions>/win.file.new-window" "<Primary><Shift>n")
+; (gtk_accel_path "<Actions>/app.state.search.incremental" "")
+; (gtk_accel_path "<Actions>/app.preferences.view.show-whitespace" "")
+; (gtk_accel_path "<Actions>/app.preferences.view.use-default-monospace-font" "")
+; (gtk_accel_path "<Actions>/app.preferences.file.auto-reload" "")
+; (gtk_accel_path "<Actions>/win.document.go-to-tab(5)" "<Alt>6")
+; (gtk_accel_path "<Actions>/win.reset-font-size" "<Primary>0")
+; (gtk_accel_path "<Actions>/win.file.save" "<Primary>s")
+; (gtk_accel_path "<Actions>/win.help.about" "")
+; (gtk_accel_path "<Actions>/win.file.new" "<Primary>n")
+; (gtk_accel_path "<Actions>/app.preferences.file.add-last-end-of-line" "")
+; (gtk_accel_path "<Actions>/win.preferences.window.menubar-visible" "<Primary>m")
+; (gtk_accel_path "<Actions>/win.search.find-previous" "<Primary><Shift>g")
+; (gtk_accel_path "<Actions>/app.preferences.window.expand-tabs" "")
+; (gtk_accel_path "<Actions>/win.file.detach-tab" "<Primary>d")
+; (gtk_accel_path "<Actions>/app.state.search.highlight-all" "")
+; (gtk_accel_path "<Actions>/win.edit.paste" "<Primary>v")
+; (gtk_accel_path "<Actions>/app.preferences.view.show-whitespace.leading" "")
+; (gtk_accel_path "<Actions>/win.edit.copy" "<Primary>c")
+; (gtk_accel_path "<Actions>/win.document.go-to-tab(6)" "<Alt>7")
+; (gtk_accel_path "<Actions>/win.file.open-recent.new" "")
+; (gtk_accel_path "<Actions>/win.file.close-window" "<Primary><Shift>w")
+; (gtk_accel_path "<Actions>/win.file.new-from-template.new" "")
+; (gtk_accel_path "<Actions>/win.edit.convert.strip-trailing-spaces" "")
+; (gtk_accel_path "<Actions>/win.document.filetype" "")
+; (gtk_accel_path "<Actions>/win.edit.paste-special.paste-from-history" "")
+; (gtk_accel_path "<Actions>/win.view.select-font" "")
+; (gtk_accel_path "<Actions>/win.edit.convert.to-lowercase" "")
+; (gtk_accel_path "<Actions>/win.edit.convert.to-title-case" "")
+; (gtk_accel_path "<Actions>/app.preferences.window.always-show-tabs" "")
+; (gtk_accel_path "<Actions>/win.document.go-to-tab(7)" "<Alt>8")
+; (gtk_accel_path "<Actions>/win.search.find" "<Primary>f")
+; (gtk_accel_path "<Actions>/win.document.go-to-tab(0)" "<Alt>1")
+; (gtk_accel_path "<Actions>/app.quit" "<Primary>q")
+; (gtk_accel_path "<Actions>/win.file.close-tab" "<Primary>w")
+; (gtk_accel_path "<Actions>/win.edit.increase-indent" "<Primary>i")
+; (gtk_accel_path "<Actions>/app.preferences.view.show-line-endings" "")
+; (gtk_accel_path "<Actions>/win.edit.delete-selection" "Delete")
+; (gtk_accel_path "<Actions>/win.edit.move.word-left" "<Alt>Left")
+; (gtk_accel_path "<Actions>/win.edit.delete-line" "<Primary><Shift>Delete")
+; (gtk_accel_path "<Actions>/win.textview.menubar" "")
+; (gtk_accel_path "<Actions>/win.file.open-recent.clear-history" "")
+; (gtk_accel_path "<Actions>/win.document.viewer-mode" "")
+; (gtk_accel_path "<Actions>/app.preferences.view.show-whitespace.trailing" "")
+; (gtk_accel_path "<Actions>/win.file.reload" "")
+; (gtk_accel_path "<Actions>/win.document.tab.tab-size" "")
+; (gtk_accel_path "<Actions>/win.edit.move.line-down" "<Alt>Down")
+; (gtk_accel_path "<Actions>/win.document.go-to-tab(8)" "<Alt>9")
+; (gtk_accel_path "<Actions>/win.document.go-to-tab(1)" "<Alt>2")
+; (gtk_accel_path "<Actions>/win.document.line-ending" "")
+; (gtk_accel_path "<Actions>/win.search.go-to" "<Primary>l")
+; (gtk_accel_path "<Actions>/app.preferences.view.color-scheme" "")
+; (gtk_accel_path "<Actions>/app.preferences.view.show-line-numbers" "")
+; (gtk_accel_path "<Actions>/win.edit.paste-special.paste-as-column" "")
+; (gtk_accel_path "<Actions>/app.preferences.view.show-right-margin" "")
+; (gtk_accel_path "<Actions>/app.preferences.window.remember-position" "")
+; (gtk_accel_path "<Actions>/win.edit.cut" "<Primary>x")
+; (gtk_accel_path "<Actions>/win.search.find-next" "<Primary>g")
+; (gtk_accel_path "<Actions>/app.preferences.file.monitor-changes" "")
+; (gtk_accel_path "<Actions>/app.preferences.view.match-braces" "")
+; (gtk_accel_path "<Actions>/win.edit.decrease-indent" "<Primary>u")
+; (gtk_accel_path "<Actions>/win.increase-font-size" "<Primary>plus")
+; (gtk_accel_path "<Actions>/app.preferences.view.word-wrap" "")
+; (gtk_accel_path "<Actions>/win.document.go-to-tab(2)" "<Alt>3")
+; (gtk_accel_path "<Actions>/app.preferences.view.insert-spaces" "")
+; (gtk_accel_path "<Actions>/app.preferences.view.auto-indent" "")
+; (gtk_accel_path "<Actions>/win.file.open" "<Primary>o")
+; (gtk_accel_path "<Actions>/win.decrease-font-size" "<Primary>minus")
+; (gtk_accel_path "<Actions>/win.file.print" "<Primary>p")
+; (gtk_accel_path "<Actions>/win.document.next-tab" "<Primary>Page_Down")
+; (gtk_accel_path "<Actions>/win.edit.move.word-right" "<Alt>Right")
+; (gtk_accel_path "<Actions>/win.edit.select-all" "<Primary>a")
+; (gtk_accel_path "<Actions>/win.edit.convert.to-uppercase" "")
+; (gtk_accel_path "<Actions>/win.document.go-to-tab" "")
+; (gtk_accel_path "<Actions>/win.preferences.window.statusbar-visible" "")
+; (gtk_accel_path "<Actions>/win.edit.convert.to-opposite-case" "<Primary><Alt>u")
+; (gtk_accel_path "<Actions>/app.preferences.window.cycle-tabs" "")
+; (gtk_accel_path "<Actions>/app.preferences.view.indent-on-tab" "")
+; (gtk_accel_path "<Actions>/win.help.contents" "F1")
+; (gtk_accel_path "<Actions>/win.document.go-to-tab(3)" "<Alt>4")
+; (gtk_accel_path "<Actions>/win.edit.redo" "<Primary>y")
+; (gtk_accel_path "<Actions>/win.document.write-unicode-bom" "")
+; (gtk_accel_path "<Actions>/app.preferences.window.toolbar-visible" "")
+
+EOF
+
 #Create .bashaliases
+
 echo "alias cls='clear -x'
 alias prun='proot-distro login --user $varname debian --shared-tmp -- env DISPLAY=:1 $@'
 alias debian='clear && proot-distro login debian --user $varname --shared-tmp && clear'
@@ -507,22 +723,181 @@ alias display='env DISPLAY=:1 dbus-launch --exit-with-session xfce4-session'
 alias virgl='virgl_test_server_android &'
 " > .bash_aliases
 
+#Create cp2menu script and desktop launcher
+
+cat <<'EOF' > cp2menu
+#!/bin/bash
+
+cd
+
+user_dir="../usr/var/lib/proot-distro/installed-rootfs/debian/home/"
+
+# Get the username from the user directory
+username=$(basename "$user_dir"/*)
+
+selected_file=$(zenity --file-selection --title="Select .desktop File" --file-filter="*.desktop" --filename="../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications")
+
+if [[ -z $selected_file ]]; then
+  zenity --info --text="No file selected. Quitting..." --title="Operation Cancelled"
+  exit 0
+fi
+
+desktop_filename=$(basename "$selected_file")
+
+cp "$selected_file" "../usr/share/applications/"
+sed -i "s/^Exec=\(.*\)$/Exec=proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 \1/" "../usr/share/applications/$desktop_filename"
+
+zenity --info --text="Operation completed successfully!" --title="Success"
+
+EOF
+
+chmod +x cp2menu
+cp cp2menu ../usr/bin/cp2menu
+
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=cp2menu
+Comment=
+Exec=cp2menu
+Icon=mail-move
+Path=
+Terminal=false
+StartupNotify=false
+" > ~/Desktop/cp2menu.desktop
+
+chmod +x ~/Desktop/cp2menu.desktop
+
+#Create Vivaldi and WebCord backup script and desktop launcher
+
+#!/bin/bash
+
+cat <<'EOF' > ../usr/var/lib/proot-distro/installed-rootfs/debian/home/phoenixbyrd/backup_restore
+#!/bin/bash
+
+backup_dir_local="."  # Specify the local backup directory path
+backup_dir_sdcard="/storage/emulated/0/Download/"  # Specify the SD card backup directory path
+archive_file="backup.tar.gz"     # Specify the archive file name
+
+function backup_vivaldi() {
+    zenity --info --title="Vivaldi and WebCord Backup" --width=300 --text="Creating Vivaldi and WebCord directory archive..."
+    tar -czf "$backup_dir_local/$archive_file" -C ~/.config vivaldi WebCord
+    zenity --info --title="Vivaldi and WebCord Backup" --width=300 --text="Local backup completed!\n\nBackup path: $backup_dir_local/$archive_file"
+
+    zenity --info --title="Vivaldi and WebCord Backup" --width=300 --text="Creating Vivaldi and WebCord directory archive on SD card..."
+    tar -czf "$backup_dir_sdcard/$archive_file" -C ~/.config vivaldi WebCord
+    zenity --info --title="Vivaldi and WebCord Backup" --width=300 --text="SD card backup completed!\n\nBackup path: $backup_dir_sdcard/$archive_file"
+}
+
+function restore_vivaldi() {
+    restore_source=$(zenity --list --radiolist --title="Restore Source" --width=300 --height=200 --column "" --column "Source" FALSE "Local Backup" FALSE "SD Card Backup" --hide-header)
+    case "$restore_source" in
+        "Local Backup")
+            restore_directory="$backup_dir_local"
+            ;;
+        "SD Card Backup")
+            restore_directory="$backup_dir_sdcard"
+            ;;
+        *)
+            echo "No restore source selected."
+            return
+            ;;
+    esac
+
+    if [ -f "$restore_directory/$archive_file" ]; then
+        zenity --info --title="Vivaldi and WebCord Restore" --width=300 --text="Restoring Vivaldi and WebCord directory..."
+        rm -rf ~/.config/vivaldi ~/.config/WebCord
+        tar -xzf "$restore_directory/$archive_file" -C ~/.config
+        zenity --info --title="Vivaldi and WebCord Restore" --width=300 --text="Restoration completed!"
+    else
+        zenity --info --title="Vivaldi and WebCord Restore" --width=300 --text="No backup archive found in the selected restore source. Unable to restore Vivaldi and WebCord!"
+    fi
+}
+
+function show_backup_dialog() {
+    zenity --info --title="Vivaldi and WebCord Backup" --width=300 --text="Click OK to create a backup of the Vivaldi and WebCord directories.\n\nThis will take a few moments."
+    backup_vivaldi
+}
+
+function show_restore_dialog() {
+    restore_vivaldi
+}
+
+# Display GUI dialog to select backup or restore
+selection=$(zenity --list --radiolist --title="Backup and Restore" --width=300 --height=200 --column "" --column "Action" FALSE "Backup" FALSE "Restore" --hide-header)
+
+case "$selection" in
+    "Backup")
+        show_backup_dialog
+        ;;
+    "Restore")
+        show_restore_dialog
+        ;;
+    *)
+        echo "No action selected."
+        ;;
+esac
+
+EOF
+
+chmod +x ../usr/var/lib/proot-distro/installed-rootfs/debian/home/phoenixbyrd/backup_restore
+
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Backup & Restore
+Comment=
+Exec=proot-distro login debian --user phoenixbyrd --shared-tmp -- env DISPLAY=:1.0 ./backup_restore
+Icon=backup
+Path=
+Terminal=false
+StartupNotify=false
+" > ~/Desktop/backup_restore.desktop
+
 # Display completion message and next steps
-echo "┌─────────────────────────────────────────┐"
-echo "│     Setup completed successfully!       │"
-echo "└─────────────────────────────────────────┘"
+# Function to print centered text with margin
+print_centered_text() {
+  local text="$1"
+  local margin_width=5  # Desired margin width
+  local terminal_width=$(tput cols)  # Get the width of the terminal
+
+  # Calculate the available width for the centered text
+  local available_width=$((terminal_width - (2 * margin_width)))
+
+  # Wrap the text to fit the available width
+  local wrapped_text=$(echo "$text" | fold -s -w "$available_width")
+
+  # Split the wrapped text into lines
+  IFS=$'\n' read -d '' -r -a lines <<< "$wrapped_text"
+
+  # Print the centered and wrapped lines with margin
+  for line in "${lines[@]}"; do
+    local indent=$(( (terminal_width - ${#line}) / 2 ))
+    printf "%*s%s%*s\n" $margin_width "" "$line" $((margin_width + indent)) ""
+  done
+}
+
+# Display completion message and next steps
+
 echo ""
-echo "You can now connect to your Termux XFCE4 Desktop using a VNC viewer."
 echo ""
-echo "Start the VNC server by running:"
+print_centered_text "Setup completed successfully!"
 echo ""
-echo "   vncserver"
+print_centered_text "You can now connect to your Termux XFCE4 Desktop using a VNC viewer like bVNC or your preferred VNC app."
 echo ""
-echo "To stop the VNC server, use the following command:"
+print_centered_text "Start the VNC server by running:"
 echo ""
-echo "   vncserver -kill :1"
+print_centered_text "   vncserver"
 echo ""
-echo "Make note of the displayed VNC server address (e.g., localhost:1) for connecting with the VNC viewer."
+print_centered_text "To stop the VNC server, use the following command:"
 echo ""
-echo "Enjoy your Termux XFCE4 Desktop experience!"
+print_centered_text "   vncserver -kill :1"
+echo ""
+print_centered_text "Make note of the displayed VNC server address (e.g., localhost:1) for connecting with the VNC viewer."
+echo ""
+print_centered_text "After installing apps in proot, exit back into Termux and use the command cp2menu to move the application launchers into your XFCE menu."
+echo ""
+print_centered_text "I highly recommend using Termux-X11 available here https://github.com/termux/termux-x11"
+echo ""
+print_centered_text "Enjoy your Termux XFCE4 Desktop experience!"
 echo ""
