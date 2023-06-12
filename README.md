@@ -2,7 +2,7 @@
 
 Sets up a termux XFCE desktop and a Debian proot install and installs some additional software like Vivaldi, Firefox, Libreoffice, Audacious, Webcord and a few others.
 
-You only need to pick your username and follow the prompts to create a vncserver password and a password for proot user. Comes already themed too.
+You only need to pick your username and follow the prompts to create a vncserver password and a password for proot user. Comes already themed too. This will take just under 7.5GB of storage space.
 
 # cp2menu
 
