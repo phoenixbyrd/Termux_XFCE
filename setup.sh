@@ -228,7 +228,7 @@ sed -i "327s/\\\h/termux/" ~/.fancybash.sh
 #Setup Fancybash Proot
 cp .fancybash.sh ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname
 echo "source ~/.fancybash.sh" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bashrc
-sed -i "327s/\\\h/proot/" ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.fancybash.sh
+sed -i '327s/termux/proot/' ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.fancybash.sh
 
 #Set Display in proot .bashrc
 
