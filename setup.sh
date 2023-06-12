@@ -711,7 +711,7 @@ cat <<EOF > .config/Mousepad/accels.scm
 
 EOF
 
-#Create .bashaliases
+#Create .bash_aliases
 
 echo "alias cls='clear -x'
 alias prun='proot-distro login --user $varname debian --shared-tmp -- env DISPLAY=:1 $@'
@@ -722,6 +722,13 @@ alias x11='termux-x11 :1 &'
 alias display='env DISPLAY=:1 dbus-launch --exit-with-session xfce4-session'
 alias virgl='virgl_test_server_android &'
 " > .bash_aliases
+
+#Create .bash_aliases proot
+
+echo "alias cls='clear -x'
+alias ls='exa -lF'
+alias cat='bat $@'
+" > ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bash_aliases
 
 #Create cp2menu script and desktop launcher
 
