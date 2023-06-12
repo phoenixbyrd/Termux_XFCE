@@ -92,8 +92,7 @@ cp ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/on
 
 #Install Vivaldi Web Browser
 
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://downloads.vivaldi.com/stable/vivaldi-stable_6.0.2979.22-1_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./vivaldi-stable_6.0.2979.22-1_arm64.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm vivaldi-stable_6.0.2979.22-1_arm64.deb
-
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://downloads.vivaldi.com/stable/vivaldi-stable_6.0.2979.22-1_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./vivaldi-stable_6.0.2979.22-1_arm64.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm vivaldi-stable_6.0.2979.22-1_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  apt-mark hold vivaldi-stable
 #Create Desktop Folder
 
 mkdir ~/Desktop
