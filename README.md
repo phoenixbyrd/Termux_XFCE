@@ -34,20 +34,36 @@ alias display='env DISPLAY=:1 dbus-launch --exit-with-session xfce4-session'
 
 alias virgl='virgl_test_server_android &'
 
+&nbsp;
+
 # cp2menu
+
+&nbsp;
 
 A companion script for this setup to make it easier to add apps installed into debian proot to be added to the termux xfce menu. 
 
+&nbsp;
+
 # Backup & Restore
+
+&nbsp;
 
 This script will back up and restore the installed Vivaldi and WebCord .config directories. 
 
+&nbsp;
+
 # Install
 
+&nbsp;
+
 To install run this command in termux
+
+&nbsp;
 
 ```
 pkg update && pkg upgrade && pkg install wget && wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh && chmod +x setup.sh && ./setup.sh
 ```
+
+&nbsp;
 
 ![Desktop Screenshot](Desktop.png)
