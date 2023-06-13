@@ -17,12 +17,19 @@ These are some bash aliases I set, the most important ones to not are
 ```debian``` for accessing the Debian proot-distro
 
 alias cls='clear -x'
+
 alias prun='proot-distro login --user phoenixbyrd debian --shared-tmp -- env DISPLAY=:1 '
+
 alias debian='clear && proot-distro login debian --user phoenixbyrd --shared-tmp && clear'
+
 alias ls='exa -lF'
+
 alias cat='bat '
+
 alias x11='termux-x11 :1 &'
+
 alias display='env DISPLAY=:1 dbus-launch --exit-with-session xfce4-session'
+
 alias virgl='virgl_test_server_android &'
 
 # cp2menu
