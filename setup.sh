@@ -245,6 +245,17 @@ mv otf/static/* .fonts/ && rm -rf otf
 mv ttf/* .fonts/ && rm -rf ttf/
 rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
 
+# Set workplaces to just 1
+
+wmctrl -n 1
+
+# Install Termux-X11
+ 
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip 
+unzip termux-x11.zip
+mv termux-x11.apk storage/downloads/
+apt install ./termux-x11-1.02.07-0-all.deb
+
 #XFCE Terminal Settings
 
 mkdir -p ~/.config/xfce4/terminal/
@@ -863,6 +874,40 @@ Terminal=false
 StartupNotify=false
 " > ~/Desktop/backup_restore.desktop
 
+
+cat <<'EOF' > ../usr/bin/kill_termux_x11
+#!/bin/bash
+
+# Get the process IDs of Termux-X11 and XFCE sessions
+termux_x11_pid=$(pgrep -f "/system/bin/app_process / com.termux.x11.Loader :1")
+xfce_pid=$(pgrep -f "xfce4-session")
+
+# Check if the process IDs exist
+if [ -n "$termux_x11_pid" ] && [ -n "$xfce_pid" ]; then
+  # Kill the processes
+  kill -9 "$termux_x11_pid" "$xfce_pid"
+  echo "Termux-X11 and XFCE sessions closed."
+else
+  echo "Termux-X11 or XFCE session not found."
+fi
+
+EOF
+
+chmod +x ../usr/bin/kill_termux_x11
+
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Kill Termux X11
+Comment=
+Exec=kill_termux_x11
+Icon=system-shutdown
+Path=
+Terminal=false
+StartupNotify=false
+" > ~/Desktop/backup_restore.desktop
+
+
 # Display completion message and next steps
 # Function to print centered text with margin
 print_centered_text() {
@@ -885,17 +930,6 @@ print_centered_text() {
     printf "%*s%s%*s\n" $margin_width "" "$line" $((margin_width + indent)) ""
   done
 }
-
-# Set workplaces to just 1
-
-wmctrl -n 1
-
-# Install Termux-X11
- 
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip 
-unzip termux-x11.zip
-mv termux-x11.apk storage/downloads/
-apt install ./termux-x11-1.02.07-0-all.deb
 
 # Display completion message and next steps
 
