@@ -42,6 +42,7 @@ alias virgl='virgl_test_server_android &'
 # cp2menu
 
 A companion script for this setup to make it easier to add apps installed into debian proot to be added to the termux xfce menu. 
+I have noticed an issue with some things not wanting to show in the menu even with this script, those .desktop files will need to be manually edited by the user, however once moved you can also created a desktop launcher normally for that app and it will work as expected.
 
 &nbsp;
 
