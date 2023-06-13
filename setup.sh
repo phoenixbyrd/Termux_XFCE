@@ -884,27 +884,34 @@ print_centered_text() {
   done
 }
 
+# Install Termux-X11
+ 
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip 
+unzip termux-x11.zip
+mv termux-x11.apk storage/downloads/
+apt install ./termux-x11-1.02.07-0-all.deb
+
 # Display completion message and next steps
 
 echo ""
 echo ""
 print_centered_text "Setup completed successfully!"
 echo ""
-print_centered_text "You can now connect to your Termux XFCE4 Desktop using a VNC viewer like bVNC or your preferred VNC app."
+print_centered_text "You can now connect to your Termux XFCE4 Desktop using after installing Termux-X11 APK which was downloaded to your devices download folder."
 echo ""
-print_centered_text "Start the VNC server by running:"
+print_centered_text "To connect issue these two commands in termux:"
 echo ""
-print_centered_text "   vncserver"
+print_centered_text "   x11"
 echo ""
-print_centered_text "To stop the VNC server, use the following command:"
+print_centered_text "Followed by:"
 echo ""
-print_centered_text "   vncserver -kill :1"
+print_centered_text "   display"
 echo ""
-print_centered_text "Make note of the displayed VNC server address (e.g., localhost:1) for connecting with the VNC viewer."
+print_centered_text "This will start the termux-x11 server in termux and start the XFCE Desktop which you can connect to by openning the installed Termux-X11 app."
 echo ""
 print_centered_text "After installing apps in proot, exit back into Termux and use the command cp2menu to move the application launchers into your XFCE menu."
 echo ""
-print_centered_text "I highly recommend using Termux-X11 available here https://github.com/termux/termux-x11"
+# print_centered_text "I highly recommend using Termux-X11 available here https://github.com/termux/termux-x11"
 echo ""
 print_centered_text "Enjoy your Termux XFCE4 Desktop experience!"
 echo ""
