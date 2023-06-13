@@ -6,6 +6,23 @@ You only need to pick your username and follow the prompts to create a password 
 
 This setup uses Termux-X11, the termux-x11 server will be installed and the Android APK will be placed in your Downloads directory, please manually install it. 
 
+# bash_aliases
+
+These are some bash aliases I set, the most important ones to not are
+
+```x11``` for starting the Termux-X11 server
+```display``` for starting the XFCE desktop
+```debian``` for accessing the Debian proot-distro
+
+alias cls='clear -x'
+alias prun='proot-distro login --user phoenixbyrd debian --shared-tmp -- env DISPLAY=:1 '
+alias debian='clear && proot-distro login debian --user phoenixbyrd --shared-tmp && clear'
+alias ls='exa -lF'
+alias cat='bat '
+alias x11='termux-x11 :1 &'
+alias display='env DISPLAY=:1 dbus-launch --exit-with-session xfce4-session'
+alias virgl='virgl_test_server_android &'
+
 # cp2menu
 
 A companion script for this setup to make it easier to add apps installed into debian proot to be added to the termux xfce menu. 
