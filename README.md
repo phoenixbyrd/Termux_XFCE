@@ -11,7 +11,7 @@ This is is how I personally use Termux on my Galaxy Fold 3, script was created m
 &nbsp;
 # bash_aliases
 
-These are some bash aliases I set, the most important ones to not are
+These are some bash aliases I set, the most important ones to note are
 
 ```x11``` for starting the Termux-X11 server
 
