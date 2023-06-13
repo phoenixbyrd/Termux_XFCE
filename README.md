@@ -16,6 +16,8 @@ These are some bash aliases I set, the most important ones to not are
 
 ```debian``` for accessing the Debian proot-distro
 
+
+
 alias cls='clear -x'
 
 alias prun='proot-distro login --user phoenixbyrd debian --shared-tmp -- env DISPLAY=:1 '
