@@ -52,14 +52,14 @@ termux-setup-storage
 
 #Setup XFCE4 in Termux
 
-apt install x11-repo && apt install wget git neofetch proot-distro papirus-icon-theme virglrenderer-android tigervnc xfce4 xfce4-goodies xfce4-whiskermenu-plugin evince pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious wmctrl -y && vncserver  && vncserver -kill :1 && wmctrl -n 1
+apt install x11-repo && apt install wget git neofetch proot-distro papirus-icon-theme virglrenderer-android tigervnc xfce4 xfce4-goodies xfce4-whiskermenu-plugin evince pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious wmctrl -y && vncserver > /dev/null 2>&1 && vncserver -kill :1 > /dev/null 2>&1 
 
 #Create XFCE Desktop file for vnc
 
 echo "xfce4-session &
 xhost + &
 cp .Xauthority ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname
-" > .vnc/xstartup
+" > .vnc/xstartup 
 
 #Setup Debian Proot
 
@@ -883,6 +883,10 @@ print_centered_text() {
     printf "%*s%s%*s\n" $margin_width "" "$line" $((margin_width + indent)) ""
   done
 }
+
+# Set workplaces to just 1
+
+wmctrl -n 1
 
 # Install Termux-X11
  
