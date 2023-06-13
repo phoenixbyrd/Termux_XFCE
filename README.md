@@ -4,6 +4,8 @@ Sets up a termux XFCE desktop and a Debian proot install and installs some addit
 
 You only need to pick your username and follow the prompts to create a password for proot user. This will take just under 7.5GB of storage space.
 
+This setup uses Termux-X11, the termux-x11 server will be installed and the Android APK will be placed in your Downloads directory, please manually install it. 
+
 # cp2menu
 
 A companion script for this setup to make it easier to add apps installed into debian proot to be added to the termux xfce menu. 
