@@ -11,7 +11,9 @@ This setup uses Termux-X11, the termux-x11 server will be installed and the Andr
 These are some bash aliases I set, the most important ones to not are
 
 ```x11``` for starting the Termux-X11 server
+
 ```display``` for starting the XFCE desktop
+
 ```debian``` for accessing the Debian proot-distro
 
 alias cls='clear -x'
