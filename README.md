@@ -55,6 +55,8 @@ This script will back up and restore the installed Vivaldi and WebCord .config d
 
 This script will shut down your session, you will have to manually close the Android apps
 
+&nbsp;
+
 # Install
 
 To install run this command in termux
