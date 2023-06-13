@@ -56,6 +56,8 @@ apt install x11-repo && apt install wget git neofetch proot-distro papirus-icon-
 
 #Create XFCE Desktop file for vnc
 
+mkdir -p .vnc
+
 echo "xfce4-session &
 xhost + &
 cp .Xauthority ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname
