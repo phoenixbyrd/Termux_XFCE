@@ -15,8 +15,8 @@ These are some bash aliases I set, the most important ones to not are
 ```display``` for starting the XFCE desktop
 
 ```debian``` for accessing the Debian proot-distro
-
-
+  
+  
 
 alias cls='clear -x'
 
