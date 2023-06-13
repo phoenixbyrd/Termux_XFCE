@@ -17,7 +17,7 @@ This script will back up and restore the installed Vivaldi and WebCord .config d
 To install run this command in termux
 
 ```
-wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh && chmod +x setup.sh && ./setup.sh
+pkg update && pkg upgrade -y && pkg install wget && wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh && chmod +x setup.sh && ./setup.sh
 ```
 
 ![Desktop Screenshot](Desktop.png)
