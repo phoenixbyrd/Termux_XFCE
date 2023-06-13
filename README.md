@@ -1,4 +1,5 @@
 # Termux_XFCE
+&nbsp;
 
 Sets up a termux XFCE desktop and a Debian proot install and installs some additional software like Vivaldi, Firefox, Libreoffice, Audacious, Webcord and a few others.
 
@@ -7,6 +8,7 @@ You only need to pick your username and follow the prompts to create a password 
 This setup uses Termux-X11, the termux-x11 server will be installed and the Android APK will be placed in your Downloads directory, please manually install it. 
 
 # bash_aliases
+&nbsp;
 
 These are some bash aliases I set, the most important ones to not are
 
@@ -38,23 +40,17 @@ alias virgl='virgl_test_server_android &'
 
 # cp2menu
 
-&nbsp;
-
 A companion script for this setup to make it easier to add apps installed into debian proot to be added to the termux xfce menu. 
 
 &nbsp;
 
 # Backup & Restore
 
-&nbsp;
-
 This script will back up and restore the installed Vivaldi and WebCord .config directories. 
 
 &nbsp;
 
 # Install
-
-&nbsp;
 
 To install run this command in termux
 
