@@ -1,5 +1,4 @@
 # Termux_XFCE
-&nbsp;
 
 Sets up a termux XFCE desktop and a Debian proot install and installs some additional software like Vivaldi, Firefox, Libreoffice, Audacious, Webcord and a few others.
 
@@ -7,8 +6,8 @@ You only need to pick your username and follow the prompts to create a password 
 
 This setup uses Termux-X11, the termux-x11 server will be installed and the Android APK will be placed in your Downloads directory, please manually install it. 
 
-# bash_aliases
 &nbsp;
+# bash_aliases
 
 These are some bash aliases I set, the most important ones to not are
 
