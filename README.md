@@ -12,4 +12,10 @@ A companion script for this setup to make it easier to add apps installed into d
 
 This script will back up and restore the installed Vivaldi and WebCord .config directories. 
 
+# Install
+
+To install run this command in termux
+
+wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh && chmod +x setup.sh && ./setup.sh
+
 ![Desktop Screenshot](Desktop.png)
