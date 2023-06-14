@@ -19,9 +19,7 @@ After install you will need to exit termux using the command ```exit```
 Once you restart termux you can use the command ```start``` 
   
 This will start the termux-x11 server, XFCE4 desktop and open the Termux-X11 app right into the desktop. 
-
-
-      
+&nbsp;
 
 To enter the Debian proot install from terminal use the command ```debian```
 
