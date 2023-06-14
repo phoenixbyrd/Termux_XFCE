@@ -52,7 +52,7 @@ termux-setup-storage
 
 #Setup XFCE4 in Termux
 
-apt install x11-repo && apt install wget git neofetch proot-distro papirus-icon-theme virglrenderer-android tigervnc xfce4 xfce4-goodies xfce4-whiskermenu-plugin pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious wmctrl -y
+apt install x11-repo && apt install git neofetch proot-distro papirus-icon-theme evince xfce4 xfce4-goodies pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious wmctrl -y
 
 #Create XFCE Desktop file for vnc
 
@@ -140,7 +140,7 @@ StartupNotify=false
 " > ~/Desktop/tor.desktop
 
 chmod +x ~/Desktop/tor.desktop
-cp ~/Desktop/code.desktop ../usr/share/applications/tor.desktop 
+cp ~/Desktop/tor.desktop ../usr/share/applications/tor.desktop 
 
 #Install Webcord
 
@@ -234,7 +234,7 @@ sed -i '327s/termux/proot/' ../usr/var/lib/proot-distro/installed-rootfs/debian/
 
 #Set Display in proot .bashrc
 
-echo "export DISPLAY=:1" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bashrc
+echo "export DISPLAY=:1.0" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bashrc
 
 #Setup Fonts
 
@@ -255,6 +255,11 @@ wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip
 unzip termux-x11.zip
 mv termux-x11.apk storage/downloads/
 apt install ./termux-x11-1.02.07-0-all.deb
+rm termux-x11.zip
+rm termux-x11-1.02.07-0-all.deb
+
+sed -i '12s/^#//' .termux/termux.properties
+termux-open storage/downloads/termux-x11.apk
 
 #XFCE Terminal Settings
 
@@ -743,6 +748,18 @@ alias ls='exa -lF'
 alias cat='bat $@'
 " > ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bash_aliases
 
+# create start command
+
+cat <<'EOF' > start
+#!/bin/bash
+termux-x11 :1.0 &
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env DISPLAY=:1.0 dbus-launch --exit-with-session xfce4-session &
+
+EOF
+
+chmod +x start
+mv start ../usr/bin
+
 #Create cp2menu script and desktop launcher
 
 cat <<'EOF' > cp2menu
@@ -772,7 +789,7 @@ zenity --info --text="Operation completed successfully!" --title="Success"
 EOF
 
 chmod +x cp2menu
-cp cp2menu ../usr/bin/cp2menu
+mv cp2menu ../usr/bin/cp2menu
 
 echo "[Desktop Entry]
 Version=1.0
@@ -792,7 +809,7 @@ chmod +x ~/Desktop/cp2menu.desktop
 
 #!/bin/bash
 
-cat <<'EOF' > ../usr/var/lib/proot-distro/installed-rootfs/debian/home/phoenixbyrd/backup_restore
+cat <<'EOF' > ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/bin/backup_restore
 #!/bin/bash
 
 backup_dir_local="."  # Specify the local backup directory path
@@ -860,14 +877,14 @@ esac
 
 EOF
 
-chmod +x ../usr/var/lib/proot-distro/installed-rootfs/debian/home/phoenixbyrd/backup_restore
+chmod +x ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/bin/backup_restore
 
 echo "[Desktop Entry]
 Version=1.0
 Type=Application
 Name=Backup & Restore
 Comment=
-Exec=proot-distro login debian --user phoenixbyrd --shared-tmp -- env DISPLAY=:1.0 ./backup_restore
+Exec=proot-distro login debian --user phoenixbyrd --shared-tmp -- env DISPLAY=:1.0 backup_restore
 Icon=backup
 Path=
 Terminal=false
@@ -905,7 +922,7 @@ Icon=system-shutdown
 Path=
 Terminal=false
 StartupNotify=false
-" > ~/Desktop/backup_restore.desktop
+" > ~/Desktop/kill_termux_x11.desktop
 
 
 # Display completion message and next steps
@@ -931,27 +948,23 @@ print_centered_text() {
   done
 }
 
+clear
+
 # Display completion message and next steps
 
 echo ""
 echo ""
 print_centered_text "Setup completed successfully!"
 echo ""
-print_centered_text "You can now connect to your Termux XFCE4 Desktop after installing Termux-X11 APK which was downloaded to your devices download folder."
+print_centered_text "You can now connect to your Termux XFCE4 Desktop after restarting termux."
 echo ""
-print_centered_text "Please exit Termux, install the APK and then restart Termux."
+print_centered_text "To open the desktop use the command start"
 echo ""
-print_centered_text "To connect issue these two commands in termux:"
-echo ""
-print_centered_text "   x11"
-echo ""
-print_centered_text "Followed by:"
-echo ""
-print_centered_text "   display"
-echo ""
-print_centered_text "This will start the termux-x11 server in termux and start the XFCE Desktop which you can connect to by openning the installed Termux-X11 app."
+print_centered_text "This will start the termux-x11 server in termux and start the XFCE Desktop open the installed Termux-X11 app."
 echo ""
 print_centered_text "After installing apps in proot, exit back into Termux and use the command cp2menu to move the application launchers into your XFCE menu or you can double click the icon on the desktop to launch the cp2menu script."
 echo ""
 print_centered_text "Enjoy your Termux XFCE4 Desktop experience!"
 echo ""
+
+rm setup.sh
