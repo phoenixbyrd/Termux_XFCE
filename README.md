@@ -20,6 +20,10 @@ Once you restart termux you can use the command ```start```
   
 This will start the termux-x11 server, XFCE4 desktop and open the Termux-X11 app right into the desktop. 
 
+To enter the Debian proot install from terminal use the command ```debian```
+
+Also note, you do not need to set display in debian as it's already set. This means you can use the terminal to start any GUI application and it will startup.
+
 &nbsp;
 
 # cp2menu
