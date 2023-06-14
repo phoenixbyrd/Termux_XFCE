@@ -9,33 +9,13 @@ This setup uses Termux-X11, the termux-x11 server will be installed and the Andr
 This is is how I personally use Termux on my Galaxy Fold 3, script was created mainly for personal use but also for others if they wanted to try out my setup. This is my daily driver used with a 15 inch Lepow portable monitor and bluetooth keyboard and mouse.
 
 &nbsp;
-# bash_aliases
+# Starting the desktop
 
-These are some bash aliases I set, the most important ones to note are
+During install you will recieve a popup to allow installs from termux, this will open the APK for the Termux-X11 android app. While you do not have to allow installs from termux, you will still need to install manually by using a file browser and finding thhe APK in your downloads folder. 
 
-```x11``` for starting the Termux-X11 server
-
-```display``` for starting the XFCE desktop
-
-```debian``` for accessing the Debian proot-distro
-
-&nbsp;
-  
-alias cls='clear -x'
-
-alias prun='proot-distro login --user phoenixbyrd debian --shared-tmp -- env DISPLAY=:1 '
-
-alias debian='clear && proot-distro login debian --user phoenixbyrd --shared-tmp && clear'
-
-alias ls='exa -lF'
-
-alias cat='bat '
-
-alias x11='termux-x11 :1 &'
-
-alias display='env DISPLAY=:1 dbus-launch --exit-with-session xfce4-session'
-
-alias virgl='virgl_test_server_android &'
+After install you will need to exit termux using the command ```exit```
+Once you restart termux you can use the command ```start``` 
+This will start the termux-x11 server, XFCE4 desktop and open the Termux-X11 app right into the desktop. 
 
 &nbsp;
 
