@@ -223,8 +223,8 @@ cp .fancybash.sh ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varna
 echo "source ~/.fancybash.sh" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bashrc
 sed -i '327s/termux/proot/' ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.fancybash.sh
 
-echo "# 
-Run once script
+echo "
+# Run once script
 run_once_script() {
   if [ ! -f ~/.run_once_completed ]; then
     wmctrl -n 1
