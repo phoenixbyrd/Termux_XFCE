@@ -2,7 +2,7 @@
 
 Sets up a termux XFCE desktop and a Debian proot install and installs some additional software like Vivaldi, Firefox, Libreoffice, Audacious, Webcord and a few others.
 
-You only need to pick your username and follow the prompts to create a password for proot user. This will take just under 7.5GB of storage space. Please note, this can be a lengthy process.
+You only need to pick your username and follow the prompts to create a password for proot user. This will take roughly 7.5GB of storage space. Please note, this can be a lengthy process.
 
 This setup uses Termux-X11, the termux-x11 server will be installed and you will be prompted to allow termux to install the Android APK. 
 
