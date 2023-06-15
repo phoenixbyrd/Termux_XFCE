@@ -54,15 +54,6 @@ termux-setup-storage
 
 apt install x11-repo && apt install git neofetch proot-distro papirus-icon-theme evince xfce4 xfce4-goodies pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious wmctrl -y
 
-#Create XFCE Desktop file for vnc
-
-mkdir -p .vnc
-
-echo "xfce4-session &
-xhost + &
-cp .Xauthority ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname
-" > .vnc/xstartup 
-
 #Setup Debian Proot
 
 proot-distro install debian && proot-distro login debian --shared-tmp -- env DISPLAY=:1 apt update && proot-distro login debian --shared-tmp -- env DISPLAY=:1 apt install sudo -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1 adduser $varname
@@ -255,10 +246,6 @@ unzip CascadiaCode-2111.01.zip
 mv otf/static/* .fonts/ && rm -rf otf
 mv ttf/* .fonts/ && rm -rf ttf/
 rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
-
-# Set workplaces to just 1
-
-wmctrl -n 1
 
 # Install Termux-X11
  
