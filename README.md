@@ -4,7 +4,7 @@ Sets up a termux XFCE desktop and a Debian proot install and installs some addit
 
 You only need to pick your username and follow the prompts to create a password for proot user. This will take just under 7.5GB of storage space.
 
-This setup uses Termux-X11, the termux-x11 server will be installed and the Android APK will be placed in your Downloads directory, please manually install it. 
+This setup uses Termux-X11, the termux-x11 server will be installed and you will be prompted to allow termux to install the Android APK. 
 
 This is is how I personally use Termux on my Galaxy Fold 3, script was created mainly for personal use but also for others if they wanted to try out my setup. This is my daily driver used with a 15 inch Lepow portable monitor and bluetooth keyboard and mouse.
 
