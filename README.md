@@ -11,7 +11,7 @@ This is is how I personally use Termux on my Galaxy Fold 3, script was created m
 &nbsp;
 # Starting the desktop
 
-During install you will recieve a popup to allow installs from termux, this will open the APK for the Termux-X11 android app. While you do not have to allow installs from termux, you will still need to install manually by using a file browser and finding thhe APK in your downloads folder. 
+During install you will recieve a popup to allow installs from termux, this will open the APK for the Termux-X11 android app. While you do not have to allow installs from termux, you will still need to install manually by using a file browser and finding the APK in your downloads folder. 
   
 
 After install you will need to exit termux using the command ```exit```
