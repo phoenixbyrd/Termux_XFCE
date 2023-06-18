@@ -823,7 +823,7 @@ StartupNotify=false
 
 chmod +x ~/Desktop/cp2menu.desktop
 
-#Create Vivaldi and WebCord backup script and desktop launcher
+#Create backup script and desktop launcher
 
 #!/bin/bash
 
@@ -835,13 +835,13 @@ backup_dir_sdcard="/storage/emulated/0/Download/"  # Specify the SD card backup 
 archive_file="backup.tar.gz"     # Specify the archive file name
 
 function backup_vivaldi() {
-    zenity --info --title="Vivaldi and WebCord Backup" --width=300 --text="Creating Vivaldi and WebCord directory archive..."
-    tar -czf "$backup_dir_local/$archive_file" -C ~/.config vivaldi WebCord
-    zenity --info --title="Vivaldi and WebCord Backup" --width=300 --text="Local backup completed!\n\nBackup path: $backup_dir_local/$archive_file"
+    zenity --info --title="Backup" --width=300 --text="Creating backup directory archive..."
+    tar -czf "$backup_dir_local/$archive_file" -C ~/.config vivaldi WebCord FreeTube
+    zenity --info --title="Backup" --width=300 --text="Local backup completed!\n\nBackup path: $backup_dir_local/$archive_file"
 
-    zenity --info --title="Vivaldi and WebCord Backup" --width=300 --text="Creating Vivaldi and WebCord directory archive on SD card..."
-    tar -czf "$backup_dir_sdcard/$archive_file" -C ~/.config vivaldi WebCord
-    zenity --info --title="Vivaldi and WebCord Backup" --width=300 --text="SD card backup completed!\n\nBackup path: $backup_dir_sdcard/$archive_file"
+    zenity --info --title="Backup" --width=300 --text="Creating backup directory archive on SD card..."
+    tar -czf "$backup_dir_sdcard/$archive_file" -C ~/.config vivaldi WebCord FreeTube
+    zenity --info --title="Backup" --width=300 --text="SD card backup completed!\n\nBackup path: $backup_dir_sdcard/$archive_file"
 }
 
 function restore_vivaldi() {
@@ -860,17 +860,17 @@ function restore_vivaldi() {
     esac
 
     if [ -f "$restore_directory/$archive_file" ]; then
-        zenity --info --title="Vivaldi and WebCord Restore" --width=300 --text="Restoring Vivaldi and WebCord directory..."
-        rm -rf ~/.config/vivaldi ~/.config/WebCord
+        zenity --info --title="Restore" --width=300 --text="Restoring Vivaldi and WebCord directory..."
+        rm -rf ~/.config/vivaldi ~/.config/WebCord ~/.config/FreeTube
         tar -xzf "$restore_directory/$archive_file" -C ~/.config
-        zenity --info --title="Vivaldi and WebCord Restore" --width=300 --text="Restoration completed!"
+        zenity --info --title="Restore" --width=300 --text="Restoration completed!"
     else
-        zenity --info --title="Vivaldi and WebCord Restore" --width=300 --text="No backup archive found in the selected restore source. Unable to restore Vivaldi and WebCord!"
+        zenity --info --title="Restore" --width=300 --text="No backup archive found in the selected restore source. Unable to restore Vivaldi and WebCord!"
     fi
 }
 
 function show_backup_dialog() {
-    zenity --info --title="Vivaldi and WebCord Backup" --width=300 --text="Click OK to create a backup of the Vivaldi and WebCord directories.\n\nThis will take a few moments."
+    zenity --info --title="Backup" --width=300 --text="Click OK to create a backup.\n\nThis will take a few moments."
     backup_vivaldi
 }
 
