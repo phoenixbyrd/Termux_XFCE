@@ -66,7 +66,7 @@ chmod u-w ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 
 #Install Additional Software as user
 
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1 sudo apt install zenity onboard firefox-esr libreoffice wget apt-utils -y
+proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1 sudo apt install zenity onboard firefox-esr libreoffice wget pithos apt-utils -y
 
 #Set localtime to EST
 
@@ -106,6 +106,26 @@ MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xht
 
 chmod +x ~/Desktop/vivaldi.desktop
 cp ~/Desktop/vivaldi.desktop ../usr/share/applications/vivaldi.desktop 
+
+# Install FreeTube
+
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/FreeTubeApp/FreeTube/releases/download/v0.18.0-beta/freetube_0.18.0_arm64.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt install ./freetube_0.18.0_arm64.deb
+
+echo "[Desktop Entry]
+Name=FreeTube
+Exec=proot-distro login debian --user phoenixbyrd --shared-tmp -- env DISPLAY=:1.0 /opt/FreeTube/freetube %U --no-sandbox
+Terminal=false
+Type=Application
+Icon=freetube
+StartupWMClass=FreeTube
+Comment=A private YouTube client
+MimeType=x-scheme-handler/freetube;
+Categories=Network;
+" > ~/Desktop/freetube.desktop
+
+chmod +x ~/Desktop/freetube.desktop
+cp ~/Desktop/freetube.desktop ../usr/share/applications/freetube.desktop 
 
 #Install Tor Browser
 
