@@ -35,7 +35,7 @@ I have noticed an issue with some things not wanting to show in the menu even wi
 
 # Backup & Restore
 
-This script will back up and restore the installed Vivaldi and WebCord .config directories. 
+This script will back up and restore the installed FreeTube, Vivaldi, and WebCord .config directories. 
 
 &nbsp;
 
