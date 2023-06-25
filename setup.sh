@@ -834,11 +834,11 @@ backup_dir_sdcard="/storage/emulated/0/Download/"  # Specify the SD card backup 
 archive_file="backup.tar.gz"     # Specify the archive file name
 
 function backup_vivaldi() {
-    zenity --info --title="Backup" --width=300 --text="Creating backup directory archive..."
+    zenity --info --title="Backup" --width=300 --text="Creating backup archive..."
     tar -czf "$backup_dir_local/$archive_file" -C ~/.config vivaldi WebCord FreeTube
     zenity --info --title="Backup" --width=300 --text="Local backup completed!\n\nBackup path: $backup_dir_local/$archive_file"
 
-    zenity --info --title="Backup" --width=300 --text="Creating backup directory archive on SD card..."
+    zenity --info --title="Backup" --width=300 --text="Creating backup archive on SD card..."
     tar -czf "$backup_dir_sdcard/$archive_file" -C ~/.config vivaldi WebCord FreeTube
     zenity --info --title="Backup" --width=300 --text="SD card backup completed!\n\nBackup path: $backup_dir_sdcard/$archive_file"
 }
@@ -859,12 +859,12 @@ function restore_vivaldi() {
     esac
 
     if [ -f "$restore_directory/$archive_file" ]; then
-        zenity --info --title="Restore" --width=300 --text="Restoring Vivaldi and WebCord directory..."
-        rm -rf ~/.config/vivaldi ~/.config/WebCord ~/.config/FreeTube
+        zenity --info --title="Restore" --width=300 --text="Restoring..."
+        rm -rf ~/.config/vivaldi ~/.config/WebCord
         tar -xzf "$restore_directory/$archive_file" -C ~/.config
         zenity --info --title="Restore" --width=300 --text="Restoration completed!"
     else
-        zenity --info --title="Restore" --width=300 --text="No backup archive found in the selected restore source. Unable to restore Vivaldi and WebCord!"
+        zenity --info --title="Restore" --width=300 --text="No backup archive found in the selected restore source. Unable to restore!"
     fi
 }
 
