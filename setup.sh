@@ -66,7 +66,7 @@ chmod u-w ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 
 #Install Additional Software as user
 
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1 sudo apt install zenity onboard firefox-esr libreoffice wget pithos apt-utils -y
+proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1 sudo apt install zenity onboard firefox-esr libreoffice wget curl vlc pithos apt-utils -y
 
 #Set localtime
 
