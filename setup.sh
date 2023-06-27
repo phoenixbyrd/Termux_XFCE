@@ -68,9 +68,11 @@ chmod u-w ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 
 proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1 sudo apt install zenity onboard firefox-esr libreoffice wget pithos apt-utils -y
 
-#Set localtime to EST
+#Set localtime
 
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/America/New_York /etc/localtime
+TZ=$(getprop persist.sys.timezone)
+
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/$TZ /etc/localtime
 
 #Add Programs to Menu
 
