@@ -57,4 +57,12 @@ pkg update && pkg upgrade && pkg install wget && wget https://raw.githubusercont
 
 &nbsp;
 
+There is also a lite version without all the extra apps
+
+```
+pkg update && pkg upgrade && pkg install wget && wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup_lite.sh && chmod +x setup_lite.sh && ./setup_lite.sh
+```
+
+&nbsp;
+
 ![Desktop Screenshot](Desktop.png)
