@@ -49,8 +49,6 @@ This script will shut down your session, you will have to manually close the And
 
 To install run this command in termux
 
-&nbsp;
-
 ```
 pkg update && pkg upgrade && pkg install wget && wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh && chmod +x setup.sh && ./setup.sh
 ```
