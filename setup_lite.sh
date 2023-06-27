@@ -64,9 +64,11 @@ chmod u+rw ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 echo "$varname ALL=(ALL) NOPASSWD:ALL" | tee -a ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers > /dev/null
 chmod u-w ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 
-#Set localtime to EST
+#Set localtime
 
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/America/New_York /etc/localtime
+TZ=$(getprop persist.sys.timezone)
+
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/$TZ /etc/localtime
 
 #update and upgrade 
 apt update && apt upgrade -y
