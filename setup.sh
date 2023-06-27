@@ -208,6 +208,25 @@ StartupNotify=false
 chmod +x ~/Desktop/code.desktop
 cp ~/Desktop/code.desktop ../usr/share/applications/code.desktop 
 
+#Create VLC Menu Item
+
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=VLC media player
+Comment=Read, capture, broadcast your multimedia streams
+Exec=proot-distro login debian --user phoenixbyrd --shared-tmp -- env DISPLAY=:1.0 /usr/bin/vlc --started-from-file %U
+Icon=vlc
+Categories=Video;
+Path=
+Terminal=false
+StartupNotify=false
+
+" > ../usr/share/applications/vlc.desktop
+
+chmod +x ../usr/share/applications/vlc.desktop 
+
+
 #update and upgrade 
 apt update && apt upgrade -y
 
