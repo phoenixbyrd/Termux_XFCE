@@ -52,7 +52,7 @@ termux-setup-storage
 
 #Setup XFCE4 in Termux
 
-apt install x11-repo && apt install git neofetch proot-distro papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa batwmctrl -y
+apt install x11-repo && apt install git neofetch proot-distro papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa bat wmctrl -y
 
 #Setup Debian Proot
 
