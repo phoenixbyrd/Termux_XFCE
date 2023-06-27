@@ -198,6 +198,7 @@ Name=Visual Studio Code
 Comment=Code Editing. Redefined.
 Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /usr/share/code/code --no-sandbox
 Icon=visual-studio-code
+Categories=Development;
 Path=
 Terminal=false
 StartupNotify=false
