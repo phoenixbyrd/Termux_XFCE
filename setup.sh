@@ -85,9 +85,12 @@ cp ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/li
 #Onboard
 cp ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/onboard.desktop ../usr/share/applications && sed -i "s/^Exec=\(.*\)$/Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 \1/"  ../usr/share/applications/onboard.desktop
 
-#Install Vivaldi Web Browser
+#Install Brave Web Browser
 
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://downloads.vivaldi.com/stable/vivaldi-stable_6.0.2979.22-1_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./vivaldi-stable_6.0.2979.22-1_arm64.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm vivaldi-stable_6.0.2979.22-1_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  apt-mark hold vivaldi-stable
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|sudo tee /etc/apt/sources.list.d/brave-browser-release.list
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt update && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt install brave-browser
+
 #Create Desktop Folder
 
 mkdir ~/Desktop
@@ -95,19 +98,27 @@ mkdir ~/Desktop
 #Create Desktop Launcher
 
 echo "[Desktop Entry]
-Name=Vivaldi
-GenericName=Web Browser
-Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 vivaldi --no-sandbox
+Version=1.0
+Name=Brave Web Browser
+Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /usr/bin/brave-browser-stable %U --no-sandbox
 StartupNotify=true
 Terminal=false
-Icon=vivaldi
+Icon=brave-browser
 Type=Application
 Categories=Network;WebBrowser;
-MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/ftp;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/mailto;
-" > ~/Desktop/vivaldi.desktop
+MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ipfs;x-scheme-handler/ipns;
+Actions=new-window;new-private-window;
+Path=
+[Desktop Action new-window]
+Name=New Window
+Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /usr/bin/brave-browser-stable
+[Desktop Action new-private-window]
+Name=New Incognito Window
+Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /usr/bin/brave-browser-stable --incognito
+" > ~/Desktop/Brave.desktop
 
-chmod +x ~/Desktop/vivaldi.desktop
-cp ~/Desktop/vivaldi.desktop ../usr/share/applications/vivaldi.desktop 
+chmod +x ~/Desktop/Brave.desktop
+cp ~/Desktop/Brave.desktop ../usr/share/applications/Brave.desktop 
 
 # Install FreeTube
 
@@ -115,7 +126,7 @@ proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.c
 
 echo "[Desktop Entry]
 Name=FreeTube
-Exec=proot-distro login debian --user phoenixbyrd --shared-tmp -- env DISPLAY=:1.0 /opt/FreeTube/freetube %U --no-sandbox
+Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /opt/FreeTube/freetube %U --no-sandbox
 Terminal=false
 Type=Application
 Icon=freetube
@@ -142,7 +153,7 @@ Name=Tor Browser
 GenericName=Web Browser
 Comment=Tor Browser  is +1 for privacy and −1 for mass surveillance
 Categories=Network;WebBrowser;Security;
-Exec=proot-distro login debian --user phoenixbyrd --shared-tmp -- env DISPLAY=:1.0 tor-browser/Browser/start-tor-browser
+Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 tor-browser/Browser/start-tor-browser
 X-TorBrowser-ExecShell=./Browser/start-tor-browser --detach
 Icon=tor
 StartupWMClass=Tor Browser
@@ -835,17 +846,17 @@ backup_dir_local="."  # Specify the local backup directory path
 backup_dir_sdcard="/storage/emulated/0/Download/"  # Specify the SD card backup directory path
 archive_file="backup.tar.gz"     # Specify the archive file name
 
-function backup_vivaldi() {
+function backup() {
     zenity --info --title="Backup" --width=300 --text="Creating backup archive..."
-    tar -czf "$backup_dir_local/$archive_file" -C ~/.config vivaldi WebCord FreeTube
+    tar -czf "$backup_dir_local/$archive_file" -C ~/.config BraveSoftware WebCord FreeTube
     zenity --info --title="Backup" --width=300 --text="Local backup completed!\n\nBackup path: $backup_dir_local/$archive_file"
 
     zenity --info --title="Backup" --width=300 --text="Creating backup archive on SD card..."
-    tar -czf "$backup_dir_sdcard/$archive_file" -C ~/.config vivaldi WebCord FreeTube
+    tar -czf "$backup_dir_sdcard/$archive_file" -C ~/.config BraveSoftware WebCord FreeTube
     zenity --info --title="Backup" --width=300 --text="SD card backup completed!\n\nBackup path: $backup_dir_sdcard/$archive_file"
 }
 
-function restore_vivaldi() {
+function restore() {
     restore_source=$(zenity --list --radiolist --title="Restore Source" --width=300 --height=200 --column "" --column "Source" FALSE "Local Backup" FALSE "SD Card Backup" --hide-header)
     case "$restore_source" in
         "Local Backup")
@@ -862,7 +873,7 @@ function restore_vivaldi() {
 
     if [ -f "$restore_directory/$archive_file" ]; then
         zenity --info --title="Restore" --width=300 --text="Restoring..."
-        rm -rf ~/.config/vivaldi ~/.config/WebCord
+        rm -rf ~/.config/BraveSoftware ~/.config/WebCord ~/.config/FreeTube
         tar -xzf "$restore_directory/$archive_file" -C ~/.config
         zenity --info --title="Restore" --width=300 --text="Restoration completed!"
     else
@@ -872,11 +883,11 @@ function restore_vivaldi() {
 
 function show_backup_dialog() {
     zenity --info --title="Backup" --width=300 --text="Click OK to create a backup.\n\nThis will take a few moments."
-    backup_vivaldi
+    backup
 }
 
 function show_restore_dialog() {
-    restore_vivaldi
+    restore
 }
 
 # Display GUI dialog to select backup or restore
