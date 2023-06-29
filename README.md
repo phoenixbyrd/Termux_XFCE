@@ -50,7 +50,7 @@ This script will shut down your session, you will have to manually close the And
 To install run this command in termux
 
 ```
-pkg update && pkg upgrade && pkg install wget && wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh && chmod +x setup.sh && ./setup.sh
+curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh | bash
 ```
 
 &nbsp;
@@ -58,7 +58,7 @@ pkg update && pkg upgrade && pkg install wget && wget https://raw.githubusercont
 There is also a lite version without all the extra apps
 
 ```
-pkg update && pkg upgrade && pkg install wget && wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup_lite.sh && chmod +x setup_lite.sh && ./setup_lite.sh
+curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup_lite.sh | bash
 ```
 
 &nbsp;
