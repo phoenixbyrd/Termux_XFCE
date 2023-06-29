@@ -30,6 +30,7 @@ print_centered_text() {
 # Change to home directory and clear the screen
 cd
 clear
+termux-change-repo
 
 # Install ncurses-utils package
 apt update > /dev/null 2>&1
@@ -75,7 +76,7 @@ apt update && apt upgrade -y
 
 #Install Fluent Cursor Icon Theme
 
-wget https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-01.zip
+curl -sLO https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-01.zip
 unzip 2023-02-01.zip
 mv Fluent-icon-theme-2023-02-01/cursors/dist ../usr/share/icons/ && mv Fluent-icon-theme-2023-02-01/cursors/dist-dark ../usr/share/icons/
 rm -rf ~/Fluent*
@@ -83,7 +84,7 @@ rm 2023-02-01.zip
 
 #Install WhiteSur-Dark Theme
 
-wget https://github.com/vinceliuice/WhiteSur-gtk-theme/archive/refs/tags/2023-04-26.zip
+curl -sLO https://github.com/vinceliuice/WhiteSur-gtk-theme/archive/refs/tags/2023-04-26.zip
 unzip 2023-04-26.zip
 tar -xf WhiteSur-gtk-theme-2023-04-26/release/WhiteSur-Dark-44-0.tar.xz
 mv WhiteSur-Dark/ ../usr/share/themes/
@@ -91,7 +92,7 @@ rm -rf WhiteSur*
 rm 2023-04-26.zip
 
 #Download wallpaper
-wget https://besthqwallpapers.com/Uploads/22-9-2017/21311/gray-lines-geometry-strips-dark-material-art.jpg
+curl -sLO https://besthqwallpapers.com/Uploads/22-9-2017/21311/gray-lines-geometry-strips-dark-material-art.jpg
 mv gray-lines-geometry-strips-dark-material-art.jpg ../usr/share/backgrounds/xfce/
 
 #Create .bashrc
@@ -107,7 +108,7 @@ echo "source ~/.sound" >> ~/.bashrc
 
 #Setup Fancybash Termux
 
-wget https://raw.githubusercontent.com/ChrisTitusTech/scripts/master/fancy-bash-promt.sh
+curl -sLO https://raw.githubusercontent.com/ChrisTitusTech/scripts/master/fancy-bash-promt.sh
 mv fancy-bash-promt.sh .fancybash.sh
 echo "source ~/.fancybash.sh" >> .bashrc
 sed -i "326s/\\\u/$varname/" ~/.fancybash.sh
@@ -135,7 +136,7 @@ echo "export DISPLAY=:1.0" >> ../usr/var/lib/proot-distro/installed-rootfs/debia
 
 #Setup Fonts
 
-wget https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
+curl -sLO https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
 mkdir .fonts 
 unzip CascadiaCode-2111.01.zip
 mv otf/static/* .fonts/ && rm -rf otf
@@ -144,7 +145,7 @@ rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
 
 # Install Termux-X11
  
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip 
+curl -sLO https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip 
 unzip termux-x11.zip
 mv termux-x11.apk storage/downloads/
 apt install ./termux-x11-1.02.07-0-all.deb
