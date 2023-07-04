@@ -30,7 +30,6 @@ print_centered_text() {
 # Change to home directory and clear the screen
 cd
 clear
-termux-change-repo
 
 # Install ncurses-utils package
 apt update > /dev/null 2>&1
