@@ -122,7 +122,7 @@ cp ~/Desktop/Brave.desktop ../usr/share/applications/Brave.desktop
 
 # Install FreeTube
 
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 curl -sLO https://github.com/FreeTubeApp/FreeTube/releases/download/v0.18.0-beta/freetube_0.18.0_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt install ./freetube_0.18.0_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm freetube_0.18.0_arm64.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/FreeTubeApp/FreeTube/releases/download/v0.18.0-beta/freetube_0.18.0_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt install ./freetube_0.18.0_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm freetube_0.18.0_arm64.deb
 
 echo "[Desktop Entry]
 Name=FreeTube
@@ -141,7 +141,7 @@ cp ~/Desktop/freetube.desktop ../usr/share/applications/freetube.desktop
 
 #Install Tor Browser
 
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 curl -sLO https://sourceforge.net/projects/tor-browser-ports/files/12.0.6/tor-browser-linux-arm64-12.0.6_ALL.tar.xz/download -O tor.tar.xz
+proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 wget https://sourceforge.net/projects/tor-browser-ports/files/12.0.6/tor-browser-linux-arm64-12.0.6_ALL.tar.xz/download -O tor.tar.xz
 proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 tar -xvf tor.tar.xz 
 proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 rm tor.tar.xz
 
@@ -167,7 +167,7 @@ cp ~/Desktop/tor.desktop ../usr/share/applications/tor.desktop
 
 #Install Webcord
 
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 curl -sLO https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./webcord_4.2.0_arm64.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm webcord_4.2.0_arm64.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./webcord_4.2.0_arm64.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm webcord_4.2.0_arm64.deb
 
 #Create Desktop Launcher
 
@@ -187,7 +187,7 @@ cp ~/Desktop/webcord.desktop ../usr/share/applications/webcord.desktop
 
 #Install Visual Studio Code
 
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 curl -sLO https://packages.microsoft.com/repos/code/pool/main/c/code/code_1.79.0-1686148160_arm64.deb -O code.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./code.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm code.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://packages.microsoft.com/repos/code/pool/main/c/code/code_1.79.0-1686148160_arm64.deb -O code.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./code.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm code.deb
 
 #Create Desktop Launcher
 
@@ -208,31 +208,12 @@ StartupNotify=false
 chmod +x ~/Desktop/code.desktop
 cp ~/Desktop/code.desktop ../usr/share/applications/code.desktop 
 
-#Create VLC Menu Item
-
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=VLC media player
-Comment=Read, capture, broadcast your multimedia streams
-Exec=proot-distro login debian --user phoenixbyrd --shared-tmp -- env DISPLAY=:1.0 /usr/bin/vlc --started-from-file %U
-Icon=vlc
-Categories=Video;
-Path=
-Terminal=false
-StartupNotify=false
-
-" > ../usr/share/applications/vlc.desktop
-
-chmod +x ../usr/share/applications/vlc.desktop 
-
-
 #update and upgrade 
 apt update && apt upgrade -y
 
 #Install Fluent Cursor Icon Theme
 
-curl -sLO https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-01.zip
+wget https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-01.zip
 unzip 2023-02-01.zip
 mv Fluent-icon-theme-2023-02-01/cursors/dist ../usr/share/icons/ && mv Fluent-icon-theme-2023-02-01/cursors/dist-dark ../usr/share/icons/
 rm -rf ~/Fluent*
@@ -240,7 +221,7 @@ rm 2023-02-01.zip
 
 #Install WhiteSur-Dark Theme
 
-curl -sLO https://github.com/vinceliuice/WhiteSur-gtk-theme/archive/refs/tags/2023-04-26.zip
+wget https://github.com/vinceliuice/WhiteSur-gtk-theme/archive/refs/tags/2023-04-26.zip
 unzip 2023-04-26.zip
 tar -xf WhiteSur-gtk-theme-2023-04-26/release/WhiteSur-Dark-44-0.tar.xz
 mv WhiteSur-Dark/ ../usr/share/themes/
@@ -248,7 +229,7 @@ rm -rf WhiteSur*
 rm 2023-04-26.zip
 
 #Download wallpaper
-curl -sLO https://besthqwallpapers.com/Uploads/22-9-2017/21311/gray-lines-geometry-strips-dark-material-art.jpg
+wget https://besthqwallpapers.com/Uploads/22-9-2017/21311/gray-lines-geometry-strips-dark-material-art.jpg
 mv gray-lines-geometry-strips-dark-material-art.jpg ../usr/share/backgrounds/xfce/
 
 #Create .bashrc
@@ -264,7 +245,7 @@ echo "source ~/.sound" >> ~/.bashrc
 
 #Setup Fancybash Termux
 
-curl -sLO https://raw.githubusercontent.com/ChrisTitusTech/scripts/master/fancy-bash-promt.sh
+wget https://raw.githubusercontent.com/ChrisTitusTech/scripts/master/fancy-bash-promt.sh
 mv fancy-bash-promt.sh .fancybash.sh
 echo "source ~/.fancybash.sh" >> .bashrc
 sed -i "326s/\\\u/$varname/" ~/.fancybash.sh
@@ -292,7 +273,7 @@ echo "export DISPLAY=:1.0" >> ../usr/var/lib/proot-distro/installed-rootfs/debia
 
 #Setup Fonts
 
-curl -sLO https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
+wget https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
 mkdir .fonts 
 unzip CascadiaCode-2111.01.zip
 mv otf/static/* .fonts/ && rm -rf otf
@@ -301,7 +282,7 @@ rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
 
 # Install Termux-X11
  
-curl -sLO https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip 
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip 
 unzip termux-x11.zip
 mv termux-x11.apk storage/downloads/
 apt install ./termux-x11-1.02.07-0-all.deb
