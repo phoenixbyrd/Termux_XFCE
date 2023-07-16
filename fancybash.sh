@@ -1,5 +1,7 @@
 #!/bin/sh
 
+varname=$(basename $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/*)
+
 ##	+-----------------------------------+-----------------------------------+
 ##	|                                                                       |
 ##	|                            FANCY BASH PROMT                           |
@@ -323,7 +325,7 @@ bash_prompt() {
 	
 	
 	# GENERATE PROMT SECTIONS
-	local PROMT_USER=$"$TEXT_FORMAT_1 phoenixbyrd "
+	local PROMT_USER=$"$TEXT_FORMAT_1 $varname "
 	local PROMT_HOST=$"$TEXT_FORMAT_2 termux "
 	local PROMT_PWD=$"$TEXT_FORMAT_3 \${NEW_PWD} "
 	local PROMT_INPUT=$"$PROMT_FORMAT "
