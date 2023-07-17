@@ -40,6 +40,10 @@ This will shut down your vncserver session, you will have to manually close the 
 
 &nbsp;
 
+# Hardware Acceleration & Proot
+
+This is setup with virglrenderer-android installed for hardware acceleration on supported devices. Use the command ```GALLIUM_DRIVER=virpipe app_name_here``` to run that app with hardware acceleration. This should also work in proot. To enter proot use the command ```debian```, from there you can install aditional software. 
+
 # Install
 
 To install run this command in termux
