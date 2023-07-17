@@ -15,8 +15,6 @@ finish() {
 
 trap finish EXIT
 
-termux-change-repo
-
 pkg update -y && pkg install wget -y
 
 termux-setup-storage
