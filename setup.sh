@@ -736,3 +736,5 @@ echo ""
 echo "Enjoy your Termux XFCE4 Desktop experience!"
 echo ""
 echo ""
+
+rm setup.sh
