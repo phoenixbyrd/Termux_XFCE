@@ -50,4 +50,4 @@ pkg update && pkg upgrade && pkg install wget && wget https://raw.githubusercont
 
 &nbsp;
 
-![Desktop Screenshot](Desktop.png)
+![Desktop Screenshot](desktop.png)
