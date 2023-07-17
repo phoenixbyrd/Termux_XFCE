@@ -1,226 +1,88 @@
 #!/bin/bash
 
-# Function to print centered text with margin and color
-print_centered_text() {
-  local text="$1"
-  local margin_width=5  # Desired margin width
-  local terminal_width=$(tput cols 2>/dev/null)  # Get the width of the terminal
+# Unofficial Bash Strict Mode
+set -euo pipefail
+IFS=$'\n\t'
 
-  # Check if tput is available
-  if [[ -z $terminal_width ]]; then
-    terminal_width=80  # Default terminal width if tput is not available
+finish() {
+  local ret=$?
+  if [ ${ret} -ne 0 ] && [ ${ret} -ne 130 ]; then
+    echo
+    echo "ERROR: Failed to setup XFCE on Termux."
+    echo "Please refer to the error message(s) above"
   fi
-
-  # Calculate the available width for the centered text
-  local available_width=$((terminal_width - (2 * margin_width)))
-
-  # Wrap the text to fit the available width
-  local wrapped_text=$(echo "$text" | fold -s -w "$available_width")
-
-  # Split the wrapped text into lines
-  IFS=$'\n' read -d '' -r -a lines <<< "$wrapped_text"
-
-  # Print the centered and wrapped lines with margin and color
-  for line in "${lines[@]}"; do
-    local indent=$(( (terminal_width - ${#line}) / 2 ))
-    printf "%*s\e[1m%s\e[0m%*s\n" $margin_width "" "$line" $((margin_width + indent)) ""
-  done
 }
 
-# Change to home directory and clear the screen
-cd
-clear
+trap finish EXIT
 
-# Install ncurses-utils package
-apt update > /dev/null 2>&1
-apt install ncurses-utils -y > /dev/null 2>&1
+termux-change-repo
 
-echo ""
-echo ""
-print_centered_text ""
-print_centered_text ""
-print_centered_text "This install script will set up Termux with an XFCE4 Desktop and a Debian proot-distro install"
-
-# Prompt for username
-echo ""
-echo ""
-read -p "Please enter a username: " varname
-
-#Setup phone storage access
+pkg update -y && pkg install wget -y
 
 termux-setup-storage
 
-#Setup XFCE4 in Termux
+clear -x
 
-apt install x11-repo && apt install git neofetch proot-distro papirus-icon-theme evince xfce4 xfce4-goodies pavucontrol-qt epiphany exa bat lynx cmatrix nyancat gimp hexchat audacious wmctrl -y
+echo ""
+echo "This script will install XFCE Desktop in Termux along with a Debian proot"
+echo ""
+read -r -p "Please enter username for proot installation: " username </dev/tty
+
+timezone=$(getprop persist.sys.timezone)
+
+#Fix Potential dbus Issues
+pkg uninstall dbus -y
+pkg install dbus -y
+
+#Install requirements
+pkg install x11-repo tur-repo pulseaudio -y
+
+#Install XFCE4 Desktop and Extras
+pkg install git neofetch virglrenderer-android proot-distro papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa bat wmctrl tigervnc firefox -y
 
 #Setup Debian Proot
+proot-distro install debian
+proot-distro login debian --shared-tmp -- env DISPLAY=:1 apt update
+proot-distro login debian --shared-tmp -- env DISPLAY=:1 apt upgrade -y
+proot-distro login debian --shared-tmp -- env DISPLAY=:1 apt install sudo wget -y
 
-proot-distro install debian && proot-distro login debian --shared-tmp -- env DISPLAY=:1 apt update && proot-distro login debian --shared-tmp -- env DISPLAY=:1 apt install sudo -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1 adduser $varname
+#Create Debian Proot User
+proot-distro login debian --shared-tmp -- env DISPLAY=:1 groupadd storage
+proot-distro login debian --shared-tmp -- env DISPLAY=:1 groupadd wheel
+proot-distro login debian --shared-tmp -- env DISPLAY=:1 groupadd video || true
+proot-distro login debian --shared-tmp -- env DISPLAY=:1 useradd -m -g users -G wheel,audio,video,storage -s /bin/bash "$username"
 
-#Add user to sudoers
-
+#Add User to sudoers
 chmod u+rw ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
-echo "$varname ALL=(ALL) NOPASSWD:ALL" | tee -a ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers > /dev/null
-chmod u-w ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
+echo "$username ALL=(ALL) NOPASSWD:ALL" | tee -a ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers > /dev/null
+chmod u-w  ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 
-#Install Additional Software as user
+#Set Timezone
+timezone=$(getprop persist.sys.timezone)
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/$timezone /etc/localtime
 
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1 sudo apt install zenity onboard firefox-esr libreoffice wget curl vlc pithos apt-utils -y
+#Set Display in Proot .bashrc
+echo "export DISPLAY=:1.0" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
-#Set localtime
+############################
+##Setup XFCE4 Desktop Theme and Sound##
+############################
 
-TZ=$(getprop persist.sys.timezone)
+#Create .bashrc
+cp ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc ~/.bashrc
 
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/$TZ /etc/localtime
+#Enable Sound
+echo "pulseaudio --start --exit-idle-time=-1
+pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1
+" > ~/.sound
+echo "source ~/.sound" >> ~/.bashrc
 
-#Add Programs to Menu
-
-#Firefox-ESR
-cp ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/firefox-esr.desktop ../usr/share/applications && sed -i "s/^Exec=\(.*\)$/Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 \1/"  ../usr/share/applications/firefox-esr.desktop
-
-#LibreOffice
-cp ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/libreoffice* ../usr/share/applications && sed -i "s/^Exec=\(.*\)$/Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 \1/"   ../usr/share/applications/libreoffice*
-
-#Onboard
-cp ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/onboard.desktop ../usr/share/applications && sed -i "s/^Exec=\(.*\)$/Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 \1/"  ../usr/share/applications/onboard.desktop
-
-#Install Brave Web Browser
-
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo curl -fsSLo /usr/share/keyrings/brave-browser-archive-keyring.gpg https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 echo "deb [signed-by=/usr/share/keyrings/brave-browser-archive-keyring.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main"|proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo tee /etc/apt/sources.list.d/brave-browser-release.list
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt update && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt install brave-browser -y
-
-#Create Desktop Folder
-
-mkdir ~/Desktop
-
-#Create Desktop Launcher
-
-echo "[Desktop Entry]
-Version=1.0
-Name=Brave Web Browser
-Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /usr/bin/brave-browser-stable %U --no-sandbox
-StartupNotify=true
-Terminal=false
-Icon=brave-browser
-Type=Application
-Categories=Network;WebBrowser;
-MimeType=application/pdf;application/rdf+xml;application/rss+xml;application/xhtml+xml;application/xhtml_xml;application/xml;image/gif;image/jpeg;image/png;image/webp;text/html;text/xml;x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/ipfs;x-scheme-handler/ipns;
-Actions=new-window;new-private-window;
-Path=
-[Desktop Action new-window]
-Name=New Window
-Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /usr/bin/brave-browser-stable
-[Desktop Action new-private-window]
-Name=New Incognito Window
-Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /usr/bin/brave-browser-stable --incognito
-" > ~/Desktop/Brave.desktop
-
-chmod +x ~/Desktop/Brave.desktop
-cp ~/Desktop/Brave.desktop ../usr/share/applications/Brave.desktop 
-
-# Install FreeTube
-
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/FreeTubeApp/FreeTube/releases/download/v0.18.0-beta/freetube_0.18.0_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt install ./freetube_0.18.0_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm freetube_0.18.0_arm64.deb
-
-echo "[Desktop Entry]
-Name=FreeTube
-Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /opt/FreeTube/freetube %U --no-sandbox
-Terminal=false
-Type=Application
-Icon=freetube
-StartupWMClass=FreeTube
-Comment=A private YouTube client
-MimeType=x-scheme-handler/freetube;
-Categories=Network;
-" > ~/Desktop/freetube.desktop
-
-chmod +x ~/Desktop/freetube.desktop
-cp ~/Desktop/freetube.desktop ../usr/share/applications/freetube.desktop 
-
-#Install Tor Browser
-
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 wget https://sourceforge.net/projects/tor-browser-ports/files/12.0.6/tor-browser-linux-arm64-12.0.6_ALL.tar.xz/download -O tor.tar.xz
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 tar -xvf tor.tar.xz 
-proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 rm tor.tar.xz
-
-#Create Desktop Launcher
-
-echo "[Desktop Entry]
-Type=Application
-Name=Tor Browser
-GenericName=Web Browser
-Comment=Tor Browser  is +1 for privacy and −1 for mass surveillance
-Categories=Network;WebBrowser;Security;
-Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 tor-browser/Browser/start-tor-browser
-X-TorBrowser-ExecShell=./Browser/start-tor-browser --detach
-Icon=tor
-StartupWMClass=Tor Browser
-Path=
-Terminal=false
-StartupNotify=false
-" > ~/Desktop/tor.desktop
-
-chmod +x ~/Desktop/tor.desktop
-cp ~/Desktop/tor.desktop ../usr/share/applications/tor.desktop 
-
-#Install Webcord
-
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./webcord_4.2.0_arm64.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm webcord_4.2.0_arm64.deb
-
-#Create Desktop Launcher
-
-echo "[Desktop Entry]
-Name=Discord
-Comment=A Discord and Fosscord client made with the Electron API.
-GenericName=Internet Messenger
-Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 webcord --no-sandbox
-Icon=discord
-Type=Application
-StartupNotify=true
-Categories=Network;InstantMessaging;
-" > ~/Desktop/webcord.desktop
-
-chmod +x ~/Desktop/webcord.desktop
-cp ~/Desktop/webcord.desktop ../usr/share/applications/webcord.desktop 
-
-#Install Visual Studio Code
-
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://packages.microsoft.com/repos/code/pool/main/c/code/code_1.79.0-1686148160_arm64.deb -O code.deb && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  sudo -S apt install ./code.deb -y && proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm code.deb
-
-#Create Desktop Launcher
-
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Visual Studio Code
-Comment=Code Editing. Redefined.
-Exec=proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 /usr/share/code/code --no-sandbox
-Icon=visual-studio-code
-Categories=Development;
-Path=
-Terminal=false
-StartupNotify=false
-
-" > ~/Desktop/code.desktop
-
-chmod +x ~/Desktop/code.desktop
-cp ~/Desktop/code.desktop ../usr/share/applications/code.desktop 
-
-#update and upgrade 
-apt update && apt upgrade -y
-
-#Install Fluent Cursor Icon Theme
-
-wget https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-01.zip
-unzip 2023-02-01.zip
-mv Fluent-icon-theme-2023-02-01/cursors/dist ../usr/share/icons/ && mv Fluent-icon-theme-2023-02-01/cursors/dist-dark ../usr/share/icons/
-rm -rf ~/Fluent*
-rm 2023-02-01.zip
+#Download Wallpaper
+wget https://besthqwallpapers.com/Uploads/22-9-2017/21311/gray-lines-geometry-strips-dark-material-art.jpg
+mv gray-lines-geometry-strips-dark-material-art.jpg ../usr/share/backgrounds/xfce/
 
 #Install WhiteSur-Dark Theme
-
 wget https://github.com/vinceliuice/WhiteSur-gtk-theme/archive/refs/tags/2023-04-26.zip
 unzip 2023-04-26.zip
 tar -xf WhiteSur-gtk-theme-2023-04-26/release/WhiteSur-Dark-44-0.tar.xz
@@ -228,51 +90,14 @@ mv WhiteSur-Dark/ ../usr/share/themes/
 rm -rf WhiteSur*
 rm 2023-04-26.zip
 
-#Download wallpaper
-wget https://besthqwallpapers.com/Uploads/22-9-2017/21311/gray-lines-geometry-strips-dark-material-art.jpg
-mv gray-lines-geometry-strips-dark-material-art.jpg ../usr/share/backgrounds/xfce/
-
-#Create .bashrc
-
-cp ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc ~/.bashrc
-
-#Enable Sound
-
-echo "pulseaudio --start --exit-idle-time=-1
-pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1
-" > .sound
-echo "source ~/.sound" >> ~/.bashrc
-
-#Setup Fancybash Termux
-
-wget https://raw.githubusercontent.com/ChrisTitusTech/scripts/master/fancy-bash-promt.sh
-mv fancy-bash-promt.sh .fancybash.sh
-echo "source ~/.fancybash.sh" >> .bashrc
-sed -i "326s/\\\u/$varname/" ~/.fancybash.sh
-sed -i "327s/\\\h/termux/" ~/.fancybash.sh
-
-#Setup Fancybash Proot
-cp .fancybash.sh ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname
-echo "source ~/.fancybash.sh" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bashrc
-sed -i '327s/termux/proot/' ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.fancybash.sh
-
-echo "
-# Run once script
-run_once_script() {
-  if [ ! -f ~/.run_once_completed ]; then
-    wmctrl -n 1
-    touch ~/.run_once_completed
-  fi
-}
-run_once_script
-" >> ~/.bashrc 
-
-#Set Display in proot .bashrc
-
-echo "export DISPLAY=:1.0" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bashrc
+#Install Fluent Cursor Icon Theme
+wget https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-01.zip
+unzip 2023-02-01.zip
+mv Fluent-icon-theme-2023-02-01/cursors/dist ../usr/share/icons/ && mv Fluent-icon-theme-2023-02-01/cursors/dist-dark ../usr/share/icons/
+rm -rf ~/Fluent*
+rm 2023-02-01.zip
 
 #Setup Fonts
-
 wget https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
 mkdir .fonts 
 unzip CascadiaCode-2111.01.zip
@@ -280,8 +105,27 @@ mv otf/static/* .fonts/ && rm -rf otf
 mv ttf/* .fonts/ && rm -rf ttf/
 rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
 
+#Setup Fancybash Termux
+wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/fancybash.sh
+mv fancybash.sh .fancybash.sh
+echo "source ~/.fancybash.sh" >> .bashrc
+sed -i "326s/\\\u/$username/" ~/.fancybash.sh
+sed -i "327s/\\\h/termux/" ~/.fancybash.sh
+
+#Setup Fancybash Proot
+cp .fancybash.sh ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username
+echo "source ~/.fancybash.sh" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
+sed -i '327s/termux/proot/' ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.fancybash.sh
+
+#Set aliases
+echo "
+alias debian='proot-distro login debian --user phoenixbyrd --shared-tmp && clear'
+alias virgl='GALLIUM_DRIVER=virpipe $@'
+alias ls='exa -lF'
+alias cat='bat $@'
+" >> ~/.bashrc
+
 # Install Termux-X11
- 
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip 
 unzip termux-x11.zip
 mv termux-x11.apk storage/downloads/
@@ -292,7 +136,124 @@ rm termux-x11-1.02.07-0-all.deb
 sed -i '12s/^#//' .termux/termux.properties
 termux-open storage/downloads/termux-x11.apk
 
-#XFCE Terminal Settings
+mkdir -p ~/Desktop
+
+#XFCE Start
+cat <<'EOF' > start
+#!/bin/bash
+termux-x11 :1.0 &
+virgl_test_server_android &
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env DISPLAY=:1.0 dbus-launch --exit-with-session xfce4-session &
+
+EOF
+
+chmod +x start
+mv start ../usr/bin
+
+#Shutdown Utility
+cat <<'EOF' > ../usr/bin/kill_termux_x11
+#!/bin/bash
+
+# Get the process IDs of Termux-X11 and XFCE sessions
+termux_x11_pid=$(pgrep -f "/system/bin/app_process / com.termux.x11.Loader :1")
+xfce_pid=$(pgrep -f "xfce4-session")
+
+# Check if the process IDs exist
+if [ -n "$termux_x11_pid" ] && [ -n "$xfce_pid" ]; then
+  # Kill the processes
+  kill -9 "$termux_x11_pid" "$xfce_pid"
+  echo "Termux-X11 and XFCE sessions closed."
+else
+  echo "Termux-X11 or XFCE session not found."
+fi
+
+EOF
+
+chmod +x ../usr/bin/kill_termux_x11
+
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Kill Termux X11
+Comment=
+Exec=kill_termux_x11
+Icon=system-shutdown
+Path=
+Terminal=false
+StartupNotify=false
+" > ~/Desktop/kill_termux_x11.desktop
+
+#Setup VNC
+
+vncserver
+vncserver -kill :1
+
+sed -i '7s/.*/#/' ~/.vnc/xstartup
+sed -i '11s/.*/xfce4-session \&/' ~/.vnc/xstartup
+
+cat <<'EOF' > ../usr/bin/vncstart
+#!/bin/bash
+
+rm -rf ../usr/tmp/.X1*
+vncserver
+
+EOF
+
+chmod +x ../usr/bin/vncstart
+
+cat <<'EOF' > ../usr/bin/vncstop
+#!/bin/bash
+
+vncserver -kill :1
+
+EOF
+
+chmod +x ../usr/bin/vncstop
+
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Kill vncserver
+Comment=
+Exec=vncstop
+Icon=system-shutdown
+Path=
+Terminal=false
+StartupNotify=false
+" > ~/Desktop/kill_vncserver.desktop
+
+#Install Webcord
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0  apt install ./webcord_4.2.0_arm64.deb -y
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm webcord_4.2.0_arm64.deb
+
+echo "[Desktop Entry]
+Name=Discord
+Comment=A Discord and Fosscord client made with the Electron API.
+GenericName=Internet Messenger
+Exec=proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 webcord --no-sandbox
+Icon=discord
+Type=Application
+StartupNotify=true
+Categories=Network;InstantMessaging;
+" > ~/Desktop/webcord.desktop
+
+chmod +x ~/Desktop/webcord.desktop
+cp ~/Desktop/webcord.desktop ../usr/share/applications/webcord.desktop 
+
+#Create Firefox hw accel enabled desktop icon
+echo "#!/bin/bash
+
+GALLIUM_DRIVER=virpipe firefox
+" > ~/.firefox
+
+chmod +x .firefox
+cp ../usr/share/applications/firefox.desktop ~/Desktop 
+sed -i '7s/.*/Exec=\/data\/data\/com.termux\/files\/home\/.firefox/' ~/Desktop/firefox.desktop
+
+##############
+##XFCE4 SETTINGS##
+##############
 
 mkdir -p ~/.config/xfce4/terminal/
 
@@ -334,8 +295,6 @@ TitleMode=TERMINAL_TITLE_HIDE
 ScrollingUnlimited=TRUE
 ScrollingBar=TERMINAL_SCROLLBAR_NONE
 EOF
-
-#Create XFCE Files
 
 mkdir -p ~/.config/xfce4/xfconf/xfce-perchannel-xml/
 
@@ -760,242 +719,24 @@ cat <<EOF > .config/Mousepad/accels.scm
 
 EOF
 
-#Create .bash_aliases
 
-echo "alias cls='clear -x'
-alias prun='proot-distro login --user $varname debian --shared-tmp -- env DISPLAY=:1 $@'
-alias debian='clear && proot-distro login debian --user $varname --shared-tmp && clear'
-alias ls='exa -lF'
-alias cat='bat $@'
-alias x11='termux-x11 :1 &'
-alias display='env DISPLAY=:1 dbus-launch --exit-with-session xfce4-session'
-alias virgl='virgl_test_server_android &'
-" > .bash_aliases
+########
+##Finish ##
+########
 
-#Create .bash_aliases proot
-
-echo "alias cls='clear -x'
-alias ls='exa -lF'
-alias cat='bat $@'
-" > ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.bash_aliases
-
-# create start command
-
-cat <<'EOF' > start
-#!/bin/bash
-termux-x11 :1.0 &
-am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env DISPLAY=:1.0 dbus-launch --exit-with-session xfce4-session &
-
-EOF
-
-chmod +x start
-mv start ../usr/bin
-
-#Create cp2menu script and desktop launcher
-
-cat <<'EOF' > cp2menu
-#!/bin/bash
-
-cd
-
-user_dir="../usr/var/lib/proot-distro/installed-rootfs/debian/home/"
-
-# Get the username from the user directory
-username=$(basename "$user_dir"/*)
-
-selected_file=$(zenity --file-selection --title="Select .desktop File" --file-filter="*.desktop" --filename="../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications")
-
-if [[ -z $selected_file ]]; then
-  zenity --info --text="No file selected. Quitting..." --title="Operation Cancelled"
-  exit 0
-fi
-
-desktop_filename=$(basename "$selected_file")
-
-cp "$selected_file" "../usr/share/applications/"
-sed -i "s/^Exec=\(.*\)$/Exec=proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 \1/" "../usr/share/applications/$desktop_filename"
-
-zenity --info --text="Operation completed successfully!" --title="Success"
-
-EOF
-
-chmod +x cp2menu
-mv cp2menu ../usr/bin/cp2menu
-
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=cp2menu
-Comment=
-Exec=cp2menu
-Icon=mail-move
-Path=
-Terminal=false
-StartupNotify=false
-" > ~/Desktop/cp2menu.desktop
-
-chmod +x ~/Desktop/cp2menu.desktop
-
-#Create backup script and desktop launcher
-
-#!/bin/bash
-
-cat <<'EOF' > ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/bin/backup_restore
-#!/bin/bash
-
-backup_dir_local="."  # Specify the local backup directory path
-backup_dir_sdcard="/storage/emulated/0/Download/"  # Specify the SD card backup directory path
-archive_file="backup.tar.gz"     # Specify the archive file name
-
-function backup() {
-    zenity --info --title="Backup" --width=300 --text="Creating backup archive..."
-    tar -czf "$backup_dir_local/$archive_file" -C ~/.config BraveSoftware WebCord FreeTube
-    zenity --info --title="Backup" --width=300 --text="Local backup completed!\n\nBackup path: $backup_dir_local/$archive_file"
-
-    zenity --info --title="Backup" --width=300 --text="Creating backup archive on SD card..."
-    tar -czf "$backup_dir_sdcard/$archive_file" -C ~/.config BraveSoftware WebCord FreeTube
-    zenity --info --title="Backup" --width=300 --text="SD card backup completed!\n\nBackup path: $backup_dir_sdcard/$archive_file"
-}
-
-function restore() {
-    restore_source=$(zenity --list --radiolist --title="Restore Source" --width=300 --height=200 --column "" --column "Source" FALSE "Local Backup" FALSE "SD Card Backup" --hide-header)
-    case "$restore_source" in
-        "Local Backup")
-            restore_directory="$backup_dir_local"
-            ;;
-        "SD Card Backup")
-            restore_directory="$backup_dir_sdcard"
-            ;;
-        *)
-            echo "No restore source selected."
-            return
-            ;;
-    esac
-
-    if [ -f "$restore_directory/$archive_file" ]; then
-        zenity --info --title="Restore" --width=300 --text="Restoring..."
-        rm -rf ~/.config/BraveSoftware ~/.config/WebCord ~/.config/FreeTube
-        tar -xzf "$restore_directory/$archive_file" -C ~/.config
-        zenity --info --title="Restore" --width=300 --text="Restoration completed!"
-    else
-        zenity --info --title="Restore" --width=300 --text="No backup archive found in the selected restore source. Unable to restore!"
-    fi
-}
-
-function show_backup_dialog() {
-    zenity --info --title="Backup" --width=300 --text="Click OK to create a backup.\n\nThis will take a few moments."
-    backup
-}
-
-function show_restore_dialog() {
-    restore
-}
-
-# Display GUI dialog to select backup or restore
-selection=$(zenity --list --radiolist --title="Backup and Restore" --width=300 --height=200 --column "" --column "Action" FALSE "Backup" FALSE "Restore" --hide-header)
-
-case "$selection" in
-    "Backup")
-        show_backup_dialog
-        ;;
-    "Restore")
-        show_restore_dialog
-        ;;
-    *)
-        echo "No action selected."
-        ;;
-esac
-
-EOF
-
-chmod +x ../usr/var/lib/proot-distro/installed-rootfs/debian/usr/bin/backup_restore
-
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Backup & Restore
-Comment=
-Exec=proot-distro login debian --user phoenixbyrd --shared-tmp -- env DISPLAY=:1.0 backup_restore
-Icon=backup
-Path=
-Terminal=false
-StartupNotify=false
-" > ~/Desktop/backup_restore.desktop
-
-
-cat <<'EOF' > ../usr/bin/kill_termux_x11
-#!/bin/bash
-
-# Get the process IDs of Termux-X11 and XFCE sessions
-termux_x11_pid=$(pgrep -f "/system/bin/app_process / com.termux.x11.Loader :1")
-xfce_pid=$(pgrep -f "xfce4-session")
-
-# Check if the process IDs exist
-if [ -n "$termux_x11_pid" ] && [ -n "$xfce_pid" ]; then
-  # Kill the processes
-  kill -9 "$termux_x11_pid" "$xfce_pid"
-  echo "Termux-X11 and XFCE sessions closed."
-else
-  echo "Termux-X11 or XFCE session not found."
-fi
-
-EOF
-
-chmod +x ../usr/bin/kill_termux_x11
-
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Kill Termux X11
-Comment=
-Exec=kill_termux_x11
-Icon=system-shutdown
-Path=
-Terminal=false
-StartupNotify=false
-" > ~/Desktop/kill_termux_x11.desktop
-
-
-# Display completion message and next steps
-# Function to print centered text with margin
-print_centered_text() {
-  local text="$1"
-  local margin_width=5  # Desired margin width
-  local terminal_width=$(tput cols)  # Get the width of the terminal
-
-  # Calculate the available width for the centered text
-  local available_width=$((terminal_width - (2 * margin_width)))
-
-  # Wrap the text to fit the available width
-  local wrapped_text=$(echo "$text" | fold -s -w "$available_width")
-
-  # Split the wrapped text into lines
-  IFS=$'\n' read -d '' -r -a lines <<< "$wrapped_text"
-
-  # Print the centered and wrapped lines with margin
-  for line in "${lines[@]}"; do
-    local indent=$(( (terminal_width - ${#line}) / 2 ))
-    printf "%*s%s%*s\n" $margin_width "" "$line" $((margin_width + indent)) ""
-  done
-}
-
-clear
-
-# Display completion message and next steps
-
+clear -x
 echo ""
 echo ""
-print_centered_text "Setup completed successfully!"
+echo "Setup completed successfully!"
 echo ""
-print_centered_text "You can now connect to your Termux XFCE4 Desktop after restarting termux."
+echo "You can now connect to your Termux XFCE4 Desktop after restarting termux."
 echo ""
-print_centered_text "To open the desktop use the command start"
+echo "To open the desktop use the command start"
 echo ""
-print_centered_text "This will start the termux-x11 server in termux and start the XFCE Desktop open the installed Termux-X11 app."
+echo "This will start the termux-x11 server in termux and start the XFCE Desktop open the installed Termux-X11 app."
 echo ""
-print_centered_text "After installing apps in proot, exit back into Termux and use the command cp2menu to move the application launchers into your XFCE menu or you can double click the icon on the desktop to launch the cp2menu script."
+echo "To use start vnc use command vncstart and to shutdown vnc use command vncstop"
 echo ""
-print_centered_text "Enjoy your Termux XFCE4 Desktop experience!"
+echo "Enjoy your Termux XFCE4 Desktop experience!"
 echo ""
-
-rm setup.sh
+echo ""
