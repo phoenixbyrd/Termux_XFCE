@@ -121,6 +121,14 @@ alias ls='exa -lF'
 alias cat='bat $@'
 " >> ~/.bashrc
 
+#Set proot aliases
+
+echo "
+alias virgl='GALLIUM_DRIVER=virpipe $@'
+alias ls='exa -lF'
+alias cat='bat $@'
+" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
+
 # Install Termux-X11
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip 
 unzip termux-x11.zip
