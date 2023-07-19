@@ -147,12 +147,24 @@ cat <<'EOF' > start
 #!/bin/bash
 termux-x11 :1.0 &
 virgl_test_server_android &
-am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env DISPLAY=:1.0 dbus-launch --exit-with-session xfce4-session &
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env DISPLAY=:1.0 dbus-launch --exit-with-session glxfce &
 
 EOF
 
 chmod +x start
 mv start ../usr/bin
+
+#glxfce Hardware Acceleration XFCE Desktop
+cat <<'EOF' > glxfce
+#!/bin/bash
+
+export DISPLAY=:1
+GALLIUM_DRIVER=virpipe xfce4-session &
+
+EOF
+
+chmod +x glxfce
+mv glxfce ../usr/bin
 
 #Shutdown Utility
 cat <<'EOF' > ../usr/bin/kill_termux_x11
@@ -245,15 +257,8 @@ Categories=Network;InstantMessaging;
 chmod +x ~/Desktop/webcord.desktop
 cp ~/Desktop/webcord.desktop ../usr/share/applications/webcord.desktop 
 
-#Create Firefox hw accel enabled desktop icon
-echo "#!/bin/bash
-
-GALLIUM_DRIVER=virpipe firefox
-" > ~/.firefox
-
-chmod +x .firefox
+#Put Firefox icon on Desktop
 cp ../usr/share/applications/firefox.desktop ~/Desktop 
-sed -i '7s/.*/Exec=\/data\/data\/com.termux\/files\/home\/.firefox/' ~/Desktop/firefox.desktop
 
 ##############
 ##XFCE4 SETTINGS##
