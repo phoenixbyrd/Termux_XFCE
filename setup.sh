@@ -124,7 +124,7 @@ alias cat='bat $@'
 #Set proot aliases
 
 echo "
-alias virgl='GALLIUM_DRIVER=virpipe $@'
+alias virgl='GALLIUM_DRIVER=virpipe MESA_GL_VERSION_OVERRIDE=3.3 $@'
 alias ls='exa -lF'
 alias cat='bat $@'
 " >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
