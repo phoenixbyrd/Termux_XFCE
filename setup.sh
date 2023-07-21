@@ -116,7 +116,7 @@ sed -i '327s/termux/proot/' ../usr/var/lib/proot-distro/installed-rootfs/debian/
 #Set aliases
 echo "
 alias debian='proot-distro login debian --user $username -shared-tmp && clear'
-alias virgl='GALLIUM_DRIVER=virpipe $@'
+alias virgl='GALLIUM_DRIVER=virpipe MESA_GL_VERSION_OVERRIDE=3.3 $@'
 alias ls='exa -lF'
 alias cat='bat $@'
 " >> ~/.bashrc
