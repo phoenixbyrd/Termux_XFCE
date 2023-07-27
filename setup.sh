@@ -101,6 +101,9 @@ mv otf/static/* .fonts/ && rm -rf otf
 mv ttf/* .fonts/ && rm -rf ttf/
 rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
 
+wget https://github.com/phoenixbyrd/Termux_XFCE/blob/main/font.ttf
+mv font.ttf .termux
+
 #Setup Fancybash Termux
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/fancybash.sh
 mv fancybash.sh .fancybash.sh
