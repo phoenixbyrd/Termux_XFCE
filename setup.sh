@@ -216,13 +216,14 @@ StartupNotify=false
 #App-Installer Utility
 
 git clone https://github.com/phoenixbyrd/App-Installer.git
+mv App-Installer .App-Installer
 
 echo "[Desktop Entry]
 Version=1.0
 Type=Application
 Name=App Installer
 Comment=
-Exec=/data/data/com.termux/files/home/App-Installer/app-installer
+Exec=/data/data/com.termux/files/home/.App-Installer/app-installer
 Icon=package-install
 Path=
 Terminal=false
