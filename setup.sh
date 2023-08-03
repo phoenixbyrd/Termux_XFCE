@@ -217,6 +217,7 @@ StartupNotify=false
 
 git clone https://github.com/phoenixbyrd/App-Installer.git
 mv App-Installer .App-Installer
+chmod +x .App-Installer/*
 
 echo "[Desktop Entry]
 Version=1.0
