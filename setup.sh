@@ -135,13 +135,6 @@ alias cat='bat $@'
 # Install Termux-X11
 
 sed -i '12s/^#//' .termux/termux.properties
-#wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.zip 
-#unzip termux-x11.zip
-#mv termux-x11.apk storage/downloads/
-#apt install ./termux-x11-1.02.07-0-all.deb
-#rm termux-x11.zip
-#rm termux-x11-1.02.07-0-all.deb
-#termux-open storage/downloads/termux-x11.apk
 
 curl -sL https://nightly.link/termux/termux-x11/workflows/debug_build/master/termux-companion%20packages.zip -o termux_companion_packages.zip
 unzip termux_companion_packages.zip "termux-x11-nightly*.deb"
@@ -153,6 +146,7 @@ curl -sL https://nightly.link/termux/termux-x11/workflows/debug_build/master/ter
 unzip termux-x11.zip
 mv app-universal-debug.apk storage/downloads/
 termux-open storage/downloads/app-universal-debug.apk
+rm termux-x11.zip
 
 mkdir -p ~/Desktop
 
