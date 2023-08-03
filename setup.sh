@@ -58,9 +58,8 @@ timezone=$(getprop persist.sys.timezone)
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/$timezone /etc/localtime
 
-#Set Display in Proot .bashrc and enable hardware acceleration
+#Set Display in Proot .bashrc
 echo "export DISPLAY=:1.0" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
-echo "export GALLIUM_DRIVER=virpipe" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
 ############################
 ##Setup XFCE4 Desktop Theme and Sound##
