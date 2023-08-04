@@ -75,7 +75,7 @@ pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymou
 echo "source ~/.sound" >> ~/.bashrc
 
 #Download Wallpaper
-wget https://github.com/phoenixbyrd/Termux_XFCE/blob/main/peakpx.jpg
+wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/peakpx.jpg
 mv peakpx.jpg ../usr/share/backgrounds/xfce/
 
 #Install WhiteSur-Dark Theme
