@@ -9,14 +9,12 @@ This setup uses Termux-X11, the termux-x11 server will be installed and you will
 This is is how I personally use Termux on my Galaxy Fold 3, script was created mainly for personal use but also for others if they wanted to try out my setup. This is my daily driver used with a 15 inch Lepow portable monitor and bluetooth keyboard and mouse.
 
 &nbsp;
+
 # Starting the desktop
 
 During install you will recieve a popup to allow installs from termux, this will open the APK for the Termux-X11 android app. While you do not have to allow installs from termux, you will still need to install manually by using a file browser and finding the APK in your downloads folder. 
   
-
-After install you will need to exit termux using the command ```exit```
-  
-Once you restart termux you can use the command ```start``` 
+Use the command ```start``` to initiate a Termux-X11 session
   
 This will start the termux-x11 server, XFCE4 desktop and open the Termux-X11 app right into the desktop. 
 
@@ -28,21 +26,9 @@ Also note, you do not need to set display in Debian proot as it is already set. 
 
 &nbsp;
 
-# Kill Termux X11
-
-This will shut down your Termux-X11 session, you will have to manually close the Android apps
-
-&nbsp;
-
-# Kill vncserver
-
-This will shut down your vncserver session, you will have to manually close the Android apps
-
-&nbsp;
-
 # Hardware Acceleration & Proot
 
-This is setup with virglrenderer-android installed for hardware acceleration on supported devices. Use the command ```GALLIUM_DRIVER=virpipe app_name_here``` to run that app with hardware acceleration. This should also work in proot. To enter proot use the command ```debian```, from there you can install aditional software. 
+This is setup with virglrenderer-android installed for hardware acceleration on supported devices. Use the command ```virgl app_name_here``` to run that app with hardware acceleration. This should also work in proot. To enter proot use the command ```debian```, from there you can install aditional software. 
 
 # Install
 
