@@ -237,15 +237,6 @@ StartupNotify=false
 vncserver
 vncserver -kill :1
 
-sed -i '7s/.*/#/' ~/.vnc/xstartup
-sed -i '11s/.*/xfce4-session \&/' ~/.vnc/xstartup
-
-cat <<'EOF' > ../usr/bin/vncstart
-#!/bin/bash
-
-rm -rf ../usr/tmp/.X1*
-vncserver
-
 echo "[Desktop Entry]
 Version=1.0
 Type=Application
@@ -256,7 +247,20 @@ Icon=system-shutdown
 Path=
 Terminal=false
 StartupNotify=false
-" > ~/Desktop/kill_vncserver.desktop
+" > $HOME/Desktop/.kill_vncserver.desktop
+
+chmod +x $HOME/Desktop/.kill_vncserver.desktop
+
+sed -i '7s/.*/#/' ~/.vnc/xstartup
+sed -i '11s/.*/xfce4-session \&/' ~/.vnc/xstartup
+
+cat <<'EOF' > ../usr/bin/vncstart
+#!/bin/bash
+
+rm -rf ../usr/tmp/.X1*
+vncserver
+
+mv $HOME/Desktop/.kill_vncserver.desktop $HOME/Desktop/kill_vncserver.desktop
 
 EOF
 
@@ -267,7 +271,7 @@ cat <<'EOF' > ../usr/bin/vncstop
 
 vncserver -kill :1
 
-rm ~/Desktop/kill_vncserver.desktop
+mv $HOME/Desktop/kill_vncserver.desktop $HOME/Desktop/.kill_vncserver.desktop
 
 EOF
 
