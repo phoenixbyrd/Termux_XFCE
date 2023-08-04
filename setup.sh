@@ -75,8 +75,8 @@ pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymou
 echo "source ~/.sound" >> ~/.bashrc
 
 #Download Wallpaper
-wget https://besthqwallpapers.com/Uploads/22-9-2017/21311/gray-lines-geometry-strips-dark-material-art.jpg
-mv gray-lines-geometry-strips-dark-material-art.jpg ../usr/share/backgrounds/xfce/
+wget https://github.com/phoenixbyrd/Termux_XFCE/blob/main/peakpx.jpg
+mv peakpx.jpg ../usr/share/backgrounds/xfce/
 
 #Install WhiteSur-Dark Theme
 wget https://github.com/vinceliuice/WhiteSur-gtk-theme/archive/refs/tags/2023-04-26.zip
