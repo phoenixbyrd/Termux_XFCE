@@ -159,27 +159,6 @@ virgl_test_server_android &
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env 
 DISPLAY=:1.0 dbus-launch --exit-with-session glxfce &
 
-#Shutdown Utility
-cat <<'EOF' > ../usr/bin/kill_termux_x11
-#!/bin/bash
-
-# Get the process IDs of Termux-X11 and XFCE sessions
-termux_x11_pid=$(pgrep -f "/system/bin/app_process / com.termux.x11.Loader :1")
-xfce_pid=$(pgrep -f "xfce4-session")
-
-# Check if the process IDs exist
-if [ -n "$termux_x11_pid" ] && [ -n "$xfce_pid" ]; then
-  # Kill the processes
-  kill -9 "$termux_x11_pid" "$xfce_pid"
-  echo "Termux-X11 and XFCE sessions closed."
-else
-  echo "Termux-X11 or XFCE session not found."
-fi
-
-EOF
-
-chmod +x ../usr/bin/kill_termux_x11
-
 echo "[Desktop Entry]
 Version=1.0
 Type=Application
