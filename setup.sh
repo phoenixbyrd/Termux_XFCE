@@ -264,19 +264,6 @@ cat <<'EOF' > ../usr/bin/vncstart
 rm -rf ../usr/tmp/.X1*
 vncserver
 
-EOF
-
-chmod +x ../usr/bin/vncstart
-
-cat <<'EOF' > ../usr/bin/vncstop
-#!/bin/bash
-
-vncserver -kill :1
-
-EOF
-
-chmod +x ../usr/bin/vncstop
-
 echo "[Desktop Entry]
 Version=1.0
 Type=Application
@@ -288,6 +275,21 @@ Path=
 Terminal=false
 StartupNotify=false
 " > ~/Desktop/kill_vncserver.desktop
+
+EOF
+
+chmod +x ../usr/bin/vncstart
+
+cat <<'EOF' > ../usr/bin/vncstop
+#!/bin/bash
+
+vncserver -kill :1
+
+rm ~/Desktop/kill_vncserver.desktop
+
+EOF
+
+chmod +x ../usr/bin/vncstop
 
 #Install Webcord
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb
