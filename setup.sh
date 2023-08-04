@@ -588,7 +588,7 @@ cat <<EOF > .config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
         <property name="workspace0" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="5"/>
-          <property name="last-image" type="string" value="../usr/share/backgrounds/xfce/gray-lines-geometry-strips-dark-material-art.jpg"/>
+          <property name="last-image" type="string" value="../usr/share/backgrounds/xfce/peakpx.jpg"/>
         </property>
         <property name="workspace1" type="empty">
           <property name="color-style" type="int" value="0"/>
@@ -610,7 +610,7 @@ cat <<EOF > .config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
         <property name="workspace0" type="empty">
           <property name="color-style" type="int" value="0"/>
           <property name="image-style" type="int" value="5"/>
-          <property name="last-image" type="string" value="/data/data/com.termux/files/usr/share/backgrounds/xfce/gray-lines-geometry-strips-dark-material-art.jpg"/>
+          <property name="last-image" type="string" value="/data/data/com.termux/files/usr/share/backgrounds/xfce/peakpx.jpg"/>
         </property>
         <property name="workspace1" type="empty">
           <property name="color-style" type="int" value="0"/>
