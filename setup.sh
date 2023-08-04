@@ -101,9 +101,6 @@ mv otf/static/* .fonts/ && rm -rf otf
 mv ttf/* .fonts/ && rm -rf ttf/
 rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
 
-wget https://github.com/phoenixbyrd/Termux_XFCE/blob/main/font.ttf
-mv font.ttf .termux
-
 #Setup Fancybash Termux
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/fancybash.sh
 mv fancybash.sh .fancybash.sh
@@ -148,6 +145,22 @@ mv app-universal-debug.apk storage/downloads/
 termux-open storage/downloads/app-universal-debug.apk
 rm termux-x11.zip
 
+#Create kill_termux_x11.desktop
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Kill Termux X11
+Comment=
+Exec=kill_termux_x11
+Icon=system-shutdown
+Path=
+Terminal=false
+StartupNotify=false
+" > $HOME/Desktop/.kill_termux_x11.desktop
+
+chmod +x $HOME/Desktop/.kill_termux_x11.desktop
+
+
 mkdir -p ~/Desktop
 
 #XFCE Start
@@ -159,17 +172,7 @@ virgl_test_server_android &
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env 
 DISPLAY=:1.0 dbus-launch --exit-with-session glxfce &
 
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Kill Termux X11
-Comment=
-Exec=kill_termux_x11
-Icon=system-shutdown
-Path=
-Terminal=false
-StartupNotify=false
-" > ~/Desktop/kill_termux_x11.desktop
+mv $HOME/Desktop/.kill_termux_x11.desktop $HOME/Desktop/kill_termux_x11.desktop
 
 EOF
 
@@ -205,7 +208,7 @@ else
   echo "Termux-X11 or XFCE session not found."
 fi
 
-rm ~/Desktop/kill_termux_x11.desktop
+mv $HOME/Desktop/kill_termux_x11.desktop $HOME/Desktop/.kill_termux_x11.desktop  
 
 EOF
 
