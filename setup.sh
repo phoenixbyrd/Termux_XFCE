@@ -145,6 +145,8 @@ mv app-universal-debug.apk storage/downloads/
 termux-open storage/downloads/app-universal-debug.apk
 rm termux-x11.zip
 
+mkdir -p ~/Desktop
+
 #Create kill_termux_x11.desktop
 echo "[Desktop Entry]
 Version=1.0
@@ -156,12 +158,9 @@ Icon=system-shutdown
 Path=
 Terminal=false
 StartupNotify=false
-" > $HOME/Desktop/.kill_termux_x11.desktop
+" > ~/Desktop/.kill_termux_x11.desktop
 
-chmod +x $HOME/Desktop/.kill_termux_x11.desktop
-
-
-mkdir -p ~/Desktop
+chmod +x ~/Desktop/.kill_termux_x11.desktop
 
 #XFCE Start
 cat <<'EOF' > start
