@@ -277,9 +277,9 @@ EOF
 chmod +x ../usr/bin/vncstop
 
 #Install Webcord
-proot-distro login --user $varname debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb
-proot-distro login --user $varname debian --shared-tmp -- env DISPLAY=:1.0 sudo -S apt install ./webcord_4.2.0_arm64.deb -y
-proot-distro login --user $varname debian --shared-tmp -- env DISPLAY=:1.0 rm webcord_4.2.0_arm64.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt install ./webcord_4.2.0_arm64.deb -y
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm webcord_4.2.0_arm64.deb
 
 echo "[Desktop Entry]
 Name=Discord
