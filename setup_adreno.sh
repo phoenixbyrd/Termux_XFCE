@@ -1,7 +1,5 @@
 #!/bin/bash
 
-clear
-
 # Unofficial Bash Strict Mode
 set -euo pipefail
 IFS=$'\n\t'
@@ -16,6 +14,8 @@ finish() {
 }
 
 trap finish EXIT
+
+clear
 
 echo ""
 echo "This script will install XFCE Desktop in Termux along with a Debian proot"
