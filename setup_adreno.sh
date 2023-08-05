@@ -74,21 +74,6 @@ proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.c
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt install ./webcord_4.2.0_arm64.deb -y
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm webcord_4.2.0_arm64.deb
 
-echo "[Desktop Entry]
-Name=Discord
-Comment=A Discord and Fosscord client made with the Electron API.
-GenericName=Internet Messenger
-Exec=proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 webcord --no-sandbox
-Icon=discord
-Type=Application
-StartupNotify=true
-Categories=Network;InstantMessaging;
-" > $HOME/Desktop/webcord.desktop
-
-chmod +x $HOME/Desktop/webcord.desktop
-cp $HOME/Desktop/webcord.desktop ../usr/share/applications/webcord.desktop 
-}
-
 setup_xfce() {
 #Install xfce4 desktop and additional packages
 pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa bat wmctrl tigervnc firefox -y
@@ -120,6 +105,23 @@ alias cat='bat $@'
 
 #Put Firefox icon on Desktop
 cp $HOME/../usr/share/applications/firefox.desktop $HOME/Desktop 
+
+#Add Webcord Icon to Desktop
+echo "[Desktop Entry]
+Name=Discord
+Comment=A Discord and Fosscord client made with the Electron API.
+GenericName=Internet Messenger
+Exec=proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 webcord --no-sandbox
+Icon=discord
+Type=Application
+StartupNotify=true
+Categories=Network;InstantMessaging;
+" > $HOME/Desktop/webcord.desktop
+
+chmod +x $HOME/Desktop/webcord.desktop
+cp $HOME/Desktop/webcord.desktop ../usr/share/applications/webcord.desktop 
+}
+
 
 #App Installer Utility
 git clone https://github.com/phoenixbyrd/App-Installer.git
