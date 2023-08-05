@@ -1,5 +1,7 @@
 #!/bin/bash
 
+clear
+
 # Unofficial Bash Strict Mode
 set -euo pipefail
 IFS=$'\n\t'
