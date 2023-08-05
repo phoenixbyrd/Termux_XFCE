@@ -38,15 +38,15 @@ pkg install git neofetch virglrenderer-android proot-distro papirus-icon-theme x
 
 #Setup Debian Proot
 proot-distro install debian
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY apt update
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY apt upgrade -y
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY apt install sudo wget -y
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt update
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt upgrade -y
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt install sudo wget -y
 
 #Create Debian Proot User
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY groupadd storage
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY groupadd wheel
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY groupadd video || true
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY useradd -m -g users -G wheel,audio,video,storage -s /bin/bash "$username"
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 groupadd storage
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 groupadd wheel
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 groupadd video || true
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 useradd -m -g users -G wheel,audio,video,storage -s /bin/bash "$username"
 
 #Add User to sudoers
 chmod u+rw ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
@@ -55,11 +55,11 @@ chmod u-w  ../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 
 #Set Timezone
 timezone=$(getprop persist.sys.timezone)
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY rm /etc/localtime
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY cp /usr/share/zoneinfo/$timezone /etc/localtime
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/$timezone /etc/localtime
 
 #Set Display in Proot .bashrc
-echo "export DISPLAY=$DISPLAY" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
+echo "export DISPLAY=:1.0" >> ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
 ############################
 ##Setup XFCE4 Desktop Theme and Sound##
@@ -166,10 +166,10 @@ chmod +x ~/Desktop/.kill_termux_x11.desktop
 cat <<'EOF' > start
 #!/bin/bash
 
-termux-x11 $DISPLAY &
+termux-x11 :1.0 &
 virgl_test_server_android &
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env 
-DISPLAY=$DISPLAY dbus-launch --exit-with-session glxfce &
+DISPLAY=:1.0 dbus-launch --exit-with-session glxfce &
 
 mv $HOME/Desktop/.kill_termux_x11.desktop $HOME/Desktop/kill_termux_x11.desktop
 
@@ -182,7 +182,7 @@ mv start ../usr/bin
 cat <<'EOF' > glxfce
 #!/bin/bash
 
-export DISPLAY=$DISPLAY
+export DISPLAY=:1.0
 GALLIUM_DRIVER=virpipe xfce4-session &
 
 EOF
@@ -195,7 +195,7 @@ cat <<'EOF' > ../usr/bin/kill_termux_x11
 #!/bin/bash
 
 # Get the process IDs of Termux-X11 and XFCE sessions
-termux_x11_pid=$(pgrep -f "/system/bin/app_process / com.termux.x11.Loader $DISPLAY")
+termux_x11_pid=$(pgrep -f "/system/bin/app_process / com.termux.x11.Loader :1.0")
 xfce_pid=$(pgrep -f "xfce4-session")
 
 # Check if the process IDs exist
@@ -234,7 +234,7 @@ StartupNotify=false
 #Setup VNC
 
 vncserver
-vncserver -kill $DISPLAY
+vncserver -kill :1.0
 
 echo "[Desktop Entry]
 Version=1.0
@@ -268,7 +268,7 @@ chmod +x ../usr/bin/vncstart
 cat <<'EOF' > ../usr/bin/vncstop
 #!/bin/bash
 
-vncserver -kill $DISPLAY
+vncserver -kill :1.0
 
 mv $HOME/Desktop/kill_vncserver.desktop $HOME/Desktop/.kill_vncserver.desktop
 
@@ -277,15 +277,15 @@ EOF
 chmod +x ../usr/bin/vncstop
 
 #Install Webcord
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY wget https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY apt install ./webcord_4.2.0_arm64.deb -y
-proot-distro login debian --shared-tmp -- env DISPLAY=$DISPLAY rm webcord_4.2.0_arm64.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/SpacingBat3/WebCord/releases/download/v4.2.0/webcord_4.2.0_arm64.deb
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt install ./webcord_4.2.0_arm64.deb -y
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm webcord_4.2.0_arm64.deb
 
 echo "[Desktop Entry]
 Name=Discord
 Comment=A Discord and Fosscord client made with the Electron API.
 GenericName=Internet Messenger
-Exec=proot-distro login debian --user $username --shared-tmp -- env DISPLAY=$DISPLAY webcord --no-sandbox
+Exec=proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 webcord --no-sandbox
 Icon=discord
 Type=Application
 StartupNotify=true
