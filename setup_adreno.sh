@@ -25,15 +25,15 @@ read -r -p "Please enter username for proot installation: " username </dev/tty
 termux-setup-storage
 
 pkg update
-pkg upgrade -y 
-pkg install wget -y
+pkg upgrade -y || true
+pkg install wget -y || true
 
 setup_req() {
-pkg update -y
-pkg install ncurses-utils -y
-pkg uninstall dbus -y 
-pkg install dbus -y
-pkg install x11-repo tur-repo pulseaudio proot-distro -y
+pkg update -y || true
+pkg install ncurses-utils -y || true
+pkg uninstall dbus -y || true
+pkg install dbus -y || true
+pkg install x11-repo tur-repo pulseaudio proot-distro -y || true
 }
 
 setup_proot() {
