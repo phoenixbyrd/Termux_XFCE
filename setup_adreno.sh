@@ -33,7 +33,7 @@ pkg update -y || true
 pkg install ncurses-utils -y || true
 pkg uninstall dbus -y || true
 pkg install dbus -y || true
-pkg install x11-repo tur-repo pulseaudio proot-distro -y || true
+pkg install x11-repo tur-repo pulseaudio proot-distro git -y || true
 }
 
 setup_proot() {
@@ -121,7 +121,6 @@ Categories=Network;InstantMessaging;
 chmod +x $HOME/Desktop/webcord.desktop
 cp $HOME/Desktop/webcord.desktop ../usr/share/applications/webcord.desktop 
 }
-
 
 #App Installer Utility
 git clone https://github.com/phoenixbyrd/App-Installer.git
