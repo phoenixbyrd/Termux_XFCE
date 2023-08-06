@@ -1,8 +1,8 @@
 # Termux_XFCE
 
-Sets up a termux XFCE desktop and a Debian proot install and installs some additional software like Firefox and Webcord, a discord client.
+Sets up a termux XFCE desktop and a Debian proot install.
 
-You only need to pick your username and follow the prompts to create a password for vncserver. This will take roughly 4GB of storage space. Please note, this can be a lengthy process.
+You only need to pick your username and follow the prompts to create a password for vncserver. This will take roughly 3GB of storage space. Please note, this can be a lengthy process.
 
 This setup uses Termux-X11, the termux-x11 server will be installed and you will be prompted to allow termux to install the Android APK. It will also setup vncserver.
 
@@ -35,7 +35,15 @@ This is setup with virglrenderer-android installed for hardware acceleration on 
 To install run this command in termux
 
 ```
-pkg update && pkg upgrade && pkg install wget && wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh && chmod +x setup.sh && ./setup.sh
+curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh -o setup.sh && chmod +x setup.sh && ./setup.sh
+```
+
+&nbsp;
+
+If your phone has a mali gpu then run this command in termux. There will be no hardware acceleration available.
+
+```
+curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setupnogl.sh -o setupnogl.sh && chmod +x setupnogl.sh && ./setupnogl.sh
 ```
 
 &nbsp;
