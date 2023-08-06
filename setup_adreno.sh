@@ -137,7 +137,7 @@ Icon=package-install
 Path=
 Terminal=false
 StartupNotify=false
-" > $HOME/Desktop/App-Installer.desktop
+" > ~/Desktop/App-Installer.desktop
 
 }
 
