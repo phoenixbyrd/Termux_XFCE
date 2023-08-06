@@ -96,12 +96,12 @@ alias cat='bat $@'
 " >> $HOME/.bashrc
 
 #Create default directories
-mkdir -p $HOME/Desktop
-mkdir -p $HOME/Downloads
-mkdir -p $HOME/Documents
-mkdir -p $HOME/Pictures
-mkdir -p $HOME/Music
-mkdir -p $HOME/Video
+mkdir Desktop
+mkdir Downloads
+mkdir Documents
+mkdir Pictures
+mkdir Music
+mkdir Video
 
 echo "[Desktop Entry]
 Version=1.0
@@ -113,7 +113,7 @@ Icon=package-install
 Path=
 Terminal=false
 StartupNotify=false
-" > ~/Desktop/App-Installer.desktop
+" > $HOME/Desktop/App-Installer.desktop
 
 #Put Firefox icon on Desktop
 cp $HOME/../usr/share/applications/firefox.desktop $HOME/Desktop 
