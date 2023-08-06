@@ -30,6 +30,8 @@ Also note, you do not need to set display in Debian proot as it is already set. 
 
 This is setup with virglrenderer-android installed for hardware acceleration on supported devices. Use the command ```virgl app_name_here``` to run that app with hardware acceleration. This should also work in proot. To enter proot use the command ```debian```, from there you can install aditional software. 
 
+&nbsp;
+
 # Install
 
 To install run this command in termux
