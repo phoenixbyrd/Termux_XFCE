@@ -95,7 +95,6 @@ alias ls='exa -lF'
 alias cat='bat $@'
 " >> $HOME/.bashrc
 
-
 #Create default directories
 mkdir -p $HOME/Desktop
 mkdir -p $HOME/Downloads
