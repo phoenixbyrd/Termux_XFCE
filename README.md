@@ -45,7 +45,7 @@ curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh
 If your phone has a mali gpu then run this command in termux. There will be no hardware acceleration available.
 
 ```
-curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setupnogl.sh -o setupnogl.sh && chmod +x setupnogl.sh && ./setupnogl.sh
+curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup_nogl.sh -o setup_nogl.sh && chmod +x setup_nogl.sh && ./setup_nogl.sh
 ```
 
 &nbsp;
