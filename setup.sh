@@ -150,7 +150,7 @@ cat <<'EOF' > start
 #!/bin/bash
 
 termux-x11 :1.0 &
-virgl_test_server_android &
+virgl_test_server_android --angle-gl &
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env 
 DISPLAY=:1.0 dbus-launch --exit-with-session glxfce &
 
