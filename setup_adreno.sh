@@ -78,14 +78,6 @@ setup_xfce() {
 #Install xfce4 desktop and additional packages
 pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa bat wmctrl tigervnc firefox -y
 
-#Create default directories
-mkdir -p $HOME/Desktop
-mkdir -p $HOME/Downloads
-mkdir -p $HOME/Documents
-mkdir -p $HOME/Pictures
-mkdir -p $HOME/Music
-mkdir -p $HOME/Video
-
 #Create .bashrc
 cp $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc $HOME/.bashrc
 
@@ -103,6 +95,15 @@ alias ls='exa -lF'
 alias cat='bat $@'
 " >> $HOME/.bashrc
 
+
+#Create default directories
+mkdir -p $HOME/Desktop
+mkdir -p $HOME/Downloads
+mkdir -p $HOME/Documents
+mkdir -p $HOME/Pictures
+mkdir -p $HOME/Music
+mkdir -p $HOME/Video
+
 #Put Firefox icon on Desktop
 cp $HOME/../usr/share/applications/firefox.desktop $HOME/Desktop 
 
@@ -119,7 +120,7 @@ Categories=Network;InstantMessaging;
 " > $HOME/Desktop/webcord.desktop
 
 chmod +x $HOME/Desktop/webcord.desktop
-cp $HOME/Desktop/webcord.desktop ../usr/share/applications/webcord.desktop 
+cp $HOME/Desktop/webcord.desktop $HOME../usr/share/applications/webcord.desktop 
 }
 
 #App Installer Utility
