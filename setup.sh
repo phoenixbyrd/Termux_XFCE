@@ -298,6 +298,8 @@ setup_vnc
 setup_theme
 setup_xfce_settings
 
+rm setup.sh
+
 ########
 ##Finish ##
 ########
