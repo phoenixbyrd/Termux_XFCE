@@ -60,7 +60,8 @@ echo "export DISPLAY=:1.0" >> $HOME/../usr/var/lib/proot-distro/installed-rootfs
 
 #Set proot aliases
 echo "
-alias virgl='GALLIUM_DRIVER=virpipe MESA_GL_VERSION_OVERRIDE=3.3 '
+alias virgl='GALLIUM_DRIVER=virpipe '
+alias mesav='MESA_GL_VERSION_OVERRIDE=$@ '
 alias ls='exa -lF'
 alias cat='bat '
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
@@ -87,7 +88,8 @@ echo "source $HOME/.sound" >> $HOME/.bashrc
 #Set aliases
 echo "
 alias debian='proot-distro login debian --user $username --shared-tmp'
-alias virgl='GALLIUM_DRIVER=virpipe MESA_GL_VERSION_OVERRIDE=3.3 '
+alias virgl='GALLIUM_DRIVER=virpipe '
+alias mesav='MESA_GL_VERSION_OVERRIDE=$@ '
 alias ls='exa -lF'
 alias cat='bat '
 " >> $HOME/.bashrc
