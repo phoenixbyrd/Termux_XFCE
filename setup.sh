@@ -98,7 +98,7 @@ cp $HOME/../usr/share/applications/firefox.desktop $HOME/Desktop
 chmod +x $HOME/Desktop/firefox.desktop
 
 cat <<'EOF' > ../usr/bin/prun
-"#!/bin/bash
+#!/bin/bash
 varname=$(basename $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/*)
 proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 $@
 
