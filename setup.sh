@@ -25,6 +25,8 @@ read -r -p "Please enter username for proot installation: " username </dev/tty
 termux-setup-storage
 termux-change-repo
 
+export DEBIAN_FRONTEND=noninteractive
+
 pkg update
 pkg upgrade -y
 pkg uninstall dbus -y
