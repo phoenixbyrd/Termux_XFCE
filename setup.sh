@@ -63,7 +63,6 @@ echo "export DISPLAY=:1.0" >> $HOME/../usr/var/lib/proot-distro/installed-rootfs
 #Set proot aliases
 echo "
 alias virgl='GALLIUM_DRIVER=virpipe '
-alias mesav='MESA_GL_VERSION_OVERRIDE=$@ '
 alias ls='exa -lF'
 alias cat='bat '
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
@@ -90,8 +89,6 @@ echo "source $HOME/.sound" >> $HOME/.bashrc
 #Set aliases
 echo "
 alias debian='proot-distro login debian --user $username --shared-tmp'
-alias virgl='GALLIUM_DRIVER=virpipe '
-alias mesav='MESA_GL_VERSION_OVERRIDE=$@ '
 alias ls='exa -lF'
 alias cat='bat '
 " >> $HOME/.bashrc
@@ -99,6 +96,12 @@ alias cat='bat '
 #Put Firefox icon on Desktop
 cp $HOME/../usr/share/applications/firefox.desktop $HOME/Desktop 
 chmod +x $HOME/Desktop/firefox.desktop
+
+echo "#!/bin/bash
+varname=$(basename $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/*)
+proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 $@
+" > ../usr/bin/prun
+chmod +x ../usr/bin/prun
 
 #App Installer Utility
 git clone https://github.com/phoenixbyrd/App-Installer.git
