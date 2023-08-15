@@ -105,6 +105,32 @@ proot-distro login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 $@
 EOF
 chmod +x ../usr/bin/prun
 
+cat <<'EOF' > ../usr/bin/cp2menu
+#!/bin/bash
+
+cd
+
+user_dir="../usr/var/lib/proot-distro/installed-rootfs/debian/home/"
+
+# Get the username from the user directory
+username=$(basename "$user_dir"/*)
+
+selected_file=$(zenity --file-selection --title="Select .desktop File" --file-filter="*.desktop" --filename="../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications")
+
+if [[ -z $selected_file ]]; then
+  zenity --info --text="No file selected. Quitting..." --title="Operation Cancelled"
+  exit 0
+fi
+
+desktop_filename=$(basename "$selected_file")
+
+cp "$selected_file" "../usr/share/applications/"
+sed -i "s/^Exec=\(.*\)$/Exec=proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 \1/" "../usr/share/applications/$desktop_filename"
+
+zenity --info --text="Operation completed successfully!" --title="Success"
+EOF
+chmod +x ../usr/bin/cp2menu
+
 #App Installer Utility
 git clone https://github.com/phoenixbyrd/App-Installer.git
 mv $HOME/App-Installer $HOME/.App-Installer
