@@ -32,6 +32,12 @@ This is setup with virglrenderer-android installed for hardware acceleration on 
 
 &nbsp;
 
+There are two scripts available for this setup as well
+```prun```  Running this followed by a command you want to run from the debian proot install will allow you to run stuff from the termux terminal without running ```debian``` to get into the proot itself.
+```cp2menu``` Running this will pop up a window allowing you to copy .desktop files from debian proot into the termux xfce "start" menu so you won't need to launch them from terminal.
+
+&nbsp;
+
 # Install
 
 To install run this command in termux
