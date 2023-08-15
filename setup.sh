@@ -131,6 +131,23 @@ zenity --info --text="Operation completed successfully!" --title="Success"
 EOF
 chmod +x ../usr/bin/cp2menu
 
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=cp2menu
+Comment=
+Exec=cp2menu
+Icon=edit-move
+Categories=System;
+Path=
+Terminal=false
+StartupNotify=false
+" > $HOME/Desktop/cp2menu.desktop
+chmod +x $HOME/Desktop/cp2menu.desktop
+cp $HOME/Desktop/cp2menu.desktop $HOME/../usr/share/applications
+
+
+
 #App Installer Utility
 git clone https://github.com/phoenixbyrd/App-Installer.git
 mv $HOME/App-Installer $HOME/.App-Installer
@@ -146,8 +163,9 @@ Icon=package-install
 Path=
 Terminal=false
 StartupNotify=false
-" > $HOME//Desktop/App-Installer.desktop
-chmod +x $HOME//Desktop/App-Installer.desktop
+" > $HOME/Desktop/App-Installer.desktop
+chmod +x $HOME/Desktop/App-Installer.desktop
+cp $HOME/Desktop/App-Installer.desktop $HOME/../usr/share/applications
 }
 
 setup_termux_x11() {
