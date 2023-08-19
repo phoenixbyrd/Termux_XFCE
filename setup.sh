@@ -146,7 +146,9 @@ StartupNotify=false
 chmod +x $HOME/Desktop/cp2menu.desktop
 cp $HOME/Desktop/cp2menu.desktop $HOME/../usr/share/applications
 
-rm $HOME/.config/autostart/xfce*
+if [ -e $HOME/.config/autostart/*.desktop ]; then
+    rm $HOME/.config/autostart/xfce*.desktop
+fi
 
 cat <<'EOF' > $HOME/.config/autostart/kill_screensaver.desktop
 [Desktop Entry]
