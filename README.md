@@ -52,11 +52,10 @@ curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh
 
 # Problem Termux Process completed (signal 9) - press Enter
 
+To fix this issue follow along
 read https://docs.andronix.app/android-12/andronix-on-android-12-and-beyond
-
 or
-
-To fix this issue follow along with this video https://www.youtube.com/watch?v=mjXSh3yq-I0
+with this video https://www.youtube.com/watch?v=mjXSh3yq-I0
 
   
 
