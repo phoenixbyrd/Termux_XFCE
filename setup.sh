@@ -146,6 +146,8 @@ StartupNotify=false
 chmod +x $HOME/Desktop/cp2menu.desktop
 cp $HOME/Desktop/cp2menu.desktop $HOME/../usr/share/applications
 
+
+
 #App Installer Utility
 git clone https://github.com/phoenixbyrd/App-Installer.git
 mv $HOME/App-Installer $HOME/.App-Installer
@@ -201,9 +203,9 @@ cat <<'EOF' > start
 #!/bin/bash
 
 termux-x11 :1.0 &
-virgl_test_server_android --angle-gl & > /dev/null 2>&1
-am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
-env DISPLAY=:1.0 dbus-launch --exit-with-session glxfce & > /dev/null 2>&1
+virgl_test_server_android --angle-gl &
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env 
+DISPLAY=:1.0 dbus-launch --exit-with-session glxfce &
 
 mv $HOME/Desktop/.kill_termux_x11.desktop $HOME/Desktop/kill_termux_x11.desktop
 
@@ -216,9 +218,10 @@ mv start $HOME/../usr/bin
 cat <<'EOF' > glxfce
 #!/bin/bash
 
-export DISPLAY=:1.0 > /dev/null 2>&1
-GALLIUM_DRIVER=virpipe xfce4-session & > /dev/null 2>&1
+export DISPLAY=:1.0
+GALLIUM_DRIVER=virpipe xfce4-session &
 
+Terminal=false
 EOF
 
 chmod +x glxfce
