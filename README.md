@@ -50,7 +50,7 @@ curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh
 
 &nbsp;
 
-# Process completed (signal 9) - press Enter
+# Problem Termux Process completed (signal 9) - press Enter
 
 To fix this issue follow along with this video https://www.youtube.com/watch?v=mjXSh3yq-I0
 
