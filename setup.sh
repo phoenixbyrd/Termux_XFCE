@@ -255,19 +255,7 @@ setup_vnc() {
 vncserver
 vncserver -kill :1.0
 
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Kill vncserver
-Comment=
-Exec=vncstop
-Icon=system-shutdown
-Path=
-Terminal=false
-StartupNotify=false
-" > $HOME/Desktop/.kill_vncserver.desktop
 
-chmod +x $HOME/Desktop/.kill_vncserver.desktop
 
 sed -i '7s/.*/#/' $HOME/.vnc/xstartup
 sed -i '11s/.*/xfce4-session \&/' $HOME/.vnc/xstartup
@@ -280,6 +268,20 @@ vncserver
 
 mv $HOME/Desktop/.kill_vncserver.desktop $HOME/Desktop/kill_vncserver.desktop
 
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Kill vncserver
+Comment=
+Exec=vncstop
+Icon=system-shutdown
+Path=
+Terminal=false
+StartupNotify=false
+" > $HOME/Desktop/kill_vncserver.desktop
+
+chmod +x $HOME/Desktop/kill_vncserver.desktop
+
 EOF
 
 chmod +x $HOME/../usr/bin/vncstart
@@ -289,7 +291,7 @@ cat <<'EOF' > $HOME/../usr/bin/vncstop
 
 vncserver -kill :1.0
 
-mv $HOME/Desktop/kill_vncserver.desktop $HOME/Desktop/.kill_vncserver.desktop
+rm $HOME/Desktop/kill_vncserver.desktop
 
 EOF
 
