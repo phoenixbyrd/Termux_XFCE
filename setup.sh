@@ -146,24 +146,6 @@ StartupNotify=false
 chmod +x $HOME/Desktop/cp2menu.desktop
 cp $HOME/Desktop/cp2menu.desktop $HOME/../usr/share/applications
 
-if [ -e $HOME/.config/autostart/*.desktop ]; then
-    rm $HOME/.config/autostart/xfce*.desktop
-fi
-
-cat <<'EOF' > $HOME/.config/autostart/kill_screensaver.desktop
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=kill_screensaver
-Comment=
-Exec=kill_screensaver
-Icon=
-Path=
-Terminal=false
-StartupNotify=false
-EOF
-chmod +x $HOME/.config/autostart/kill_screensaver.desktop
-
 #App Installer Utility
 git clone https://github.com/phoenixbyrd/App-Installer.git
 mv $HOME/App-Installer $HOME/.App-Installer
