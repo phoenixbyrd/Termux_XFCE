@@ -2,9 +2,9 @@
 
 Sets up a termux XFCE desktop and a Debian proot install.
 
-You only need to pick your username and follow the prompts to create a password for vncserver. This will take roughly 3GB of storage space. Please note, this can be a lengthy process.
+You only need to pick your username and follow the prompts. This will take roughly 3GB of storage space. Please note, this can be a lengthy process.
 
-This setup uses Termux-X11, the termux-x11 server will be installed and you will be prompted to allow termux to install the Android APK. It will also setup vncserver.
+This setup uses Termux-X11, the termux-x11 server will be installed and you will be prompted to allow termux to install the Android APK.
 
 This is is how I personally use Termux on my Galaxy Fold 3, script was created mainly for personal use but also for others if they wanted to try out my setup. This is my daily driver used with a 15 inch Lepow portable monitor and bluetooth keyboard and mouse.
 
@@ -17,8 +17,6 @@ During install you will recieve a popup to allow installs from termux, this will
 Use the command ```start``` to initiate a Termux-X11 session
   
 This will start the termux-x11 server, XFCE4 desktop and open the Termux-X11 app right into the desktop. 
-
-To start vnc use the command ```vncstart``` and to stop vnc use the command ```vncstop```
 
 To enter the Debian proot install from terminal use the command ```debian```
 
