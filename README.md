@@ -26,7 +26,11 @@ Also note, you do not need to set display in Debian proot as it is already set. 
 
 # Hardware Acceleration & Proot
 
-This is setup with virglrenderer-android installed for hardware acceleration on supported devices. Use the command ```virgl app_name_here``` to run that app with hardware acceleration. This should also work in proot. To enter proot use the command ```debian```, from there you can install aditional software. 
+This is setup with virglrenderer-android installed for hardware acceleration on supported devices. Termux XFCE desktop and apps install in termux are automatically hardware accelerated. Apps install in proot are not, se the command ```virgl app_name_here``` to run that app with hardware acceleration in debian proot. Some apps might require the use of ```MESA_GL_VERSION_OVERRIDE=4.0```
+  
+The full hardware acceleration command would be ```GALLIUM_DRIVER=virvpipe MESA_GL_VERSION_OVERRIDE=4.0``` for reference.   
+    
+To enter proot use the command ```debian```, from there you can install aditional software. 
 
 &nbsp;
 
