@@ -75,7 +75,7 @@ proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinf
 
 setup_xfce() {
 #Install xfce4 desktop and additional packages
-pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa bat wmctrl tigervnc firefox -y
+pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa bat wmctrl firefox -y
 
 #Create .bashrc
 cp $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc $HOME/.bashrc
@@ -145,8 +145,6 @@ StartupNotify=false
 " > $HOME/Desktop/cp2menu.desktop
 chmod +x $HOME/Desktop/cp2menu.desktop
 cp $HOME/Desktop/cp2menu.desktop $HOME/../usr/share/applications
-
-
 
 #App Installer Utility
 git clone https://github.com/phoenixbyrd/App-Installer.git
@@ -251,53 +249,6 @@ EOF
 chmod +x $HOME/../usr/bin/kill_termux_x11
 }
 
-setup_vnc() {
-vncserver
-vncserver -kill :1.0
-
-
-
-sed -i '7s/.*/#/' $HOME/.vnc/xstartup
-sed -i '11s/.*/xfce4-session \&/' $HOME/.vnc/xstartup
-
-cat <<'EOF' > $HOME/../usr/bin/vncstart
-#!/bin/bash
-
-rm -rf $HOME/../usr/tmp/.X1*
-vncserver
-
-mv $HOME/Desktop/.kill_vncserver.desktop $HOME/Desktop/kill_vncserver.desktop
-
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Kill vncserver
-Comment=
-Exec=vncstop
-Icon=system-shutdown
-Path=
-Terminal=false
-StartupNotify=false
-" > $HOME/Desktop/kill_vncserver.desktop
-
-chmod +x $HOME/Desktop/kill_vncserver.desktop
-
-EOF
-
-chmod +x $HOME/../usr/bin/vncstart
-
-cat <<'EOF' > $HOME/../usr/bin/vncstop
-#!/bin/bash
-
-vncserver -kill :1.0
-
-rm $HOME/Desktop/kill_vncserver.desktop
-
-EOF
-
-chmod +x $HOME/../usr/bin/vncstop
-}
-
 setup_theme() {
 #Download Wallpaper
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/peakpx.jpg
@@ -349,7 +300,6 @@ rm config.tar.gz
 setup_proot
 setup_xfce
 setup_termux_x11
-setup_vnc
 setup_theme
 setup_xfce_settings
 
@@ -370,9 +320,7 @@ echo "To open the desktop use the command start"
 echo ""
 echo "This will start the termux-x11 server in termux and start the XFCE Desktop open the installed Termux-X11 app."
 echo ""
-echo "To exit, doublick the exit icon on the desktop"
-echo ""
-echo "To start vnc use command vncstart and to exit, doublick exit icon on desktop"
+echo "To exit, double click the exit icon on the desktop"
 echo ""
 echo "Enjoy your Termux XFCE4 Desktop experience!"
 echo ""
