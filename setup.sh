@@ -192,9 +192,9 @@ Exec=kill_termux_x11
 Icon=system-shutdown
 Path=
 StartupNotify=false
-" > $HOME/Desktop/.kill_termux_x11.desktop
+" > $HOME/Desktop/kill_termux_x11.desktop
 
-chmod +x $HOME/Desktop/.kill_termux_x11.desktop
+chmod +x $HOME/Desktop/kill_termux_x11.desktop
 
 #Create XFCE Start and Shutdown
 cat <<'EOF' > start
@@ -204,8 +204,6 @@ termux-x11 :1.0 &
 virgl_test_server_android --angle-gl &
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env 
 DISPLAY=:1.0 dbus-launch --exit-with-session glxfce &
-
-mv $HOME/Desktop/.kill_termux_x11.desktop $HOME/Desktop/kill_termux_x11.desktop
 
 EOF
 
@@ -240,9 +238,7 @@ if [ -n "$termux_x11_pid" ] && [ -n "$xfce_pid" ]; then
   echo "Termux-X11 and XFCE sessions closed."
 else
   echo "Termux-X11 or XFCE session not found."
-fi
-
-mv $HOME/Desktop/kill_termux_x11.desktop $HOME/Desktop/.kill_termux_x11.desktop  
+fi  
 
 EOF
 
