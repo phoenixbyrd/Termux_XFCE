@@ -17,17 +17,6 @@ trap finish EXIT
 
 clear
 
-if curl --silent --fail -o /dev/null ipinfo.io; then
-
-echo "Internet connection is OK."
-
-else
-
-echo "No Internet available."
-exit
-
-fi
-
 echo ""
 echo "This script will install XFCE Desktop in Termux along with a Debian proot"
 echo ""
