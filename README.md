@@ -30,7 +30,7 @@ This is setup with virglrenderer-android installed for hardware acceleration on 
   
 The full hardware acceleration command would be ```GALLIUM_DRIVER=virvpipe MESA_GL_VERSION_OVERRIDE=4.0``` for reference.   
     
-To enter proot use the command ```debian```, from there you can install aditional software. 
+To enter proot use the command ```debian```, from there you can install aditional software with apt and use cp2menu in termux to copy the menu items over to termux xfce menu. 
 
 &nbsp;
 
