@@ -201,9 +201,9 @@ cat <<'EOF' > start
 #!/bin/bash
 
 termux-x11 :1.0 &
-virgl_test_server_android --angle-gl &
-am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity && env 
-DISPLAY=:1.0 dbus-launch --exit-with-session glxfce &
+virgl_test_server_android --angle-gl & > /dev/null 2>&1
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
+env DISPLAY=:1.0 dbus-launch --exit-with-session glxfce & > /dev/null 2>&1
 
 EOF
 
@@ -215,7 +215,7 @@ cat <<'EOF' > glxfce
 #!/bin/bash
 
 export DISPLAY=:1.0
-GALLIUM_DRIVER=virpipe xfce4-session &
+GALLIUM_DRIVER=virpipe xfce4-session & > /dev/null 2>&1
 
 Terminal=false
 EOF
