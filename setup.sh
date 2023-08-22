@@ -25,8 +25,8 @@ read -r -p "Please enter username for proot installation: " username </dev/tty
 termux-setup-storage
 termux-change-repo
 
-pkg update -y
-pkg DEBIAN_FRONTEND=noninteractive upgrade -y --force-confnew
+pkg update -y --force-confnew
+pkg upgrade -y 
 pkg uninstall dbus -y
 pkg install wget ncurses-utils dbus proot-distro x11-repo tur-repo pulseaudio -y
 
