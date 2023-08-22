@@ -35,10 +35,6 @@ pkg install wget ncurses-utils dbus proot-distro x11-repo tur-repo pulseaudio -y
 #Create default directories
 mkdir -p Desktop
 mkdir -p Downloads
-mkdir -p Documents
-mkdir -p Pictures
-mkdir -p Music
-mkdir -p Video
 
 setup_proot() {
 #Install Debian proot
