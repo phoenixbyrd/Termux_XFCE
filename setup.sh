@@ -202,6 +202,10 @@ virgl_test_server_android --angle-gl & > /dev/null 2>&1
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
 env DISPLAY=:1.0 dbus-launch --exit-with-session glxfce & > /dev/null 2>&1
 
+sleep 5
+process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
+kill "$process_id"
+
 EOF
 
 chmod +x start
