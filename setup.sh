@@ -274,7 +274,7 @@ mv ttf/* .fonts/ && rm -rf ttf/
 rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
 
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip
-mkdir -P Meslo
+mkdir -p Meslo
 unzip Meslo.zip -d Meslo
 mv Meslo/MesloLG* ../usr/share/fonts/TTF/
 rm Meslo.zip
