@@ -273,13 +273,6 @@ mv otf/static/* .fonts/ && rm -rf otf
 mv ttf/* .fonts/ && rm -rf ttf/
 rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
 
-wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip
-mkdir -p Meslo
-unzip Meslo.zip -d Meslo
-mv Meslo/MesloLG* ../usr/share/fonts/TTF/
-rm Meslo.zip
-rm -rf Meslo
-
 #Setup Fancybash Termux
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/fancybash.sh
 mv fancybash.sh .fancybash.sh
@@ -306,6 +299,7 @@ setup_theme
 setup_xfce_settings
 
 rm setup.sh
+source .bashrc
 
 ########
 ##Finish ##
@@ -316,13 +310,11 @@ echo ""
 echo ""
 echo "Setup completed successfully!"
 echo ""
-echo "You can now connect to your Termux XFCE4 Desktop after restarting termux."
+echo "You can now connect to your Termux XFCE4 Desktop to open the desktop use the command start"
 echo ""
-echo "To open the desktop use the command start"
+echo "This will start the termux-x11 server in termux and start the XFCE Desktop and then open the installed Termux-X11 app."
 echo ""
-echo "This will start the termux-x11 server in termux and start the XFCE Desktop open the installed Termux-X11 app."
-echo ""
-echo "To exit, double click the exit icon on the desktop"
+echo "To exit, double click the Kill Termux X11 icon on the desktop."
 echo ""
 echo "Enjoy your Termux XFCE4 Desktop experience!"
 echo ""
