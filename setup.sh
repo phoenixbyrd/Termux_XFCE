@@ -77,7 +77,8 @@ pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-go
 cp $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc $HOME/.bashrc
 
 #Enable Sound
-echo "pulseaudio --start --exit-idle-time=-1
+echo "
+pulseaudio --start --exit-idle-time=-1
 pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1
 " > $HOME/.sound
 echo "source $HOME/.sound" >> $HOME/.bashrc
