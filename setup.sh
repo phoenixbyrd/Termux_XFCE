@@ -278,7 +278,7 @@ mkdir -p Meslo
 unzip Meslo.zip -d Meslo
 mv Meslo/MesloLG* ../usr/share/fonts/TTF/
 rm Meslo.zip
-rm Meslo
+rm -rf Meslo
 
 #Setup Fancybash Termux
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/fancybash.sh
