@@ -152,6 +152,7 @@ Name=App Installer
 Comment=
 Exec=/data/data/com.termux/files/home/.App-Installer/app-installer
 Icon=package-install
+Categories=System;
 Path=
 Terminal=false
 StartupNotify=false
