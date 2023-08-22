@@ -27,7 +27,7 @@ termux-change-repo
 
 export DEBIAN_FRONTEND=noninteractive
 
-pkg update
+pkg update -y
 pkg upgrade -y
 pkg uninstall dbus -y
 pkg install wget ncurses-utils dbus proot-distro x11-repo tur-repo pulseaudio -y
