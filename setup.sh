@@ -137,8 +137,9 @@ Categories=System;
 Path=
 Terminal=false
 StartupNotify=false
-" > $HOME/../usr/share/applications
-chmod +x $HOME/../usr/share/applications
+" > $HOME/Desktop/cp2menu.desktop 
+chmod +x $HOME/Desktop/cp2menu.desktop
+mv $HOME/Desktop/cp2menu.desktop $HOME/../usr/share/applications
 
 #App Installer Utility
 git clone https://github.com/phoenixbyrd/App-Installer.git
