@@ -61,7 +61,9 @@ There are two scripts available for this setup as well
 
 # Process completed (signal 9) - press Enter
 
-install LADB from playstore, connect to wifi or from here https://github.com/hyperio546/ladb-builds/releases
+install LADB from playstore or from here https://github.com/hyperio546/ladb-builds/releases
+
+connect to wifi   
   
 In split screen have one side LADB and the other side showing developer settings.
   
