@@ -54,7 +54,17 @@ curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh
 
 # Process completed (signal 9) - press Enter
 
-To fix this issue follow along with this video https://www.youtube.com/watch?v=mjXSh3yq-I0
+install LADB from playstore, connect to wifi
+  
+In split screen have one side LADB and the other side showing developer settings.
+  
+In developer settings, enable wireless debugging then click into there to get the port number then click pair device to get the pairing code.
+  
+Enter both those values into LADB
+  
+Once it connects run this command
+  
+adb shell "/system/bin/device_config put activity_manager max_phantom_processes 2147483647"
 
   
 
