@@ -4,6 +4,8 @@ Sets up a termux XFCE desktop and a Debian proot install. This setup uses Termux
 
 You only need to pick your username and follow the prompts. This will take roughly 3GB of storage space. Please note, this can be a lengthy process.
 
+Please read the whole Readme for more information about this setup.  
+
 # Install
 
 To install run this command in termux
