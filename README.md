@@ -54,7 +54,7 @@ curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh
 
 # Process completed (signal 9) - press Enter
 
-install LADB from playstore, connect to wifi
+install LADB from playstore, connect to wifi or from here https://github.com/hyperio546/ladb-builds/releases
   
 In split screen have one side LADB and the other side showing developer settings.
   
