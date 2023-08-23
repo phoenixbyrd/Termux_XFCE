@@ -64,7 +64,7 @@ Enter both those values into LADB
   
 Once it connects run this command
   
-adb shell "/system/bin/device_config put activity_manager max_phantom_processes 2147483647"
+```adb shell "/system/bin/device_config put activity_manager max_phantom_processes 2147483647"```
 
   
 
