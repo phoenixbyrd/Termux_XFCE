@@ -4,6 +4,14 @@ Sets up a termux XFCE desktop and a Debian proot install. This setup uses Termux
 
 You only need to pick your username and follow the prompts. This will take roughly 3GB of storage space. Please note, this can be a lengthy process.
 
+# Install
+
+To install run this command in termux
+
+```
+curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh -o setup.sh && chmod +x setup.sh && ./setup.sh
+```
+
 &nbsp;
 
 ![Desktop Screenshot](desktop.png)
@@ -46,16 +54,6 @@ There are two scripts available for this setup as well
 ```prun```  Running this followed by a command you want to run from the debian proot install will allow you to run stuff from the termux terminal without running ```debian``` to get into the proot itself.
   
 ```cp2menu``` Running this will pop up a window allowing you to copy .desktop files from debian proot into the termux xfce "start" menu so you won't need to launch them from terminal. A launcher is available in the System menu section.
-
-&nbsp;
-
-# Install
-
-To install run this command in termux
-
-```
-curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh -o setup.sh && chmod +x setup.sh && ./setup.sh
-```
 
 &nbsp;
 
