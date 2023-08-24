@@ -2,7 +2,7 @@
 
 Sets up a termux XFCE desktop and a Debian proot install. This setup uses Termux-X11, the termux-x11 server will be installed and you will be prompted to allow termux to install the Android APK.
 
-You only need to pick your username and follow the prompts. This will take roughly 3GB of storage space. Please note, this can be a lengthy process.
+You only need to pick your username and follow the prompts. This will take roughly 3GB of storage space. Please note, this can be a lengthy process. Keep in mind that as you install applications, they will consume more storage space. 
 
 Please read the whole Readme for more information about this setup.  
 
