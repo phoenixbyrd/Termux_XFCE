@@ -39,7 +39,7 @@ setup_proot() {
 proot-distro install debian
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt update
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt upgrade -y
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt install sudo wget -y
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt install sudo wget nala -y
 
 #Create user
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 groupadd storage
@@ -59,6 +59,7 @@ echo "
 alias virgl='GALLIUM_DRIVER=virpipe '
 alias ls='exa -lF --icons'
 alias cat='bat '
+alias apt='sudo nala $@'
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
 #Set proot timezone
@@ -69,7 +70,7 @@ proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinf
 
 setup_xfce() {
 #Install xfce4 desktop and additional packages
-pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa bat wmctrl firefox -y
+pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa bat wmctrl firefox nala -y
 
 #Create .bashrc
 cp $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc $HOME/.bashrc
@@ -86,6 +87,7 @@ echo "
 alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='exa -lF --icons'
 alias cat='bat '
+alias apt='nala $@'
 " >> $HOME/.bashrc
 
 #Put Firefox icon on Desktop
