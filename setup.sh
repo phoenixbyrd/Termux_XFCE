@@ -172,8 +172,9 @@ mv termux-x11-nightly*.deb termux-x11-nightly.deb
 dpkg -i termux-x11-nightly.deb
 rm termux_companion_packages.zip termux-x11-nightly.deb
 
-curl -sL https://nightly.link/termux/termux-x11/workflows/debug_build/master/termux-x11-universal-debug.zip -o termux-x11.zip
-unzip termux-x11.zip
+#curl -sL https://nightly.link/termux/termux-x11/workflows/debug_build/master/termux-x11-universal-debug.zip -o termux-x11.zip
+#unzip termux-x11.zip
+wget https://github.com/termux/termux-x11/releases/download/1.03.00/app-universal-debug.apk
 mv app-universal-debug.apk $HOME/storage/downloads/
 termux-open $HOME/storage/downloads/app-universal-debug.apk
 rm termux-x11.zip
