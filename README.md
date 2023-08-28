@@ -14,6 +14,12 @@ To install run this command in termux
 curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh -o setup.sh && chmod +x setup.sh && ./setup.sh
 ```
 
+If you prefer Ubuntu you can attempt to use it but you might run into issues due to SNAP being forced on Ubuntu users now. Snap can not run in proot.
+
+```
+curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh -o setup.sh && chmod +x setup.sh && ./setup.sh
+```  
+
 &nbsp;
 
 ![Desktop Screenshot](desktop.png)
