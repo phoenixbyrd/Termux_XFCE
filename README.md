@@ -24,6 +24,10 @@ curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup_ub
 
 &nbsp;
 
+Join the Discord for any questions, help, suggestions, etc. https://discord.gg/5QmZeCxMHG  
+
+&nbsp;
+
 ![Desktop Screenshot](desktop.png)
   
   
