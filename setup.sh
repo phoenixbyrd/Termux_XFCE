@@ -177,7 +177,7 @@ rm termux_companion_packages.zip termux-x11-nightly.deb
 wget https://github.com/termux/termux-x11/releases/download/1.03.00/app-universal-debug.apk
 mv app-universal-debug.apk $HOME/storage/downloads/
 termux-open $HOME/storage/downloads/app-universal-debug.apk
-rm termux-x11.zip
+#rm termux-x11.zip
 
 #Create kill_termux_x11.desktop
 echo "[Desktop Entry]
