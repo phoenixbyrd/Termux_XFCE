@@ -299,7 +299,7 @@ setup_termux_x11
 setup_theme
 setup_xfce_settings
 
-rm setup.sh
+rm setup_ubuntu.sh
 source .bashrc
 
 ########
