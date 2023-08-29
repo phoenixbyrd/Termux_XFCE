@@ -62,9 +62,9 @@ alias cat='bat '
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/ubuntu/home/$username/.bashrc
 
 #Set proot timezone
-timezone=$(getprop persist.sys.timezone)
-proot-distro login ubuntu --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime
-proot-distro login ubuntu --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/$timezone /etc/localtime
+#timezone=$(getprop persist.sys.timezone)
+#proot-distro login ubuntu --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime
+#proot-distro login ubuntu --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinfo/$timezone /etc/localtime
 }
 
 setup_xfce() {
