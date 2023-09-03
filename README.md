@@ -16,14 +16,6 @@ curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh
 &nbsp;
 
 
-If you prefer Ubuntu you can attempt to use it but you might run into issues due to SNAP being forced on Ubuntu users now. Snap can not run in proot.
-
-```
-curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup_ubuntu.sh -o setup_ubuntu.sh && chmod +x setup_ubuntu.sh && ./setup_ubuntu.sh
-```  
-
-&nbsp;
-
 Join the Discord for any questions, help, suggestions, etc. https://discord.gg/5QmZeCxMHG  
 
 &nbsp;
