@@ -277,8 +277,10 @@ rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
 
 wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip
 unzip Meslo.zip
-mv Meslo/* .fonts/
-rm -rf Meslo && rm Meslo.zip
+mv *.ttf .fonts/
+rm Meslo.zip
+rm LICENSE.txt
+rm readme.md
 
 #Setup Fancybash Termux
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/fancybash.sh
