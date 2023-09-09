@@ -25,8 +25,8 @@ read -r -p "Please enter username for proot installation: " username </dev/tty
 termux-setup-storage
 termux-change-repo
 
-pkg update -y
-apt upgrade -y -o Dpkg::Options::="--force-confold"
+pkg update -y -o Dpkg::Options::="--force-confold"
+pkg upgrade -y -o Dpkg::Options::="--force-confold"
 pkg uninstall dbus -y
 pkg install wget ncurses-utils dbus proot-distro x11-repo tur-repo pulseaudio -y
 
