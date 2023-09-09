@@ -268,8 +268,13 @@ wget https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-
 unzip 2023-02-01.zip
 mv Fluent-icon-theme-2023-02-01/cursors/dist $HOME/../usr/share/icons/ 
 mv Fluent-icon-theme-2023-02-01/cursors/dist-dark $HOME/../usr/share/icons/
+cp $HOME/../usr/share/icons/dist-dark $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/icons/
 rm -rf $HOME//Fluent*
 rm 2023-02-01.zip
+
+cat <<'EOF' > $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.Xresources
+Xcursor.theme: dist-dark
+EOF
 
 #Setup Fonts
 wget https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
