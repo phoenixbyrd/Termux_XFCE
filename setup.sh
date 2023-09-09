@@ -274,7 +274,7 @@ cp -r $HOME/../usr/share/icons/dist-dark $HOME/../usr/var/lib/proot-distro/insta
 rm -rf $HOME//Fluent*
 rm 2023-02-01.zip
 
-cat <<'EOF' > $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$varname/.Xresources
+cat <<'EOF' > $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.Xresources
 Xcursor.theme: dist-dark
 EOF
 
