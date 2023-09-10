@@ -39,7 +39,7 @@ setup_proot() {
 proot-distro install debian
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt update
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt upgrade -y
-proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt install sudo wget nala -y
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt install sudo wget nala flameshot conky-all -y
 
 #Create user
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 groupadd storage
