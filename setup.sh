@@ -194,7 +194,7 @@ Path=
 StartupNotify=false
 " > $HOME/Desktop/kill_termux_x11.desktop
 chmod +x $HOME/Desktop/kill_termux_x11.desktop
-cp $HOME/Desktop/kill_termux_x11.desktop $HOME/../usr/share/applications
+mv $HOME/Desktop/kill_termux_x11.desktop $HOME/../usr/share/applications
 
 #Create XFCE Start and Shutdown
 cat <<'EOF' > start
