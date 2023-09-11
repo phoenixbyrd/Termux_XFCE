@@ -37,6 +37,16 @@ mkdir -p Downloads
 setup_proot() {
 #Install Debian proot
 proot-distro install debian
+
+# Check if the custom resolv.conf file exists
+if [ -e "$HOME/resolv.conf" ]; then
+  # Copy the file to the destination path
+  cp "$HOME/resolv.conf" "$HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/resolv.conf"
+  echo "Custom resolv.conf successfully copied"
+else
+  echo "No custom resolv.conf found, skipping replacement process..."
+fi
+
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt update
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt upgrade -y
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt install sudo wget nala flameshot conky-all -y
