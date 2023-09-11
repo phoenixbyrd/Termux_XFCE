@@ -90,7 +90,7 @@ nameserver 8.8.8.8
 nameserver 1.1.1.1
 ```
 
-if you're facing this issue during the installation process, you need to remove the proot again before able to start the installation again, execute this command
+this issue might be appear during the installation process, and you need to remove the proot again before able to re-start the installation. Execute this command to remove the distro and start the installation process:
 ```
 proot-distro remove debian
 ```
