@@ -312,15 +312,16 @@ mv font.ttf .termux/font.ttf
 }
 
 setup_xfce_settings() {
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/config.tar.gz
-tar -xvzf config.tar.gz
-rm config.tar.gz
-
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/conky.tar.gz
 tar -xvzf conky.tar.gz
 rm conky.tar.gz
 mkdir ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
 mv .config/conky/ ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
+mv .config/neofetch ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
+
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/config.tar.gz
+tar -xvzf config.tar.gz
+rm config.tar.gz
 }
 
 setup_proot
