@@ -306,12 +306,21 @@ sed -i "327s/\\\h/termux/" $HOME/.fancybash.sh
 cp .fancybash.sh $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username
 echo "source ~/.fancybash.sh" >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 sed -i '327s/termux/proot/' $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.fancybash.sh
+
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/font.ttf
+mv font.ttf .termux/font.ttf
 }
 
 setup_xfce_settings() {
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/config.tar.gz
 tar -xvzf config.tar.gz
 rm config.tar.gz
+
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/conky.tar.gz
+tar -xvzf conky.tar.gz
+rm conky.tar.gz
+mkdir ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
+mv .config/conky/ ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
 }
 
 setup_proot
@@ -322,6 +331,7 @@ setup_xfce_settings
 
 rm setup.sh
 source .bashrc
+termux-reload-settings
 
 ########
 ##Finish ##
