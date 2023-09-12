@@ -1,6 +1,6 @@
 # Termux_XFCE
 
-Sets up a termux XFCE desktop and a Debian proot install. This setup uses Termux-X11, the termux-x11 server will be installed and you will be prompted to allow termux to install the Android APK.
+Sets up a termux XFCE desktop and a ubuntu proot install. This setup uses Termux-X11, the termux-x11 server will be installed and you will be prompted to allow termux to install the Android APK.
 
 You only need to pick your username and follow the prompts. This will take roughly 4GB of storage space. Please note, this can be a lengthy process. Keep in mind that as you install applications, they will consume more storage space. 
 
@@ -39,29 +39,29 @@ Use the command ```start``` to initiate a Termux-X11 session
   
 This will start the termux-x11 server, XFCE4 desktop and open the Termux-X11 app right into the desktop. 
 
-To enter the Debian proot install from terminal use the command ```debian```
+To enter the ubuntu proot install from terminal use the command ```ubuntu```
 
-Also note, you do not need to set display in Debian proot as it is already set. This means you can use the terminal to start any GUI application and it will startup.
+Also note, you do not need to set display in ubuntu proot as it is already set. This means you can use the terminal to start any GUI application and it will startup.
 
 &nbsp;
 
 # Hardware Acceleration & Proot
 
-This is setup with virglrenderer-android installed for hardware acceleration on supported devices. Termux XFCE desktop and apps install in termux are automatically hardware accelerated. Apps install in proot are not, use the command ```virgl app_name_here``` to run that app with hardware acceleration in debian proot. Some apps might require the use of ```MESA_GL_VERSION_OVERRIDE=4.0```
+This is setup with virglrenderer-android installed for hardware acceleration on supported devices. Termux XFCE desktop and apps install in termux are automatically hardware accelerated. Apps install in proot are not, use the command ```virgl app_name_here``` to run that app with hardware acceleration in ubuntu proot. Some apps might require the use of ```MESA_GL_VERSION_OVERRIDE=4.0```
   
 The full hardware acceleration command would be ```GALLIUM_DRIVER=virvpipe MESA_GL_VERSION_OVERRIDE=4.0``` for reference.   
     
-To enter proot use the command ```debian```, from there you can install aditional software with apt and use cp2menu in termux to copy the menu items over to termux xfce menu. 
+To enter proot use the command ```ubuntu```, from there you can install aditional software with apt and use cp2menu in termux to copy the menu items over to termux xfce menu. 
 
-Nala has been chosen as a front end in Debian proot. As it is currently setup, you do not need to issue sudo prior to running apt. This allows for you to just run apt update, apt upgrade, etc without also using sudo. This is setup similar in Termux as well and works just the same.
+Nala has been chosen as a front end in ubuntu proot. As it is currently setup, you do not need to issue sudo prior to running apt. This allows for you to just run apt update, apt upgrade, etc without also using sudo. This is setup similar in Termux as well and works just the same.
 
 &nbsp;
 
 There are two scripts available for this setup as well
   
-```prun```  Running this followed by a command you want to run from the debian proot install will allow you to run stuff from the termux terminal without running ```debian``` to get into the proot itself.
+```prun```  Running this followed by a command you want to run from the ubuntu proot install will allow you to run stuff from the termux terminal without running ```ubuntu``` to get into the proot itself.
   
-```cp2menu``` Running this will pop up a window allowing you to copy .desktop files from debian proot into the termux xfce "start" menu so you won't need to launch them from terminal. A launcher is available in the System menu section.
+```cp2menu``` Running this will pop up a window allowing you to copy .desktop files from ubuntu proot into the termux xfce "start" menu so you won't need to launch them from terminal. A launcher is available in the System menu section.
 
 &nbsp;
 
