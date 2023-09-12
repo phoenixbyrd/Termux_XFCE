@@ -60,7 +60,8 @@ alias virgl='GALLIUM_DRIVER=virpipe '
 alias ls='exa -lF --icons'
 alias cat='bat '
 alias apt='sudo nala '
-alias tb="nc termbin.com 9999"
+alias tb='nc termbin.com 9999'
+alias mapscii='telnet mapscii.me'
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
 #Set proot timezone
@@ -89,7 +90,8 @@ alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='exa -lF --icons'
 alias cat='bat '
 alias apt='nala'
-alias tb="nc termbin.com 9999"
+alias tb='nc termbin.com 9999'
+alias mapscii='telnet mapscii.me'
 " >> $HOME/.bashrc
 
 #Put Firefox icon on Desktop
