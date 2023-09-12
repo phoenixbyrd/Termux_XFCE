@@ -16,7 +16,7 @@ curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/setup.sh
 &nbsp;
 
 
-Join the Discord for any questions, help, suggestions, etc. https://discord.gg/5QmZeCxMHG  
+Join the Discord for any questions, help, suggestions, etc. [https://discord.gg/pNMVrZu5dm](https://discord.gg/pNMVrZu5dm)  
 
 &nbsp;
 
