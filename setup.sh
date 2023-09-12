@@ -85,6 +85,8 @@ pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymou
 " > $HOME/.sound
 echo "source $HOME/.sound" >> $HOME/.bashrc
 
+city=$(curl -s ipinfo.io | jq -r '.city')
+
 #Set aliases
 echo "
 alias debian='proot-distro login debian --user $username --shared-tmp'
@@ -93,7 +95,7 @@ alias cat='bat '
 alias apt='nala'
 alias tb='nc termbin.com 9999'
 alias mapscii='telnet mapscii.me'
-alias weather='curl wttr.in/?n'
+alias weather='curl wttr.in/$city?n'
 " >> $HOME/.bashrc
 
 #Put Firefox icon on Desktop
