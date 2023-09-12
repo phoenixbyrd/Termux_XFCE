@@ -62,7 +62,7 @@ alias cat='bat '
 alias apt='sudo nala '
 alias tb='nc termbin.com 9999'
 alias mapscii='telnet mapscii.me'
-alias weather='curl wttr.in'
+alias weather='curl wttr.in/?n'
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
 #Set proot timezone
@@ -93,7 +93,7 @@ alias cat='bat '
 alias apt='nala'
 alias tb='nc termbin.com 9999'
 alias mapscii='telnet mapscii.me'
-alias weather='curl wttr.in'
+alias weather='curl wttr.in/?n'
 " >> $HOME/.bashrc
 
 #Put Firefox icon on Desktop
