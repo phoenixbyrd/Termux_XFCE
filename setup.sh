@@ -60,6 +60,7 @@ alias virgl='GALLIUM_DRIVER=virpipe '
 alias ls='exa -lF --icons'
 alias cat='bat '
 alias apt='sudo nala '
+alias tb="nc termbin.com 9999"
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
 #Set proot timezone
@@ -70,7 +71,7 @@ proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinf
 
 setup_xfce() {
 #Install xfce4 desktop and additional packages
-pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa bat cmus nala wmctrl firefox -y
+pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt exa bat cmus nala wmctrl firefox netcat-openbsd -y
 
 #Create .bashrc
 cp $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc $HOME/.bashrc
@@ -88,6 +89,7 @@ alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='exa -lF --icons'
 alias cat='bat '
 alias apt='nala'
+alias tb="nc termbin.com 9999"
 " >> $HOME/.bashrc
 
 #Put Firefox icon on Desktop
