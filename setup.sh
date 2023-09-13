@@ -188,18 +188,13 @@ setup_termux_x11() {
 # Install Termux-X11
 sed -i '12s/^#//' $HOME/.termux/termux.properties
 
-curl -sL https://nightly.link/termux/termux-x11/workflows/debug_build/master/termux-companion%20packages.zip -o termux_companion_packages.zip
-unzip termux_companion_packages.zip "termux-x11-nightly*.deb"
-mv termux-x11-nightly*.deb termux-x11-nightly.deb
-dpkg -i termux-x11-nightly.deb
-rm termux_companion_packages.zip termux-x11-nightly.deb
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.deb
+dpkg -i termux-x11.deb
+rm termux-x11.deb
 
-#curl -sL https://nightly.link/termux/termux-x11/workflows/debug_build/master/termux-x11-universal-debug.zip -o termux-x11.zip
-#unzip termux-x11.zip
-wget https://github.com/termux/termux-x11/releases/download/1.03.00/app-universal-debug.apk
-mv app-universal-debug.apk $HOME/storage/downloads/
-termux-open $HOME/storage/downloads/app-universal-debug.apk
-#rm termux-x11.zip
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.apk
+mv termux-x11.apk $HOME/storage/downloads/
+termux-open $HOME/storage/downloads/termux-x11.apk
 
 #Create kill_termux_x11.desktop
 echo "[Desktop Entry]
