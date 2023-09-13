@@ -67,9 +67,9 @@ alias music='tmux new-session \;   send-keys "cmus" C-m \;   split-window -v -l 
 alias ascii='ascii-image-converter -C --color-bg -b -d 60,30 --threshold 175 -m " .-=+#@" -f '
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/ascii-image-converter
-mv ascii-image-converter /usr/bin
-chmod +x /usr/bin/ascii-image-converter
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/ascii-image-converter
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 mv ascii-image-converter /usr/bin
+proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 chmod +x /usr/bin/ascii-image-converter
 
 #Set proot timezone
 timezone=$(getprop persist.sys.timezone)
@@ -107,8 +107,8 @@ alias ascii='ascii-image-converter -C --color-bg -b -d 60,30 --threshold 175 -m 
 " >> $HOME/.bashrc
 
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/ascii-image-converter
-mv ascii-image-converter $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/usr/bin
-chmod +x /usr/bin/ascii-image-converter
+mv ascii-image-converter $HOME/../usr/bin
+chmod +x $HOME../usr/bin/ascii-image-converter
 
 #Put Firefox icon on Desktop
 cp $HOME/../usr/share/applications/firefox.desktop $HOME/Desktop 
