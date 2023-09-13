@@ -69,6 +69,7 @@ alias ascii='ascii-image-converter -C --color-bg -b -d 60,30 --threshold 175 -m 
 
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/ascii-image-converter
 mv ascii-image-converter /usr/bin
+chmod +x /usr/bin/ascii-image-converter
 
 #Set proot timezone
 timezone=$(getprop persist.sys.timezone)
@@ -107,6 +108,7 @@ alias ascii='ascii-image-converter -C --color-bg -b -d 60,30 --threshold 175 -m 
 
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/ascii-image-converter
 mv ascii-image-converter ../usr/bin
+chmod +x /usr/bin/ascii-image-converter
 
 #Put Firefox icon on Desktop
 cp $HOME/../usr/share/applications/firefox.desktop $HOME/Desktop 
