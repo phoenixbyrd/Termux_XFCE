@@ -64,9 +64,11 @@ alias tb='nc termbin.com 9999'
 alias mapscii='telnet mapscii.me'
 alias weather='curl wttr.in/?n'
 alias music='tmux new-session \;   send-keys "cmus" C-m \;   split-window -v -l 5 \;   send-keys "cava" C-m'
+alias ascii='ascii-image-converter -C --color-bg -b -d 60,30 --threshold 175 -m " .-=+#@" -f '
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
-
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/ascii-image-converter
+mv ascii-image-converter /usr/bin
 
 #Set proot timezone
 timezone=$(getprop persist.sys.timezone)
@@ -100,7 +102,11 @@ alias tb='nc termbin.com 9999'
 alias mapscii='telnet mapscii.me'
 alias weather='curl wttr.in/$city?n'
 alias music='tmux new-session \;   send-keys "cmus" C-m \;   split-window -v -l 5 \;   send-keys "cava" C-m'
+alias ascii='ascii-image-converter -C --color-bg -b -d 60,30 --threshold 175 -m " .-=+#@" -f '
 " >> $HOME/.bashrc
+
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/ascii-image-converter
+mv ascii-image-converter ../usr/bin
 
 #Put Firefox icon on Desktop
 cp $HOME/../usr/share/applications/firefox.desktop $HOME/Desktop 
