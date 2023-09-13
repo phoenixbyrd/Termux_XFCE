@@ -66,6 +66,8 @@ alias weather='curl wttr.in/?n'
 alias music='tmux new-session \;   send-keys "cmus" C-m \;   split-window -v -l 5 \;   send-keys "cava" C-m'
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
+
+
 #Set proot timezone
 timezone=$(getprop persist.sys.timezone)
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 rm /etc/localtime
