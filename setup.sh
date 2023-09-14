@@ -263,7 +263,6 @@ cat <<'EOF' > glxfce
 export DISPLAY=:1.0
 GALLIUM_DRIVER=virpipe xfce4-session & > /dev/null 2>&1
 
-Terminal=false
 EOF
 
 chmod +x glxfce
