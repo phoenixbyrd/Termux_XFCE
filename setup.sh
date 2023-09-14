@@ -215,14 +215,38 @@ mv $HOME/Desktop/kill_termux_x11.desktop $HOME/../usr/share/applications
 cat <<'EOF' > start
 #!/bin/bash
 
-termux-x11 :1.0 &
-virgl_test_server_android --angle-gl & > /dev/null 2>&1
-sleep 1
-am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
-sleep 1
+# Function to check if an X server is already running
+is_x_server_running() {
+    if [ -n "$DISPLAY" ]; then
+        return 0  # X server is running
+    else
+        return 1  # X server is not running
+    fi
+}
+
+# Check if an X server is already running
+if is_x_server_running; then
+    echo "An X server is already running (DISPLAY: $DISPLAY)."
+else
+    termux-x11 :1.0 &
+    virgl_test_server_android --angle-gl & > /dev/null 2>&1
+    sleep 1
+    am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
+    sleep 1
+fi
+
+# Check if xfce4-session is already running
+if pgrep -x "xfce4-session" > /dev/null; then
+    echo "xfce4-session is already running."
+    exit 1
+fi
+
+# Start xfce4-session
 env DISPLAY=:1.0 dbus-launch --exit-with-session glxfce & > /dev/null 2>&1
 
 sleep 5
+
+# Kill xfce4-screensaver if needed
 process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
 kill "$process_id"
 
