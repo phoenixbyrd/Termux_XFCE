@@ -89,7 +89,6 @@ echo "
 pulseaudio --start --exit-idle-time=-1
 pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1
 " > $HOME/.sound
-echo "source $HOME/.sound" >> $HOME/.bashrc
 
 city=$(curl -s ipinfo.io | jq -r '.city')
 
@@ -233,6 +232,7 @@ else
     sleep 1
     am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
     sleep 1
+    bash $HOME/.sound
 fi
 
 # Check if xfce4-session is already running
