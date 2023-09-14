@@ -228,6 +228,7 @@ if is_x_server_running; then
     echo "An X server is already running (DISPLAY: $DISPLAY)."
 else
     termux-x11 :1.0 &
+    sleep 1
     virgl_test_server_android --angle-gl & > /dev/null 2>&1
     sleep 1
     am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
