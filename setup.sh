@@ -97,7 +97,7 @@ echo "
 alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='exa -lF --icons'
 alias cat='bat '
-alias apt='nala'
+alias apt='pkg upgrade -y && nala $@'
 alias tb='nc termbin.com 9999'
 alias mapscii='telnet mapscii.me'
 alias weather='curl wttr.in/$city?n'
@@ -190,6 +190,7 @@ sed -i '12s/^#//' $HOME/.termux/termux.properties
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.deb
 dpkg -i termux-x11.deb
 rm termux-x11.deb
+apt-mark hold termux-x11-nightly
 
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.apk
 mv termux-x11.apk $HOME/storage/downloads/
