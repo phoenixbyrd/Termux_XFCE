@@ -81,3 +81,6 @@ Once it connects run this command
   
 ```adb shell "/system/bin/device_config put activity_manager max_phantom_processes 2147483647"```
 
+You can also run adb shell from termux directly by following the guide found in this video
+
+[https://www.youtube.com/watch?v=BHc7uvX34bM](https://www.youtube.com/watch?v=BHc7uvX34bM)
