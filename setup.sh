@@ -205,7 +205,6 @@ StartupNotify=false
 chmod +x $HOME/Desktop/App-Installer.desktop
 cp $HOME/Desktop/App-Installer.desktop $HOME/../usr/share/applications
 
-for f in ~/Desktop/*.desktop; do chmod +x "$f"; gio set -t string "$f" metadata::xfce-exe-checksum "$(sha256sum "$f" | awk '{print $1}')"; done 
 }
 
 setup_termux_x11() {
