@@ -131,19 +131,42 @@ user_dir="../usr/var/lib/proot-distro/installed-rootfs/debian/home/"
 # Get the username from the user directory
 username=$(basename "$user_dir"/*)
 
-selected_file=$(zenity --file-selection --title="Select .desktop File" --file-filter="*.desktop" --filename="../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications")
+action=$(zenity --list --title="Choose Action" --text="Select an action:" --radiolist --column="" --column="Action" TRUE "Copy .desktop file" FALSE "Remove .desktop file")
 
-if [[ -z $selected_file ]]; then
-  zenity --info --text="No file selected. Quitting..." --title="Operation Cancelled"
+if [[ -z $action ]]; then
+  zenity --info --text="No action selected. Quitting..." --title="Operation Cancelled"
   exit 0
 fi
 
-desktop_filename=$(basename "$selected_file")
+if [[ $action == "Copy .desktop file" ]]; then
+  selected_file=$(zenity --file-selection --title="Select .desktop File" --file-filter="*.desktop" --filename="../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications")
 
-cp "$selected_file" "../usr/share/applications/"
-sed -i "s/^Exec=\(.*\)$/Exec=proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 \1/" "../usr/share/applications/$desktop_filename"
+  if [[ -z $selected_file ]]; then
+    zenity --info --text="No file selected. Quitting..." --title="Operation Cancelled"
+    exit 0
+  fi
 
-zenity --info --text="Operation completed successfully!" --title="Success"
+  desktop_filename=$(basename "$selected_file")
+
+  cp "$selected_file" "../usr/share/applications/"
+  sed -i "s/^Exec=\(.*\)$/Exec=proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 \1/" "../usr/share/applications/$desktop_filename"
+
+  zenity --info --text="Operation completed successfully!" --title="Success"
+elif [[ $action == "Remove .desktop file" ]]; then
+  selected_file=$(zenity --file-selection --title="Select .desktop File to Remove" --file-filter="*.desktop" --filename="../usr/share/applications")
+
+  if [[ -z $selected_file ]]; then
+    zenity --info --text="No file selected for removal. Quitting..." --title="Operation Cancelled"
+    exit 0
+  fi
+
+  desktop_filename=$(basename "$selected_file")
+
+  rm "$selected_file"
+
+  zenity --info --text="File '$desktop_filename' has been removed successfully!" --title="Success"
+fi
+
 EOF
 chmod +x ../usr/bin/cp2menu
 
@@ -215,6 +238,18 @@ mv $HOME/Desktop/kill_termux_x11.desktop $HOME/../usr/share/applications
 cat <<'EOF' > start
 #!/bin/bash
 
+#termux-x11 :1.0 &
+#virgl_test_server_android --angle-gl & > /dev/null 2>&1
+#sleep 1
+#am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
+#sleep 1
+#env DISPLAY=:1.0 dbus-launch --exit-with-session glxfce & > /dev/null 2>&1
+
+#sleep 5
+#process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
+#kill "$process_id"
+
+
 # Function to check if an X server is already running
 is_x_server_running() {
     if [ -n "$DISPLAY" ]; then
@@ -230,24 +265,24 @@ if is_x_server_running; then
 else
     termux-x11 :1.0 &
     sleep 1
-    virgl_test_server_android --angle-gl & > /dev/null 2>&1
+    #virgl_test_server_android --angle-gl & > /dev/null 2>&1
+    virgl_test_server_android & > /dev/null 2>&1
     sleep 1
     am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
     sleep 1
-    bash $HOME/.sound
 fi
 
 # Check if xfce4-session is already running
 if pgrep -x "xfce4-session" > /dev/null; then
     echo "xfce4-session is already running."
+    echo "Please force close termux if no desktop is displayed"
     exit 1
 fi
 
 # Start xfce4-session
 env DISPLAY=:1.0 dbus-launch --exit-with-session glxfce & > /dev/null 2>&1
-
+bash $HOME/.sound
 sleep 5
-
 # Kill xfce4-screensaver if needed
 process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
 kill "$process_id"
@@ -273,6 +308,12 @@ mv glxfce $HOME/../usr/bin
 cat <<'EOF' > $HOME/../usr/bin/kill_termux_x11
 #!/bin/bash
 
+# Check if Apt or Nala is running in Termux or Proot
+if [[ $(ps aux | grep -E 'apt( |-)get|nala' | grep -v 'grep') ]]; then
+  zenity --info --text="Apt or Nala is currently running in Termux or Proot. Please close them before continuing."
+  exit 1
+fi
+
 # Get the process IDs of Termux-X11 and XFCE sessions
 termux_x11_pid=$(pgrep -f "/system/bin/app_process / com.termux.x11.Loader :1.0")
 xfce_pid=$(pgrep -f "xfce4-session")
@@ -281,10 +322,12 @@ xfce_pid=$(pgrep -f "xfce4-session")
 if [ -n "$termux_x11_pid" ] && [ -n "$xfce_pid" ]; then
   # Kill the processes
   kill -9 "$termux_x11_pid" "$xfce_pid"
-  echo "Termux-X11 and XFCE sessions closed."
+  zenity --info --text="Termux-X11 and XFCE sessions closed."
 else
-  echo "Termux-X11 or XFCE session not found."
-fi  
+  zenity --info --text="Termux-X11 or XFCE session not found."
+fi
+
+exit 0
 
 EOF
 
