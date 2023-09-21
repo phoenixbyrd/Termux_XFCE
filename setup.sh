@@ -65,6 +65,7 @@ alias mapscii='telnet mapscii.me'
 alias weather='curl wttr.in/?n'
 alias music='tmux new-session \;   send-keys "cmus" C-m \;   split-window -v -l 5 \;   send-keys "cava" C-m \;   select-pane -U'
 alias ascii='ascii-image-converter -C --color-bg -b -d 60,30 --threshold 175 -m " .-=+#@" -f '
+alias start='echo "please run from termux, not debian proot."'
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/ascii-image-converter
