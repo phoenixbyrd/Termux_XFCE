@@ -240,18 +240,6 @@ mv $HOME/Desktop/kill_termux_x11.desktop $HOME/../usr/share/applications
 cat <<'EOF' > start
 #!/bin/bash
 
-#termux-x11 :1.0 &
-#virgl_test_server_android --angle-gl & > /dev/null 2>&1
-#sleep 1
-#am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
-#sleep 1
-#env DISPLAY=:1.0 dbus-launch --exit-with-session glxfce & > /dev/null 2>&1
-
-#sleep 5
-#process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
-#kill "$process_id"
-
-
 # Function to check if an X server is already running
 is_x_server_running() {
     if [ -n "$DISPLAY" ]; then
@@ -268,7 +256,7 @@ else
     termux-x11 :1.0 &
     sleep 1
     #virgl_test_server_android --angle-gl & > /dev/null 2>&1
-    virgl_test_server_android & > /dev/null 2>&1
+    MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android & > /dev/null 2>&1
     sleep 1
     am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
     sleep 1
@@ -282,7 +270,7 @@ if pgrep -x "xfce4-session" > /dev/null; then
 fi
 
 # Start xfce4-session
-env DISPLAY=:1.0 dbus-launch --exit-with-session glxfce & > /dev/null 2>&1
+env DISPLAY=:1.0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
 bash $HOME/.sound
 sleep 5
 # Kill xfce4-screensaver if needed
@@ -293,18 +281,6 @@ EOF
 
 chmod +x start
 mv start $HOME/../usr/bin
-
-#glxfce Hardware Acceleration XFCE Desktop
-cat <<'EOF' > glxfce
-#!/bin/bash
-
-export DISPLAY=:1.0
-GALLIUM_DRIVER=virpipe xfce4-session & > /dev/null 2>&1
-
-EOF
-
-chmod +x glxfce
-mv glxfce $HOME/../usr/bin
 
 #Shutdown Utility
 cat <<'EOF' > $HOME/../usr/bin/kill_termux_x11
