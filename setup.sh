@@ -60,9 +60,6 @@ alias virgl='GALLIUM_DRIVER=virpipe '
 alias ls='exa -lF --icons'
 alias cat='bat '
 alias apt='sudo nala '
-alias tb='nc termbin.com 9999'
-alias mapscii='telnet mapscii.me'
-alias weather='curl wttr.in/?n'
 alias music='tmux new-session \;   send-keys "cmus" C-m \;   split-window -v -l 5 \;   send-keys "cava" C-m \;   select-pane -U'
 alias ascii='ascii-image-converter -C --color-bg -b -d 60,30 --threshold 175 -m " .-=+#@" -f '
 alias start='echo "please run from termux, not debian proot."'
@@ -99,9 +96,6 @@ alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='exa -lF --icons'
 alias cat='bat '
 alias apt='pkg upgrade -y && nala $@'
-alias tb='nc termbin.com 9999'
-alias mapscii='telnet mapscii.me'
-alias weather='curl wttr.in/$city?n'
 alias music='tmux new-session \;   send-keys "cmus" C-m \;   split-window -v -l 5 \;   send-keys "cava" C-m \;   select-pane -U'
 alias ascii='ascii-image-converter -C --color-bg -b -d 60,30 --threshold 175 -m " .-=+#@" -f '
 " >> $HOME/.bashrc
@@ -240,40 +234,15 @@ mv $HOME/Desktop/kill_termux_x11.desktop $HOME/../usr/share/applications
 cat <<'EOF' > start
 #!/bin/bash
 
-# Function to check if an X server is already running
-is_x_server_running() {
-    if [ -n "$DISPLAY" ]; then
-        return 0  # X server is running
-    else
-        return 1  # X server is not running
-    fi
-}
-
-# Check if an X server is already running
-if is_x_server_running; then
-    echo "An X server is already running (DISPLAY: $DISPLAY)."
-else
-    termux-x11 :1.0 &
-    sleep 1
-    #virgl_test_server_android --angle-gl & > /dev/null 2>&1
-    MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android & > /dev/null 2>&1
-    sleep 1
-    am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
-    sleep 1
-fi
-
-# Check if xfce4-session is already running
-if pgrep -x "xfce4-session" > /dev/null; then
-    echo "xfce4-session is already running."
-    echo "Please force close termux if no desktop is displayed"
-    exit 1
-fi
-
-# Start xfce4-session
+termux-x11 :1.0 &
+sleep 1
+MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android & > /dev/null 2>&1
+sleep 1
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
+sleep 1
 env DISPLAY=:1.0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
-bash $HOME/.sound
+
 sleep 5
-# Kill xfce4-screensaver if needed
 process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
 kill "$process_id"
 
