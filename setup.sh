@@ -301,7 +301,6 @@ wget https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-
 unzip 2023-02-01.zip
 mv Fluent-icon-theme-2023-02-01/cursors/dist $HOME/../usr/share/icons/ 
 mv Fluent-icon-theme-2023-02-01/cursors/dist-dark $HOME/../usr/share/icons/
-#mkdir $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/icons
 cp -r $HOME/../usr/share/icons/dist-dark $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/usr/share/icons/dist-dark
 rm -rf $HOME//Fluent*
 rm 2023-02-01.zip
@@ -313,6 +312,7 @@ EOF
 #Setup Fonts
 wget https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
 mkdir .fonts 
+mkdir $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.fonts/
 unzip CascadiaCode-2111.01.zip
 mv otf/static/* .fonts/ && rm -rf otf
 mv ttf/* .fonts/ && rm -rf ttf/
@@ -324,6 +324,10 @@ mv *.ttf .fonts/
 rm Meslo.zip
 rm LICENSE.txt
 rm readme.md
+
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/NotoColorEmoji-Regular.ttf
+mv NotoColorEmoji-Regular.ttf .fonts
+cp .fonts/NotoColorEmoji-Regular.ttf $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.fonts/ 
 
 #Setup Fancybash Termux
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/fancybash.sh
