@@ -345,12 +345,12 @@ rm conky.tar.gz
 mkdir ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
 mv .config/conky/ ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
 mv .config/neofetch ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
-chmod u+rwx .config/autostart/conky.desktop
-chmod u+rwx .config/autostart/org.flameshot.Flameshot.desktop
 
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/config.tar.gz
 tar -xvzf config.tar.gz
 rm config.tar.gz
+chmod u+rwx .config/autostart/conky.desktop
+chmod u+rwx .config/autostart/org.flameshot.Flameshot.desktop
 }
 
 setup_proot
