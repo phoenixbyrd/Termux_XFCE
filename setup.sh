@@ -248,9 +248,9 @@ mv start $HOME/../usr/bin
 cat <<'EOF' > $HOME/../usr/bin/kill_termux_x11
 #!/bin/bash
 
-# Check if Apt or Nala is running in Termux or Proot
-if [[ $(ps aux | grep -E 'apt( |-)get|nala' | grep -v 'grep') ]]; then
-  zenity --info --text="Apt or Nala is currently running in Termux or Proot. Please close them before continuing."
+# Check if Apt, dpkg, or Nala is running in Termux or Proot
+if pgrep -f 'apt|apt-get|dpkg|nala'; then
+  zenity --info --text="Software is currently installing in Termux or Proot. Please wait for this processes to finish before continuing."
   exit 1
 fi
 
@@ -264,8 +264,12 @@ if [ -n "$termux_x11_pid" ] && [ -n "$xfce_pid" ]; then
   kill -9 "$termux_x11_pid" "$xfce_pid"
   zenity --info --text="Termux-X11 and XFCE sessions closed."
 else
-  zenity --info --text="Termux-X11 or XFCE session not found."
+  zenity --info --text="Termux-X11 or XFCE session not found. Please force close the Termux app."
 fi
+
+info_output=$(termux-info)
+pid=$(echo "$info_output" | grep -o 'TERMUX_APP_PID=[0-9]\+' | awk -F= '{print $2}')
+kill "$pid"
 
 exit 0
 
