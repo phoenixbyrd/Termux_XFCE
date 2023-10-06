@@ -237,7 +237,7 @@ env DISPLAY=:1.0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session xfce4-se
 
 sleep 5
 process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
-kill "$process_id"
+kill "$process_id" > /dev/null 2>&1
 
 EOF
 
@@ -261,10 +261,7 @@ xfce_pid=$(pgrep -f "xfce4-session")
 # Check if the process IDs exist
 if [ -n "$termux_x11_pid" ] && [ -n "$xfce_pid" ]; then
   # Kill the processes
-  kill -9 "$termux_x11_pid" "$xfce_pid"
-  zenity --info --text="Termux-X11 and XFCE sessions closed."
-else
-  zenity --info --text="Termux-X11 or XFCE session not found."
+  kill -9 "$termux_x11_pid" "$xfce_pid" > /dev/null 2>&1
 fi
 
 exit 0
