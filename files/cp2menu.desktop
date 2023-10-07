@@ -1,0 +1,12 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=cp2menu
+Comment=
+Exec=cp2menu
+Icon=edit-move
+Categories=System;
+Path=
+Terminal=false
+StartupNotify=false
+

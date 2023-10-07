@@ -1,0 +1,14 @@
+#!/bin/bash
+
+virgl_test_server_android --angle-gl & > /dev/null 2>&1
+sleep 1
+XDG_RUNTIME_DIR=${TMPDIR} termux-x11 :1.0 &
+sleep 1
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
+sleep 1
+DISPLAY=:1.0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
+
+sleep 2
+process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
+kill "$process_id" > /dev/null 2>&1
+

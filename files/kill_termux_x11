@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Check if Apt, dpkg, or Nala is running in Termux or Proot
+if pgrep -f 'apt|apt-get|dpkg|nala'; then
+  zenity --info --text="Software is currently installing in Termux or Proot. Please wait for this processes to finish before continuing."
+  exit 1
+fi
+
+# Get the process IDs of Termux-X11 and XFCE sessions
+termux_x11_pid=$(pgrep -f "/system/bin/app_process / com.termux.x11.Loader :1.0")
+xfce_pid=$(pgrep -f "xfce4-session")
+
+# Check if the process IDs exist
+if [ -n "$termux_x11_pid" ] && [ -n "$xfce_pid" ]; then
+  # Kill the processes
+  kill -9 "$termux_x11_pid" "$xfce_pid"
+fi
+
+# Run termux-info and capture its output
+info_output=$(termux-info)
+
+# Extract the PID from the output using grep and awk
+pid=$(echo "$info_output" | grep -o 'TERMUX_APP_PID=[0-9]\+' | awk -F= '{print $2}')
+
+# Now you can use the extracted PID with the kill command
+kill "$pid" 
+
+exit 0
