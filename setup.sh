@@ -57,7 +57,7 @@ echo "export DISPLAY=:1.0" >> $HOME/../usr/var/lib/proot-distro/installed-rootfs
 #Set proot aliases
 echo "
 alias virgl='GALLIUM_DRIVER=virpipe '
-alias ls='exa -lF --icons'
+alias ls='eza -lF --icons'
 alias cat='bat '
 alias apt='sudo nala '
 alias start='echo "please run from termux, not debian proot."'
