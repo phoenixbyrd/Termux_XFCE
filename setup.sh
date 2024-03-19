@@ -8,8 +8,8 @@ finish() {
   local ret=$?
   if [ ${ret} -ne 0 ] && [ ${ret} -ne 130 ]; then
     echo
-    echo "ERROR: Failed to setup XFCE on Termux."
-    echo "Please refer to the error message(s) above"
+    echo "ERROR: a unexpected error happed."
+    echo "read the messeages above for more details"
   fi
 }
 
@@ -18,9 +18,9 @@ trap finish EXIT
 clear
 
 echo ""
-echo "This script will install XFCE Desktop in Termux along with a Debian proot"
+echo "this will install a XFCE along side a debian proot"
 echo ""
-read -r -p "Please enter username for proot installation: " username </dev/tty
+read -r -p "enter your name to proceed with installation: " username </dev/tty
 
 termux-setup-storage
 termux-change-repo
@@ -41,17 +41,20 @@ proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt update
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt upgrade -y
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 apt install sudo wget nala jq flameshot conky-all -y
 
+
+
 #Create user
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 groupadd storage
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 groupadd wheel
 proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 useradd -m -g users -G wheel,audio,video,storage -s /bin/bash "$username"
+
 
 #Add user to sudoers
 chmod u+rw $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 echo "$username ALL=(ALL) NOPASSWD:ALL" | tee -a $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers > /dev/null
 chmod u-w  $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 
-#Set proot DISPLAY
+#Set proot-display
 echo "export DISPLAY=:1.0" >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
 #Set proot aliases
@@ -73,8 +76,7 @@ setup_xfce() {
 #Install xfce4 desktop and additional packages
 pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt eza bat jq nala wmctrl firefox netcat-openbsd -y
 
-#Create .bashrc
-cp $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc $HOME/.bashrc
+cp $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc
 
 #Enable Sound
 echo "
@@ -85,17 +87,13 @@ pacmd load-module module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymou
 echo "
 source .sound" >> .bashrc
 
-#Set aliases
+#set aliases
 echo "
 alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='eza -lF --icons'
 alias cat='bat '
 alias apt='pkg upgrade -y && nala $@'
 " >> $HOME/.bashrc
-
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/ascii-image-converter
-mv ascii-image-converter $HOME/../usr/bin
-chmod +x $HOME/../usr/bin/ascii-image-converter
 
 #Put Firefox icon on Desktop
 cp $HOME/../usr/share/applications/firefox.desktop $HOME/Desktop 
@@ -158,6 +156,7 @@ fi
 EOF
 chmod +x ../usr/bin/cp2menu
 
+
 echo "[Desktop Entry]
 Version=1.0
 Type=Application
@@ -173,40 +172,9 @@ StartupNotify=false
 chmod +x $HOME/Desktop/cp2menu.desktop
 mv $HOME/Desktop/cp2menu.desktop $HOME/../usr/share/applications
 
-#App Installer Utility
-git clone https://github.com/phoenixbyrd/App-Installer.git
-mv $HOME/App-Installer $HOME/.App-Installer
-chmod +x $HOME/.App-Installer/*
-
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=App Installer
-Comment=
-Exec=/data/data/com.termux/files/home/.App-Installer/app-installer
-Icon=package-install
-Categories=System;
-Path=
-Terminal=false
-StartupNotify=false
-" > $HOME/Desktop/App-Installer.desktop
-chmod +x $HOME/Desktop/App-Installer.desktop
-cp $HOME/Desktop/App-Installer.desktop $HOME/../usr/share/applications
-
-}
-
 setup_termux_x11() {
-# Install Termux-X11
 sed -i '12s/^#//' $HOME/.termux/termux.properties
-
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.deb
-dpkg -i termux-x11.deb
-rm termux-x11.deb
 apt-mark hold termux-x11-nightly
-
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.apk
-mv termux-x11.apk $HOME/storage/downloads/
-termux-open $HOME/storage/downloads/termux-x11.apk
 
 #Create kill_termux_x11.desktop
 echo "[Desktop Entry]
@@ -244,6 +212,7 @@ EOF
 chmod +x start
 mv start $HOME/../usr/bin
 
+
 #Shutdown Utility
 cat <<'EOF' > $HOME/../usr/bin/kill_termux_x11
 #!/bin/bash
@@ -276,22 +245,17 @@ exit 0
 EOF
 
 chmod +x $HOME/../usr/bin/kill_termux_x11
-}
 
 setup_theme() {
 #Download Wallpaper
-wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/peakpx.jpg
-wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/dark_waves.png
-mv peakpx.jpg $HOME/../usr/share/backgrounds/xfce/
-mv dark_waves.png $HOME/../usr/share/backgrounds/xfce/
+wget https://github.com/king7748/termux-XFCE4/blob/main/beach-wave.jpg
+mv beach-wave.jpg $HOME/../usr/share/backgrounds/xfce/
 
-#Install WhiteSur-Dark Theme
-wget https://github.com/vinceliuice/WhiteSur-gtk-theme/archive/refs/tags/2023-04-26.zip
-unzip 2023-04-26.zip
-tar -xf WhiteSur-gtk-theme-2023-04-26/release/WhiteSur-Dark-44-0.tar.xz
-mv WhiteSur-Dark/ $HOME/../usr/share/themes/
-rm -rf WhiteSur*
-rm 2023-04-26.zip
+wget https://github.com/king7748/termux-XFCE4/blob/main/Dracula.tar.xz
+tar -xf Dracula.tar.xz
+
+mv Dracula/ $HOME/../usr/share/themes/
+rm -rf Dracula*
 
 #Install Fluent Cursor Icon Theme
 wget https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-01.zip
@@ -325,37 +289,6 @@ rm readme.md
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/NotoColorEmoji-Regular.ttf
 mv NotoColorEmoji-Regular.ttf .fonts
 cp .fonts/NotoColorEmoji-Regular.ttf $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.fonts/ 
-
-#Setup Fancybash Termux
-wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/fancybash.sh
-mv fancybash.sh .fancybash.sh
-echo "source $HOME/.fancybash.sh" >> $HOME/.bashrc
-sed -i "326s/\\\u/$username/" $HOME/.fancybash.sh
-sed -i "327s/\\\h/termux/" $HOME/.fancybash.sh
-
-#Setup Fancybash Proot
-cp .fancybash.sh $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username
-echo "source ~/.fancybash.sh" >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
-sed -i '327s/termux/proot/' $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.fancybash.sh
-
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/font.ttf
-mv font.ttf .termux/font.ttf
-}
-
-setup_xfce_settings() {
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/conky.tar.gz
-tar -xvzf conky.tar.gz
-rm conky.tar.gz
-mkdir ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
-mv .config/conky/ ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
-mv .config/neofetch ../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
-
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/config.tar.gz
-tar -xvzf config.tar.gz
-rm config.tar.gz
-chmod u+rwx .config/autostart/conky.desktop
-chmod u+rwx .config/autostart/org.flameshot.Flameshot.desktop
-}
 
 setup_proot
 setup_xfce
