@@ -22,11 +22,11 @@ echo "This script will install XFCE Desktop in Termux along with a Debian proot"
 echo ""
 read -r -p "Please enter username for proot installation: " username </dev/tty
 
-termux-setup-storage
 termux-change-repo
-
 pkg update -y -o Dpkg::Options::="--force-confold"
 pkg upgrade -y -o Dpkg::Options::="--force-confold"
+termux-setup-storage
+
 pkg uninstall dbus -y
 pkg install wget ncurses-utils dbus proot-distro x11-repo tur-repo pulseaudio -y
 
@@ -71,7 +71,7 @@ proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinf
 
 setup_xfce() {
 #Install xfce4 desktop and additional packages
-pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies pavucontrol-qt eza bat jq nala wmctrl firefox netcat-openbsd -y
+pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies eza pavucontrol-qt bat jq nala wmctrl firefox netcat-openbsd termux-x11-nightly -y
 
 #Create .bashrc
 cp $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc $HOME/.bashrc
@@ -199,14 +199,14 @@ setup_termux_x11() {
 # Install Termux-X11
 sed -i '12s/^#//' $HOME/.termux/termux.properties
 
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.deb
-dpkg -i termux-x11.deb
-rm termux-x11.deb
-apt-mark hold termux-x11-nightly
+#wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.deb
+#dpkg -i termux-x11.deb
+#rm termux-x11.deb
+#apt-mark hold termux-x11-nightly
 
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.apk
-mv termux-x11.apk $HOME/storage/downloads/
-termux-open $HOME/storage/downloads/termux-x11.apk
+#wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.apk
+#mv termux-x11.apk $HOME/storage/downloads/
+#termux-open $HOME/storage/downloads/termux-x11.apk
 
 #Create kill_termux_x11.desktop
 echo "[Desktop Entry]
