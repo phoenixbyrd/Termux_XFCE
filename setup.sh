@@ -94,7 +94,7 @@ alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='eza -lF --icons'
 alias cat='bat '
 alias apt='pkg upgrade -y && nala $@ '
-alias install='pkg upgrade -y && nala install $@ sed -i '12s/^#//' $HOME/.termux/termux.properties'
+alias install='pkg upgrade -y && nala install $@'
 alias uninstall='nala remove $@ '
 " >> $HOME/.bashrc
 
