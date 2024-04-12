@@ -25,6 +25,7 @@ read -r -p "Please enter username for proot installation: " username </dev/tty
 termux-change-repo
 pkg update -y -o Dpkg::Options::="--force-confold"
 pkg upgrade -y -o Dpkg::Options::="--force-confold"
+sed -i '12s/^#//' $HOME/.termux/termux.properties
 termux-setup-storage
 
 pkg uninstall dbus -y
@@ -60,6 +61,8 @@ alias virgl='GALLIUM_DRIVER=virpipe '
 alias ls='eza -lF --icons'
 alias cat='bat '
 alias apt='sudo nala '
+alias install='nala install '
+alias uninstall='nala remove '
 alias start='echo "please run from termux, not debian proot."'
 " >> $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
@@ -71,7 +74,7 @@ proot-distro login debian --shared-tmp -- env DISPLAY=:1.0 cp /usr/share/zoneinf
 
 setup_xfce() {
 #Install xfce4 desktop and additional packages
-pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies eza pavucontrol-qt bat jq nala wmctrl firefox netcat-openbsd termux-x11-nightly -y
+pkg install git neofetch virglrenderer-android papirus-icon-theme xfce4 xfce4-goodies eza pavucontrol-qt bat jq nala wmctrl firefox netcat-openbsd termux-x11-nightly eza -y
 
 #Create .bashrc
 cp $HOME/../usr/var/lib/proot-distro/installed-rootfs/debian/etc/skel/.bashrc $HOME/.bashrc
@@ -90,12 +93,10 @@ echo "
 alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='eza -lF --icons'
 alias cat='bat '
-alias apt='pkg upgrade -y && nala $@'
+alias apt='pkg upgrade -y && nala $@ '
+alias install='pkg upgrade -y && nala install $@ sed -i '12s/^#//' $HOME/.termux/termux.properties'
+alias uninstall='nala remove $@ '
 " >> $HOME/.bashrc
-
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/ascii-image-converter
-mv ascii-image-converter $HOME/../usr/bin
-chmod +x $HOME/../usr/bin/ascii-image-converter
 
 #Put Firefox icon on Desktop
 cp $HOME/../usr/share/applications/firefox.desktop $HOME/Desktop 
@@ -197,11 +198,10 @@ cp $HOME/Desktop/App-Installer.desktop $HOME/../usr/share/applications
 
 setup_termux_x11() {
 # Install Termux-X11
-sed -i '12s/^#//' $HOME/.termux/termux.properties
 
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.deb
-dpkg -i termux-x11.deb
-rm termux-x11.deb
+wget https://github.com/termux/termux-x11/releases/download/nightly/termux-x11-nightly-1.03.00-0-all.deb
+dpkg -i termux-x11-nightly-1.03.00-0-all.deb
+rm termux-x11-nightly-1.03.00-0-all.deb
 #apt-mark hold termux-x11-nightly
 
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.apk
