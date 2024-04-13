@@ -204,9 +204,9 @@ dpkg -i termux-x11-nightly-1.03.00-0-all.deb
 rm termux-x11-nightly-1.03.00-0-all.deb
 #apt-mark hold termux-x11-nightly
 
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/termux-x11.apk
-mv termux-x11.apk $HOME/storage/downloads/
-termux-open $HOME/storage/downloads/termux-x11.apk
+wget https://github.com/termux/termux-x11/releases/download/nightly/app-arm64-v8a-debug.apk
+mv app-arm64-v8a-debug.apk $HOME/storage/downloads/
+termux-open $HOME/storage/downloads/app-arm64-v8a-debug.apk
 
 #Create kill_termux_x11.desktop
 echo "[Desktop Entry]
