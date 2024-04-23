@@ -93,8 +93,10 @@ echo "
 alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='eza -lF --icons'
 alias cat='bat '
-alias apt='pkg upgrade -y && nala $@ '
-alias install='pkg upgrade -y && nala install $@'
+alias apt='nala $@ '
+alias update='nala update'
+alias upgrade='nala upgrade'
+alias install='nala install $@'
 alias uninstall='nala remove $@ '
 " >> $HOME/.bashrc
 
