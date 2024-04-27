@@ -46,6 +46,12 @@ pkg install "${pkgs[@]}" -y -o Dpkg::Options::="--force-confold"
 mkdir -p Desktop
 mkdir -p Downloads
 
+#Download required install scripts
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/xfce.sh
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/proot.sh
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/utils.sh
+chmod +x *.sh
+
 ./xfce.sh "$username"
 ./proot.sh "$username"
 ./utils.sh
@@ -78,3 +84,8 @@ echo ""
 echo "Enjoy your Termux XFCE4 Desktop experience!"
 echo ""
 echo ""
+
+rm xfce.sh
+rm proot.sh
+rm utils.sh
+rm install.sh
