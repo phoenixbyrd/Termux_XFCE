@@ -47,9 +47,18 @@ Also note, you do not need to set display in Debian proot as it is already set. 
 
 # Hardware Acceleration & Proot
 
-This is setup with virglrenderer-android installed for hardware acceleration on supported devices. Termux XFCE desktop and apps install in termux are automatically hardware accelerated. Apps install in proot are not, use the command ```virgl app_name_here``` to run that app with hardware acceleration in debian proot. Some apps might require the use of ```MESA_GL_VERSION_OVERRIDE=4.0```
-  
-The full hardware acceleration command would be ```GALLIUM_DRIVER=virvpipe MESA_GL_VERSION_OVERRIDE=4.0``` for reference.   
+Here are some aliases prepared to make launching things just a little easier.
+
+Termux XFCE:
+
+zrun - Launch apps in Debian proot with hardware acceleration
+zrunhud - Same thing but with fps hud
+hud - Display fps hud for games in Termux
+
+Debian proot:
+
+zink - Launch apps with hardware accleration
+hud - Display fps hud
     
 To enter proot use the command ```debian```, from there you can install aditional software with apt and use cp2menu in termux to copy the menu items over to termux xfce menu. 
 
