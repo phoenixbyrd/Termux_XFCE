@@ -306,7 +306,7 @@ bash_prompt() {
 	BG3=$(($BACKGROUND_3+$BG))
 	FE3=$(($TEXTEFFECT_3+$EFFECT))
 	
-	#FC4=$(($FONT_COLOR_4+$COLOR))
+	#=$(($FONT_COLOR_4+$COLOR))
 	#BG4=$(($BACKGROUND_4+$BG))
 	#FE4=$(($TEXTEFFECT_4+$EFFECT))
 	
@@ -319,7 +319,7 @@ bash_prompt() {
 	format_font TEXT_FORMAT_1 $FE1 $FC1 $BG1
 	format_font TEXT_FORMAT_2 $FE2 $FC2 $BG2
 	format_font TEXT_FORMAT_3 $FC3 $FE3 $BG3
-	format_font TEXT_FORMAT_4 $FC4 $FE4 $BG4
+	#format_font TEXT_FORMAT_4 $FC4 $FE4 $BG4
 	
 	
 	# GENERATE PROMT SECTIONS
