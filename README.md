@@ -52,12 +52,15 @@ Here are some aliases prepared to make launching things just a little easier.
 Termux XFCE:
 
 zrun - Launch apps in Debian proot with hardware acceleration
+
 zrunhud - Same thing but with fps hud
+
 hud - Display fps hud for games in Termux
 
 Debian proot:
 
 zink - Launch apps with hardware accleration
+
 hud - Display fps hud
     
 To enter proot use the command ```debian```, from there you can install aditional software with apt and use cp2menu in termux to copy the menu items over to termux xfce menu. 
