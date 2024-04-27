@@ -306,9 +306,9 @@ bash_prompt() {
 	BG3=$(($BACKGROUND_3+$BG))
 	FE3=$(($TEXTEFFECT_3+$EFFECT))
 	
-	FC4=$(($FONT_COLOR_4+$COLOR))
-	BG4=$(($BACKGROUND_4+$BG))
-	FE4=$(($TEXTEFFECT_4+$EFFECT))
+	#FC4=$(($FONT_COLOR_4+$COLOR))
+	#BG4=$(($BACKGROUND_4+$BG))
+	#FE4=$(($TEXTEFFECT_4+$EFFECT))
 	
 
 	## CALL FORMATING HELPER FUNCTION: effect + font color + BG color
