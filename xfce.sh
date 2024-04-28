@@ -13,7 +13,7 @@ chmod +x $HOME/Desktop/firefox.desktop
 
 #Set aliases
 echo "
-alias debian='proot-distro login debian --user phoenixbyrd --shared-tmp'
+alias debian='proot-distro login debian --user $username --shared-tmp'
 alias zrun='proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 MESA_LOADER_DRIVER_OVERRIDE=zink TU_DEBUG=noconform '
 alias zrunhud='proot-distro login debian --user $username --shared-tmp -- env DISPLAY=:1.0 MESA_LOADER_DRIVER_OVERRIDE=zink TU_DEBUG=noconform GALLIUM_HUD=fps '
 alias hud='GALLIUM_HUD=fps '
