@@ -106,28 +106,29 @@ pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth
 
 # Prepare termux-x11 session
 export XDG_RUNTIME_DIR=${TMPDIR} > /dev/null 2>&1
-termux-x11 :1.0 > /dev/null 2>&1
+termux-x11 :1.0 & > /dev/null 2>&1
 
 # Wait a bit until termux-x11 gets started.
-sleep 3
+sleep 1 > /dev/null 2>&1
 
 # Launch Termux X11 main activity
-am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
-sleep 1
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity & > /dev/null 2>&1
+sleep 1 > /dev/null 2>&1
 
 # Set audio server
 export PULSE_SERVER=127.0.0.1 > /dev/null 2>&1
 
-MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android --angle-gl & > /dev/null 2>&1
+MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android & > /dev/null 2>&1
 
 #MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android & > /dev/null 2>&1
 
 #MESA_LOADER_DRIVER_OVERRIDE=zink GALLIUM_DRIVER=zink ZINK_DESCRIPTORS=lazy virgl_test_server_android --use-egl-surfaceless & > /dev/null 2>&1
 
 # Run XFCE4 Desktop
-env DISPLAY=:1.0 GALLIUM_DRIVER=virpipe XDG_SESSION_TYPE=x11 dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
+env DISPLAY=:1.0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
 
-exit 0
+exit 0 > /dev/null 2>&1
+
 EOF
 
 chmod +x start
