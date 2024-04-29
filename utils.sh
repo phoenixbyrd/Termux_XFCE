@@ -8,6 +8,22 @@ pd login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 $@
 EOF
 chmod +x ../usr/bin/prun
 
+cat <<'EOF' > ../usr/bin/zrun
+#!/bin/bash
+varname=$(basename $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/*)
+pd login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 MESA_LOADER_DRIVER_OVERRIDE=zink TU_DEBUG=noconform $@
+
+EOF
+chmod +x ../usr/bin/zrun
+
+cat <<'EOF' > ../usr/bin/zrunhud
+#!/bin/bash
+varname=$(basename $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/*)
+pd login debian --user $varname --shared-tmp -- env DISPLAY=:1.0 MESA_LOADER_DRIVER_OVERRIDE=zink TU_DEBUG=noconform GALLIUM_HUD=fps $@
+
+EOF
+chmod +x ../usr/bin/zrunhud
+
 #cp2menu utility ... Allows copying of Debian proot desktop menu items into Termux xfce menu to allow for launching programs from Debian proot from within the xfce menu rather than launching from terminal. 
 
 cat <<'EOF' > $PREFIX/bin/cp2menu
