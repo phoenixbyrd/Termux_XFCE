@@ -91,24 +91,44 @@ chmod +x $PREFIX/share/applications/cp2menu.desktop
 
 #App Installer Utility .. For installing additional applications not available in Termux or Debian proot repositories. 
 
-git clone https://github.com/phoenixbyrd/App-Installer.git
-mv $HOME/App-Installer $HOME/.App-Installer
-chmod +x $HOME/.App-Installer/*
+cat <<'EOF' > $PREFIX/bin/app-installer
+APP_INSTALLER_DIR="$HOME/.App-Installer"
+DESKTOP_DIR="$HOME/Desktop"
+APP_DESKTOP_FILE="$DESKTOP_DIR/App-Installer.desktop"
 
-echo "[Desktop Entry]
+if [ ! -d "$APP_INSTALLER_DIR" ] || [ ! -f "$APP_DESKTOP_FILE" ]; then
+    # Clone the repository and move it to the appropriate directory
+    git clone https://github.com/phoenixbyrd/App-Installer.git "$HOME/App-Installer"
+    mv "$HOME/App-Installer" "$APP_INSTALLER_DIR"
+    chmod +x "$APP_INSTALLER_DIR"/*
+
+    # Create the .desktop file
+    echo "[Desktop Entry]
 Version=1.0
 Type=Application
 Name=App Installer
 Comment=
-Exec=/data/data/com.termux/files/home/.App-Installer/app-installer
+Exec=$PREFIX/bin/app-installer
 Icon=package-install
 Categories=System;
 Path=
 Terminal=false
 StartupNotify=false
-" > $HOME/Desktop/App-Installer.desktop
-chmod +x $HOME/Desktop/App-Installer.desktop
-cp $HOME/Desktop/App-Installer.desktop $PREFIX/share/applications
+" > "$APP_DESKTOP_FILE"
+    chmod +x "$APP_DESKTOP_FILE"
+
+    # Copy the .desktop file to the applications directory
+    cp "$APP_DESKTOP_FILE" "$PREFIX/share/applications"
+
+    # Execute the command
+    "$APP_INSTALLER_DIR/app-installer"
+else
+    # Execute the command
+    "$APP_INSTALLER_DIR/app-installer"
+fi
+
+EOF
+chmod +x $PREFIX/bin/app-installer
 
 #Start script
 cat <<'EOF' > start
