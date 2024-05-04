@@ -103,7 +103,7 @@ if [ ! -d "$APP_INSTALLER_DIR" ] || [ ! -f "$APP_DESKTOP_FILE" ]; then
     chmod +x "$APP_INSTALLER_DIR"/*
 
     # Create the .desktop file
-    echo "[Desktop Entry]
+echo "[Desktop Entry]
 Version=1.0
 Type=Application
 Name=App Installer
@@ -129,6 +129,20 @@ fi
 
 EOF
 chmod +x $PREFIX/bin/app-installer
+
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=App Installer
+Comment=
+Exec=$PREFIX/bin/app-installer
+Icon=package-install
+Categories=System;
+Path=
+Terminal=false
+StartupNotify=false
+" > $HOME/Desktop/app-installer.desktop
+    chmod +x $HOME/Desktop/app-installer.desktop
 
 #Start script
 cat <<'EOF' > start
