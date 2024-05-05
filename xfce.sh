@@ -77,9 +77,18 @@ echo "source $HOME/.fancybash.sh" >> $PREFIX/etc/bash.bashrc
 sed -i "326s/\\\u/$username/" $HOME/.fancybash.sh
 sed -i "327s/\\\h/termux/" $HOME/.fancybash.sh
 
-#Autostart Conky and Flameshot
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/config.tar.gz
-tar -xvzf config.tar.gz
-rm config.tar.gz
-chmod +x .config/autostart/conky.desktop
-chmod +x .config/autostart/org.flameshot.Flameshot.desktop
+#Autostart 
+#Create autostart directory
+if [ ! -d "$HOME/.config/autostart" ]; then
+    mkdir -p "$HOME/.config/autostart"
+fi
+
+#Conky
+cp $PREFIX/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/conky.desktop $HOME/.config/autostart/
+sed -i 's|^Exec=.*$|Exec=prun conky -c .config/conky/Alterf/Alterf.conf|' $HOME/.config/autostart/conky.desktop
+
+#Flameshot
+cp $PREFIX/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/org.flameshot.Flameshot.desktop $HOME/.config/autostart/
+sed -i 's|^Exec=.*$|Exec=prun flameshot|' $HOME/.config/autostart/org.flameshot.Flameshot.desktop
+
+chmod +x $HOME/.config/autostart/*.desktop
