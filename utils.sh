@@ -96,13 +96,14 @@ APP_INSTALLER_DIR="$HOME/.App-Installer"
 DESKTOP_DIR="$HOME/Desktop"
 APP_DESKTOP_FILE="$DESKTOP_DIR/App-Installer.desktop"
 
-if [ ! -d "$APP_INSTALLER_DIR" ] || [ ! -f "$APP_DESKTOP_FILE" ]; then
+# Check if the .desktop file exists
+if [ ! -f "$APP_DESKTOP_FILE" ]; then
     # Clone the repository and move it to the appropriate directory
     git clone https://github.com/phoenixbyrd/App-Installer.git "$HOME/App-Installer"
     mv "$HOME/App-Installer" "$APP_INSTALLER_DIR"
     chmod +x "$APP_INSTALLER_DIR"/*
 
-    # Create the .desktop file
+# Create the .desktop file
 echo "[Desktop Entry]
 Version=1.0
 Type=Application
@@ -117,14 +118,12 @@ StartupNotify=false
 " > "$APP_DESKTOP_FILE"
     chmod +x "$APP_DESKTOP_FILE"
 
-    # Copy the .desktop file to the applications directory
-    cp "$APP_DESKTOP_FILE" "$PREFIX/share/applications"
+# Copy the .desktop file to the applications directory
+cp "$APP_DESKTOP_FILE" "$PREFIX/share/applications"
+fi
 
-    # Execute the command
-    "$APP_INSTALLER_DIR/app-installer"
-else
-    # Execute the command
-    "$APP_INSTALLER_DIR/app-installer"
+# Execute the command
+"$APP_INSTALLER_DIR/app-installer"
 fi
 
 EOF
