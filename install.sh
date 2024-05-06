@@ -49,11 +49,13 @@ mkdir -p Downloads
 #Download required install scripts
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/xfce.sh
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/proot.sh
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/theme.sh
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/utils.sh
 chmod +x *.sh
 
 ./xfce.sh "$username"
 ./proot.sh "$username"
+./theme.sh "$username"
 ./utils.sh
 
 # Display a message 
@@ -87,5 +89,6 @@ echo ""
 
 rm xfce.sh
 rm proot.sh
+rm theme.sh
 rm utils.sh
 rm install.sh
