@@ -85,7 +85,7 @@ echo "Enjoy your Termux XFCE4 Desktop experience!"
 echo ""
 echo ""
 
-rm proot.sh
 rm xfce.sh
+rm proot.sh
 rm utils.sh
 rm install.sh
