@@ -96,14 +96,13 @@ APP_INSTALLER_DIR="$HOME/.App-Installer"
 DESKTOP_DIR="$HOME/Desktop"
 APP_DESKTOP_FILE="$DESKTOP_DIR/App-Installer.desktop"
 
-# Check if the .desktop file exists
-if [ ! -f "$APP_DESKTOP_FILE" ]; then
+if [ ! -d "$APP_INSTALLER_DIR" ] || [ ! -f "$APP_DESKTOP_FILE" ]; then
     # Clone the repository and move it to the appropriate directory
     git clone https://github.com/phoenixbyrd/App-Installer.git "$HOME/App-Installer"
     mv "$HOME/App-Installer" "$APP_INSTALLER_DIR"
     chmod +x "$APP_INSTALLER_DIR"/*
 
-# Create the .desktop file
+    # Create the .desktop file
 echo "[Desktop Entry]
 Version=1.0
 Type=Application
@@ -118,12 +117,14 @@ StartupNotify=false
 " > "$APP_DESKTOP_FILE"
     chmod +x "$APP_DESKTOP_FILE"
 
-# Copy the .desktop file to the applications directory
-cp "$APP_DESKTOP_FILE" "$PREFIX/share/applications"
-fi
+    # Copy the .desktop file to the applications directory
+    cp "$APP_DESKTOP_FILE" "$PREFIX/share/applications"
 
-# Execute the command
-"$APP_INSTALLER_DIR/app-installer"
+    # Execute the command
+    "$APP_INSTALLER_DIR/app-installer"
+else
+    # Execute the command
+    "$APP_INSTALLER_DIR/app-installer"
 fi
 
 EOF
@@ -147,22 +148,37 @@ StartupNotify=false
 cat <<'EOF' > start
 #!/bin/bash
 
+# Kill open X11 processes
+kill -9 $(pgrep -f "termux.x11") > /dev/null 2>&1
+
 # Enable PulseAudio over Network
 pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 > /dev/null 2>&1
 
-MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android --angle-gl & > /dev/null 2>&1
-sleep 1
-XDG_RUNTIME_DIR=${TMPDIR} termux-x11 :1.0 &
-sleep 1
-am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
+# Prepare termux-x11 session
+export XDG_RUNTIME_DIR=${TMPDIR} > /dev/null 2>&1
+termux-x11 :1.0 & > /dev/null 2>&1
+
+# Wait a bit until termux-x11 gets started.
+sleep 1 > /dev/null 2>&1
+
+# Launch Termux X11 main activity
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity & > /dev/null 2>&1
+sleep 1 > /dev/null 2>&1
+
 # Set audio server
 export PULSE_SERVER=127.0.0.1 > /dev/null 2>&1
-sleep 1
+
+MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android & > /dev/null 2>&1
+
+#MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android & > /dev/null 2>&1
+
+#MESA_LOADER_DRIVER_OVERRIDE=zink GALLIUM_DRIVER=zink ZINK_DESCRIPTORS=lazy virgl_test_server_android --use-egl-surfaceless & > /dev/null 2>&1
+
+# Run XFCE4 Desktop
 env DISPLAY=:1.0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
 
-sleep 5
-process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
-kill "$process_id" > /dev/null 2>&1
+exit 0 > /dev/null 2>&1
+
 EOF
 
 chmod +x start
