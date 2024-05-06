@@ -92,41 +92,43 @@ chmod +x $PREFIX/share/applications/cp2menu.desktop
 #App Installer Utility .. For installing additional applications not available in Termux or Debian proot repositories. 
 
 cat <<'EOF' > $PREFIX/bin/app-installer
-APP_INSTALLER_DIR="$HOME/.App-Installer"
+#!/bin/bash
+
+# Define the directory paths
+INSTALLER_DIR="$HOME/.App-Installer"
+REPO_URL="https://github.com/phoenixbyrd/App-Installer.git"
 DESKTOP_DIR="$HOME/Desktop"
 APP_DESKTOP_FILE="$DESKTOP_DIR/App-Installer.desktop"
 
-if [ ! -d "$APP_INSTALLER_DIR" ] || [ ! -f "$APP_DESKTOP_FILE" ]; then
-    # Clone the repository and move it to the appropriate directory
-    git clone https://github.com/phoenixbyrd/App-Installer.git "$HOME/App-Installer"
-    mv "$HOME/App-Installer" "$APP_INSTALLER_DIR"
-    chmod +x "$APP_INSTALLER_DIR"/*
-
+# Check if the directory already exists
+if [ ! -d "$INSTALLER_DIR" ]; then
+    # Directory doesn't exist, clone the repository
+    git clone "$REPO_URL" "$INSTALLER_DIR"
     # Create the .desktop file
-echo "[Desktop Entry]
-Version=1.0
-Type=Application
-Name=App Installer
-Comment=
-Exec=$PREFIX/bin/app-installer
-Icon=package-install
-Categories=System;
-Path=
-Terminal=false
-StartupNotify=false
+    echo "[Desktop Entry]
+    Version=1.0
+    Type=Application
+    Name=App Installer
+    Comment=
+    Exec=$PREFIX/bin/app-installer
+    Icon=package-install
+    Categories=System;
+    Path=
+    Terminal=false
+    StartupNotify=false
 " > "$APP_DESKTOP_FILE"
-    chmod +x "$APP_DESKTOP_FILE"
-
-    # Copy the .desktop file to the applications directory
-    cp "$APP_DESKTOP_FILE" "$PREFIX/share/applications"
-
-    # Execute the command
-    "$APP_INSTALLER_DIR/app-installer"
+chmod +x "$APP_DESKTOP_FILE"
+chmod +x $HOME/.App-Installer/*
+    if [ $? -eq 0 ]; then
+        echo "Repository cloned successfully."
+    else
+        echo "Failed to clone repository. Exiting."
+        exit 1
+    fi
 else
-    # Execute the command
-    "$APP_INSTALLER_DIR/app-installer"
+    echo "Directory already exists. Skipping clone."
+    $HOME/.App-Installer/./app-installer
 fi
-
 EOF
 chmod +x $PREFIX/bin/app-installer
 
