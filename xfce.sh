@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 username="$1"
