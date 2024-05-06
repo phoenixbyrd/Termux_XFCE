@@ -67,6 +67,22 @@ wget https://github.com/termux/termux-x11/releases/download/nightly/app-arm64-v8
 mv app-arm64-v8a-debug.apk $HOME/storage/downloads/
 termux-open $HOME/storage/downloads/app-arm64-v8a-debug.apk
 
+#Autostart 
+#Create autostart directory
+if [ ! -d "$HOME/.config/autostart" ]; then
+    mkdir -p "$HOME/.config/autostart"
+fi
+
+#Conky
+cp $PREFIX/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/conky.desktop $HOME/.config/autostart/
+sed -i 's|^Exec=.*$|Exec=prun conky -c .config/conky/Alterf/Alterf.conf|' $HOME/.config/autostart/conky.desktop
+
+#Flameshot
+cp $PREFIX/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/org.flameshot.Flameshot.desktop $HOME/.config/autostart/
+sed -i 's|^Exec=.*$|Exec=prun flameshot|' $HOME/.config/autostart/org.flameshot.Flameshot.desktop
+
+chmod +x $HOME/.config/autostart/*.desktop
+
 source $PREFIX/etc/bash.bashrc
 termux-reload-settings
 
