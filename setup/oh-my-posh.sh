@@ -6,6 +6,6 @@ chmod +x .oh-my-posh
 wget https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Meslo/M/Regular/MesloLGMNerdFontPropo-Regular.ttf 
 mv MesloLGMNerdFontPropo-Regular.ttf .termux/font.ttf
 termux-reload-settings
-wget https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/bubbles.omp.json -O .bubbles.omo.json
-echo "eval "$(./.oh-my-posh init zsh --config ~/bubbles.omp.json)""  | tee -a ~/.zshrc > /dev/null
-source .zshrc
+#wget https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/bubbles.omp.json -O .bubbles.omo.json
+#echo "eval "$(./.oh-my-posh init zsh --config ~/bubbles.omp.json)""  | tee -a ~/.zshrc > /dev/null
+#source .zshrc
