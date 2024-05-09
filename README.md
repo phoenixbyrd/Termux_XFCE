@@ -93,3 +93,6 @@ Once it connects run this 3 commands
 You can also run adb shell from termux directly by following the guide found in this video
 
 [https://www.youtube.com/watch?v=BHc7uvX34bM](https://www.youtube.com/watch?v=BHc7uvX34bM)
+
+# Special Thanks
+- Thanks for [phoenixbyrd](https://github.com/phoenixbyrd) for creating [Termux_XFCE] this repo!
