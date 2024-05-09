@@ -1,5 +1,5 @@
 #!/bin/bash
-DIR_TG = "~/.termux/termux-go"
+DIR_TG="$HOME/termux-go"
 pkg install zsh git wget -y 
 if [ ! -d "$DIR_TG" ]; then
   echo rm -rf $DIR_TG ; mkdir $DIR_TG;
