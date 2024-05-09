@@ -19,8 +19,9 @@ To install run this command in termux
 curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/install.sh -o install.sh && chmod +x install.sh && ./install.sh
 ```
 &nbsp;
+ Termux Desktop preview
 
-![Desktop Screenshot](desktop.png)
+![Desktop Screenshot](images/desktop.png)
 
 # Starting the desktop
 
