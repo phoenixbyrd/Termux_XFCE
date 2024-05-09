@@ -95,4 +95,4 @@ You can also run adb shell from termux directly by following the guide found in 
 [https://www.youtube.com/watch?v=BHc7uvX34bM](https://www.youtube.com/watch?v=BHc7uvX34bM)
 
 # Special Thanks
-- Thanks for [phoenixbyrd](https://github.com/phoenixbyrd) for creating [Termux_XFCE] this repo!
+- Thanks for [phoenixbyrd](https://github.com/phoenixbyrd) for creating [Termux_XFCE] this repo! 
