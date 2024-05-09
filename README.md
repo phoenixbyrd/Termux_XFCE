@@ -8,6 +8,11 @@ Please read the whole Readme for more information about this setup.
 
 # Install
 
+Install termux apk from
+```
+https://github.com/KitsunedFox/termux-monet/releases
+```
+
 To install run this command in termux
 
 ```
@@ -15,21 +20,7 @@ curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/install.
 ```
 &nbsp;
 
-
-Join the Discord for any questions, help, suggestions, etc. [https://discord.gg/pNMVrZu5dm](https://discord.gg/pNMVrZu5dm)  
-
-&nbsp;
-
 ![Desktop Screenshot](desktop.png)
-  
-  
-# Use Case
-  
-This is is how I personally use Termux on my Galaxy Fold 3, script was created mainly for personal use but also for others if they wanted to try out my setup. This is my daily driver used with a 15 inch Lepow portable monitor and bluetooth keyboard and mouse. This is mainly intended to be used as a PC/Laptop replacement connected to a monitor, keyboard and mouse and used as you would with any PC/Laptop. I run this on my Samsung Galaxy Fold 3.
-
-![My Samsung Galaxy Fold 3 - Dex Setup](desk.jpg)  
-
-&nbsp;
 
 # Starting the desktop
 
@@ -89,9 +80,14 @@ In developer settings, enable wireless debugging then click into there to get th
   
 Enter both those values into LADB
   
-Once it connects run this command
-  
+Once it connects run this 3 commands
+
+```adb shell "/system/bin/device_config set_sync_disabled_for_tests persistent"```
+
 ```adb shell "/system/bin/device_config put activity_manager max_phantom_processes 2147483647"```
+
+```adb shell settings put global settings_enable_monitor_phantom_procs false```
+
 
 You can also run adb shell from termux directly by following the guide found in this video
 
