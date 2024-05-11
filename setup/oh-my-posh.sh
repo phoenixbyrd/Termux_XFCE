@@ -1,21 +1,30 @@
 #!/bin/bash
-<<<<<<<<<<<<<<  ✨ Codeium Command 🌟 >>>>>>>>>>>>>>>>
-+echo "Running setup/oh-my-posh.sh"
-+echo "dirtg=$HOME/termux-go"
-dirtg="$HOME/termux-go"
-<<<<<<<  e5e861cb-d3dc-42dc-8dc7-1130dc61a77b  >>>>>>>
-pkg install zsh git wget -y 
-if [ ! -d "$dirtg" ]; then
-  echo rm -rf $dirtg ; mkdir $dirtg;
+# Function to remove a file if it exists
+function remove_if_exists() {
+    file="$1"
+    if [ -f "$file" ]; then
+        rm -f "$file"
+        echo "file already exists. Removing..."
+    fi
+}
+dirtg=$HOME/.termux-go # Make repo dir
+temp_dir=$(mktemp -d)  # temp dir
+pkg install git wget zsh -y
+# Check if the directory exists
+if [ -d "$dirtg" ]; then
+    echo "Directory already exists. Deleting..."
+    rm -rf "$dirtg"
+    echo "Directory deleted."
 else
-mkdir $dirtg
+    mkdir -p "$dirtg"
 fi
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-wget https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v19.27.0/posh-linux-arm64 -O $dirtg/.oh-my-posh
-chmod +x $dirtg/.oh-my-posh
+remove_if_exists "/data/data/com.termux/files/usr/bin/oh-my-posh"
+wget --output-document="$temp_dir/oh-my-posh" "https://github.com/JanDeDobbeleer/oh-my-posh/releases/download/v19.27.0/posh-linux-arm64"
+mv "$temp_dir"/oh-my-posh /data/data/com.termux/files/usr/bin/oh-my-posh
+remove_if_exists "~/.termux/font.ttf"
 wget https://github.com/ryanoasis/nerd-fonts/blob/master/patched-fonts/Meslo/M/Regular/MesloLGMNerdFontPropo-Regular.ttf -O $dirtg/NerdFont.ttf
-mv NerdFont.ttf ~/.termux/font.ttf
+mv $HOME/.termux-go/NerdFont.ttf ~/.termux/font.ttf
 termux-reload-settings
-#wget https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/bubbles.omp.json -O $dirtg.bubbles.omo.json
-#echo "eval "$(~/$dirtg.oh-my-posh init zsh --config ~/$dirtg/bubbles.omp.json)""  | tee -a ~/.zshrc > /dev/null
-#source .zshrc
+wget --output-document="$temp_dir/bubbles.omp.json" "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/bubbles.omp.json"
+mv "$temp_dir"/bubbles.omp.json /data/data/com.termux/files/usr/bin/bubbles.omp.json
+eval "$(/data/data/com.termux/files/usr/bin/oh-my-posh init zsh --config /data/data/com.termux/files/usr/bin/bubbles.omp.json)"
