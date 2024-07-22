@@ -1,4 +1,4 @@
-# Termux_XFCE
+# Termux Modified Xfce4 Desktop Environment 
 
 Menyiapkan desktop termux XFCE dan instalasi proot Debian. Setup ini menggunakan Termux-X11, server termux-x11 akan diinstal dan Anda akan diminta untuk mengizinkan termux menginstal APK Android. Anda hanya perlu memilih nama pengguna Anda dan ikuti petunjuknya. Ini akan memakan ruang penyimpanan sekitar 4GB. Harap dicatat, ini bisa menjadi proses yang panjang. Ingatlah bahwa saat Anda menginstal aplikasi, aplikasi tersebut akan menghabiskan lebih banyak ruang penyimpanan. Silakan baca seluruh Readme untuk informasi lebih lanjut tentang pengaturan ini.
 
