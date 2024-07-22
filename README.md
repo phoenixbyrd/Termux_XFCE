@@ -12,6 +12,11 @@ curl -sL https://raw.githubusercontent.com/YuusaaZ/Termux_XFCE/main/install.sh -
 
 Selama instalasi Anda akan menerima popup untuk mengizinkan instalasi dari termux, ini akan membuka APK untuk aplikasi android Termux-X11. Meskipun Anda tidak harus mengizinkan penginstalan dari termux, Anda masih perlu menginstal secara manual dengan menggunakan browser file dan mencari APK di folder unduhan Anda.
 
+Script Start :
+```
+curl -sL https://raw.githubusercontent.com/YuusaaZ/Termux_XFCE/main/start.sh -o start.sh && chmod +x start.sh
+```
+
 Ketik ./start.sh 
   
 Ini akan memulai server termux-x11, desktop XFCE4
