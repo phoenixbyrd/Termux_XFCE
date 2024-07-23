@@ -65,28 +65,3 @@ cp $PREFIX/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/o
 sed -i 's|^Exec=.*$|Exec=prun flameshot|' $HOME/.config/autostart/org.flameshot.Flameshot.desktop
 
 chmod +x $HOME/.config/autostart/*.desktop
-
-
-
-#Proot Theming
-#Setup Fancybash Proot
-cp .fancybash.sh $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username
-echo "source ~/.fancybash.sh" >> $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
-sed -i '327s/termux/proot/' $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.fancybash.sh
-
-wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/conky.tar.gz
-tar -xvzf conky.tar.gz
-rm conky.tar.gz
-mkdir $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
-mv .config/conky/ $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
-mv .config/neofetch $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config
-
-#Set theming from xfce to proot
-cp -r $PREFIX/share/icons/dist-dark $PREFIX/var/lib/proot-distro/installed-rootfs/debian/usr/share/icons/dist-dark
-
-cat <<'EOF' > $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.Xresources
-Xcursor.theme: dist-dark
-EOF
-
-mkdir $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.fonts/
-cp .fonts/NotoColorEmoji-Regular.ttf $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.fonts/ 
