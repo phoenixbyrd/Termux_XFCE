@@ -34,6 +34,7 @@ echo "Mengatur akses memori (termux-setup-storage)."
 # Wait for a single character input 
 echo ""
 read -n 1 -s -r -p "Tekan Apa saja untuk melanjutkan..."
+sleep 1
 termux-setup-storage
 
 pkgs=('wget' 'ncurses-utils' 'dbus' 'proot-distro' 'x11-repo' 'tur-repo' 'pulseaudio')

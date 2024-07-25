@@ -17,7 +17,7 @@ trap finish EXIT
 
 username="$1"
 
-pkgs_proot=('sudo' 'wget' 'nala' 'jq' 'flameshot' 'conky-all')
+pkgs_proot=('sudo' 'wget' 'jq' 'flameshot' 'conky-all')
 
 #Install Debian proot
 pd install debian
@@ -39,12 +39,6 @@ chmod u-w  $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 echo "
 alias ls='eza -lF --icons'
 alias cat='bat '
-alias apt='sudo nala '
-alias install='sudo nala install -y '
-alias remove='sudo nala remove -y '
-alias list='nala list --upgradeable'
-alias show='nala show '
-alias search='nala search '
 " >> $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
 

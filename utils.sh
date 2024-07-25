@@ -72,8 +72,8 @@ fi
 cat <<'EOF' > $PREFIX/bin/kill_termux_x11
 #!/bin/bash
 
-# Check if Apt, dpkg, or Nala is running in Termux or Proot
-if pgrep -f 'apt|apt-get|dpkg|nala'; then
+# Check if Apt, dpkg, is running in Termux or Proot
+if pgrep -f 'apt|apt-get|dpkg'; then
   zenity --info --text="Software is currently installing in Termux or Proot. Please wait for these processes to finish before continuing."
   exit 1
 fi
