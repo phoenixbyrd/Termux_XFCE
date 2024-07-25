@@ -21,14 +21,14 @@ pkgs_proot=('sudo' 'wget' 'jq' 'flameshot' 'conky-all')
 
 #Install Debian proot
 pd install debian
-pd login debian --shared-tmp -- env DISPLAY=:1.0 apt update
-pd login debian --shared-tmp -- env DISPLAY=:1.0 apt upgrade -y
-pd login debian --shared-tmp -- env DISPLAY=:1.0 apt install "${pkgs_proot[@]}" -y -o Dpkg::Options::="--force-confold"
+pd login debian --shared-tmp -- env DISPLAY=:0 apt update
+pd login debian --shared-tmp -- env DISPLAY=:0 apt upgrade -y
+pd login debian --shared-tmp -- env DISPLAY=:0 apt install "${pkgs_proot[@]}" -y -o Dpkg::Options::="--force-confold"
 
 #Create user
-pd login debian --shared-tmp -- env DISPLAY=:1.0 groupadd storage
-pd login debian --shared-tmp -- env DISPLAY=:1.0 groupadd wheel
-pd login debian --shared-tmp -- env DISPLAY=:1.0 useradd -m -g users -G wheel,audio,video,storage -s /bin/bash "$username"
+pd login debian --shared-tmp -- env DISPLAY=:0 groupadd storage
+pd login debian --shared-tmp -- env DISPLAY=:0 groupadd wheel
+pd login debian --shared-tmp -- env DISPLAY=:0 useradd -m -g users -G wheel,audio,video,storage -s /bin/bash "$username"
 
 #Add user to sudoers
 chmod u+rw $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
@@ -43,5 +43,5 @@ alias cat='bat '
 
 
 #Setup Hardware Acceleration
-pd login debian --shared-tmp -- env DISPLAY=:1.0 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb
-pd login debian --shared-tmp -- env DISPLAY=:1.0 sudo apt install -y ./mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb
+pd login debian --shared-tmp -- env DISPLAY=:0 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb
+pd login debian --shared-tmp -- env DISPLAY=:0 sudo apt install -y ./mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb
