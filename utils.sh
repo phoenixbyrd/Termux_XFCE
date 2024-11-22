@@ -163,7 +163,7 @@ cat <<'EOF' > start
 
 # Enable PulseAudio over Network
 
-LD_PRELOAD=/system/lib64/libskcodec.so
+#LD_PRELOAD=/system/lib64/libskcodec.so
 
 pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 > /dev/null 2>&1
 
