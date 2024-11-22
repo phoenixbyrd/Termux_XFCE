@@ -162,6 +162,9 @@ cat <<'EOF' > start
 #!/bin/bash
 
 # Enable PulseAudio over Network
+
+LD_PRELOAD=/system/lib64/libskcodec.so
+
 pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 > /dev/null 2>&1
 
 XDG_RUNTIME_DIR=${TMPDIR} termux-x11 :1.0 & > /dev/null 2>&1
