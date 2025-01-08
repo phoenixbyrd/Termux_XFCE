@@ -4,6 +4,13 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+# Color definitions
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
 # Log file for debugging
 LOG_FILE="$HOME/termux_setup.log"
 exec 2>>"$LOG_FILE"
@@ -11,32 +18,130 @@ exec 2>>"$LOG_FILE"
 # Temporary directory for setup
 TEMP_DIR=$(mktemp -d)
 
+# Function to print colored status
+print_status() {
+    local status=$1
+    local message=$2
+    if [ "$status" = "ok" ]; then
+        echo -e "${GREEN}✓${NC} $message"
+    elif [ "$status" = "warn" ]; then
+        echo -e "${YELLOW}!${NC} $message"
+    else
+        echo -e "${RED}✗${NC} $message"
+    fi
+}
+
+# Function to clean up on exit
 finish() {
     local ret=$?
     if [ $ret -ne 0 ] && [ $ret -ne 130 ]; then
-        echo "ERROR: An issue occurred. Please check $LOG_FILE for details."
+        echo -e "${RED}ERROR: An issue occurred. Please check $LOG_FILE for details.${NC}"
     fi
     rm -rf "$TEMP_DIR"
 }
 
 trap finish EXIT
 
-# Ensure the script is running in Termux
-if [[ $(uname -o) != "Android" ]]; then
-    echo "This script is intended for Termux on Android only. Exiting."
-    exit 1
-fi
+# Function to detect system compatibility
+detect_termux() {
+    local errors=0
+    
+    echo -e "\n${BLUE}╔════════════════════════════════════╗${NC}"
+    echo -e "${BLUE}║      System Compatibility Check    ║${NC}"
+    echo -e "${BLUE}╚════════════════════════════════════╝${NC}\n"
+    
+    # Check if running on Android
+    if [[ "$(uname -o)" = "Android" ]]; then
+        print_status "ok" "Running on Android $(getprop ro.build.version.release)"
+    else
+        print_status "error" "Not running on Android"
+        ((errors++))
+    fi
 
-clear
+    # Check architecture
+    local arch=$(uname -m)
+    if [[ "$arch" = "aarch64" ]]; then
+        print_status "ok" "Architecture: $arch"
+    else
+        print_status "error" "Unsupported architecture: $arch (requires aarch64)"
+        ((errors++))
+    fi
 
-# Confirm action
-read -p "This will modify your Termux environment. Do you want to continue? (y/n): " confirm
-if [[ "$confirm" != "y" ]]; then
-    echo "Setup aborted by user."
-    exit 0
-fi
+    # Check Termux release type
+    if [[ "$TERMUX_APK_RELEASE" = "GITHUB" ]]; then
+        print_status "ok" "Using GitHub release"
+    else
+        print_status "error" "Not using GitHub release"
+        ((errors++))
+    fi
 
-# Change repository
+    # Check for required directories
+    if [[ -d "$PREFIX" ]]; then
+        print_status "ok" "Termux PREFIX directory found"
+    else
+        print_status "error" "Termux PREFIX directory not found"
+        ((errors++))
+    fi
+
+    # Check available storage space
+    local free_space=$(df -h "$HOME" | awk 'NR==2 {print $4}')
+    if [[ $(df "$HOME" | awk 'NR==2 {print $4}') -gt 4194304 ]]; then
+        print_status "ok" "Available storage: $free_space"
+    else
+        print_status "warn" "Low storage space: $free_space (4GB recommended)"
+    fi
+
+    # Check RAM
+    local total_ram=$(free -m | awk 'NR==2 {print $2}')
+    if [[ $total_ram -gt 2048 ]]; then
+        print_status "ok" "RAM: ${total_ram}MB"
+    else
+        print_status "warn" "Low RAM: ${total_ram}MB (2GB recommended)"
+    fi
+
+    echo
+    if [[ $errors -eq 0 ]]; then
+        echo -e "${GREEN}All system requirements met!${NC}"
+        return 0
+    else
+        echo -e "${RED}Found $errors error(s). System requirements not met.${NC}"
+        return 1
+    fi
+}
+
+# Main installation function
+main() {
+    clear
+    echo -e "\n${BLUE}╔════════════════════════════════════╗${NC}"
+    echo -e "${BLUE}║    XFCE Desktop Installation       ║${NC}"
+    echo -e "${BLUE}╚════════════════════════════════════╝${NC}"
+
+    # Check system compatibility
+    if ! detect_termux; then
+        echo -e "${YELLOW}Please ensure your system meets the following requirements:${NC}"
+        echo "• Termux GitHub release"
+        echo "• ARM64 (aarch64) device"
+        echo "• Android operating system"
+        echo "• At least 4GB free storage"
+        echo "• At least 2GB RAM recommended"
+        exit 1
+    fi
+
+    echo -e "${GREEN}System check passed. Ready to proceed with installation.${NC}"
+    echo -e "${GREEN}This will install XFCE native desktop in Termux"
+    echo -e "${GREEN}A Debian proot-distro is also installed for additional software"
+    echo -e "${GREEN}while also enabling hardware acceleration"
+    echo -e "${GREEN}This setup has been tested on a Samsung Galaxy S24 Ultra"
+    echo -e "${GREEN}It should run on most phones however.${NC}"
+    echo -e "\n${YELLOW}Press Enter to continue or Ctrl+C to cancel${NC}"
+    
+    read -r
+
+    # Continue with your existing installation code here
+    echo -n "Please enter username for proot installation: " > /dev/tty
+    read username < /dev/tty
+
+    # Change repository
 if ! termux-change-repo; then
     echo "Failed to change repository. Exiting."
     exit 1
@@ -55,10 +160,7 @@ else
     echo "Warning: termux.properties file not found. Skipping update."
 fi
 
-# Display a message
-clear
-echo "\nSetting up Termux Storage access.\n"
-read -n 1 -s -r -p "Press any key to continue..."
+# Setup Termux Storage Access 
 if ! termux-setup-storage; then
     echo "Failed to set up Termux storage. Exiting."
     exit 1
@@ -84,7 +186,7 @@ fi
 mkdir -p "$HOME/Desktop" "$HOME/Downloads"
 
 # Install XFCE desktop environment
-xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'termux-x11-nightly' 'virglrenderer-android')
+xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'starship' 'termux-x11-nightly' 'virglrenderer-android' 'papirus-icon-theme')
 if ! pkg install -y "${xfce_packages[@]}" -o Dpkg::Options::="--force-confold"; then
     echo "Failed to install XFCE packages. Exiting."
     exit 1
@@ -159,13 +261,12 @@ chmod +x $PREFIX/bin/start
 cat <<'EOF' > $PREFIX/bin/kill_termux_x11
 #!/bin/bash
 
-# Send stop action to Termux X11
+# Kill Termux-X11
 am broadcast -a com.termux.x11.ACTION_STOP -p com.termux.x11 > /dev/null 2>&1
 
-# Kill dependent processes
-pkill -f "virgl_test_server_android" 2>/dev/null || echo "No VirGL process found."
-pkill -f "xfce4-session" 2>/dev/null || echo "No XFCE4 session found."
-pkill -f "com.termux" 2>/dev/null || echo "No Termux processes found."
+# Kill Termux
+pkill -f termux
+
 EOF
 
 chmod +x $PREFIX/bin/kill_termux_x11
@@ -184,3 +285,39 @@ StartupNotify=false
 " > $HOME/Desktop/kill_termux_x11.desktop
 chmod +x $HOME/Desktop/kill_termux_x11.desktop
 cp $HOME/Desktop/kill_termux_x11.desktop $PREFIX/share/applications
+
+#Install Debian proot
+pkgs_proot=('sudo' 'onboard')
+
+#Install Debian proot
+pd install debian
+pd login debian --shared-tmp -- env DISPLAY=:0 apt update
+pd login debian --shared-tmp -- env DISPLAY=:0 apt upgrade -y
+pd login debian --shared-tmp -- env DISPLAY=:0 apt install "${pkgs_proot[@]}" -y -o Dpkg::Options::="--force-confold"
+
+#Create user
+pd login debian --shared-tmp -- env DISPLAY=:0 groupadd storage
+pd login debian --shared-tmp -- env DISPLAY=:0 groupadd wheel
+pd login debian --shared-tmp -- env DISPLAY=:0 useradd -m -g users -G wheel,audio,video,storage -s /bin/bash "$username"
+
+#Add user to sudoers
+chmod u+rw $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
+echo "$username ALL=(ALL) NOPASSWD:ALL" | tee -a $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers > /dev/null
+chmod u-w  $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
+
+#Set proot DISPLAY
+echo "export DISPLAY=:0" >> $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
+
+#Set proot timezone
+timezone=$(getprop persist.sys.timezone)
+pd login debian --shared-tmp -- env DISPLAY=:0 rm /etc/localtime
+pd login debian --shared-tmp -- env DISPLAY=:0 cp /usr/share/zoneinfo/$timezone /etc/localtime
+
+#Setup Hardware Acceleration in proot
+pd login debian --shared-tmp -- env DISPLAY=:0 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb
+pd login debian --shared-tmp -- env DISPLAY=:0 sudo apt install -y ./mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb
+
+}
+
+# Start installation
+main
