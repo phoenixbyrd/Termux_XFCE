@@ -11,7 +11,7 @@ Please read the whole Readme for more information about this setup.
 To install run this command in termux
 
 ```
-curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/install.sh -o install.sh && chmod +x install.sh && ./install.sh
+curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/install.sh -o install_xfce_native.sh && chmod +x install.sh && ./install.sh
 ```
 &nbsp;
 
