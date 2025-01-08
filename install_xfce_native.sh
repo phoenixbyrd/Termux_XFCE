@@ -186,7 +186,7 @@ fi
 mkdir -p "$HOME/Desktop" "$HOME/Downloads"
 
 # Install XFCE desktop environment
-xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'starship' 'termux-x11-nightly' 'virglrenderer-android' 'papirus-icon-theme')
+xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'starship' 'termux-x11-nightly' 'virglrenderer-android' 'papirus-icon-theme' 'eza' 'bat' 'arc-gtk-them')
 if ! pkg install -y "${xfce_packages[@]}" -o Dpkg::Options::="--force-confold"; then
     echo "Failed to install XFCE packages. Exiting."
     exit 1
