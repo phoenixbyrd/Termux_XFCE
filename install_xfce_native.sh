@@ -192,6 +192,13 @@ if ! pkg install -y "${xfce_packages[@]}" -o Dpkg::Options::="--force-confold"; 
     exit 1
 fi
 
+#Set aliases
+echo "
+alias debian='proot-distro login debian --user $username --shared-tmp'
+alias ls='eza -lF --icons'
+alias cat='bat '
+" >> $PREFIX/etc/bash.bashrc
+
 # Create start script
 cat <<'EOF' > $PREFIX/bin/start
 #!/bin/bash
