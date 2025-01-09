@@ -183,7 +183,7 @@ if [ "${#missing_deps[@]}" -gt 0 ]; then
 fi
 
 # Create default directories
-mkdir -p "$HOME/Desktop" "$HOME/Downloads"
+mkdir -p "$HOME/Desktop" "$HOME/Downloads" "$HOME/.fonts"
 
 # Install XFCE desktop environment
 xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'starship' 'termux-x11-nightly' 'virglrenderer-android' 'papirus-icon-theme' 'eza' 'bat' 'arc-gtk-theme')
@@ -192,12 +192,45 @@ if ! pkg install -y "${xfce_packages[@]}" -o Dpkg::Options::="--force-confold"; 
     exit 1
 fi
 
-#Set aliases
+# Set aliases
 echo "
 alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='eza -lF --icons'
 alias cat='bat '
 " >> $PREFIX/etc/bash.bashrc
+
+# Download Wallpaper
+wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/dark_waves.png
+mv dark_waves.png $PREFIX/share/backgrounds/xfce/
+
+# Install Fluent Cursor Icon Theme
+wget https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-01.zip
+unzip 2023-02-01.zip
+mv Fluent-icon-theme-2023-02-01/cursors/dist $PREFIX/share/icons/ 
+mv Fluent-icon-theme-2023-02-01/cursors/dist-dark $PREFIX/share/icons/
+rm -rf $HOME//Fluent*
+rm 2023-02-01.zip
+
+#Setup Fonts
+wget https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
+mkdir .fonts 
+unzip CascadiaCode-2111.01.zip
+mv otf/static/* .fonts/ && rm -rf otf
+mv ttf/* .fonts/ && rm -rf ttf/
+rm -rf woff2/ && rm -rf CascadiaCode-2111.01.zip
+
+wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/Meslo.zip
+unzip Meslo.zip
+mv *.ttf .fonts/
+rm Meslo.zip
+rm LICENSE.txt
+rm readme.md
+
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/NotoColorEmoji-Regular.ttf
+mv NotoColorEmoji-Regular.ttf .fonts
+
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/font.ttf
+mv font.ttf .termux/font.ttf
 
 # Create start script
 cat <<'EOF' > $PREFIX/bin/start
@@ -292,6 +325,33 @@ StartupNotify=false
 " > $HOME/Desktop/kill_termux_x11.desktop
 chmod +x $HOME/Desktop/kill_termux_x11.desktop
 cp $HOME/Desktop/kill_termux_x11.desktop $PREFIX/share/applications
+
+# Create prun script
+cat <<'EOF' > $PREFIX/bin/prun
+#!/bin/bash
+varname=$(basename $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/*)
+pd login debian --user $varname --shared-tmp -- env DISPLAY=:0 $@
+
+EOF
+chmod +x $PREFIX/bin/prun
+
+# Create zrun script
+cat <<'EOF' > $PREFIX/bin/zrun
+#!/bin/bash
+varname=$(basename $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/*)
+pd login debian --user $varname --shared-tmp -- env DISPLAY=:0 MESA_LOADER_DRIVER_OVERRIDE=zink TU_DEBUG=noconform $@
+
+EOF
+chmod +x $PREFIX/bin/zrun
+
+# Create zrunhud script
+cat <<'EOF' > $PREFIX/bin/zrunhud
+#!/bin/bash
+varname=$(basename $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/*)
+pd login debian --user $varname --shared-tmp -- env DISPLAY=:0 MESA_LOADER_DRIVER_OVERRIDE=zink TU_DEBUG=noconform GALLIUM_HUD=fps $@
+
+EOF
+chmod +x $PREFIX/bin/zrunhud
 
 #Install Debian proot
 pkgs_proot=('sudo' 'onboard')
