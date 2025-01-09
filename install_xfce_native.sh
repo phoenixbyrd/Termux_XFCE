@@ -67,14 +67,6 @@ detect_termux() {
         ((errors++))
     fi
 
-    # Check Termux release type
-    if [[ "$TERMUX_APK_RELEASE" = "GITHUB" ]]; then
-        print_status "ok" "Using GitHub release"
-    else
-        print_status "error" "Not using GitHub release"
-        ((errors++))
-    fi
-
     # Check for required directories
     if [[ -d "$PREFIX" ]]; then
         print_status "ok" "Termux PREFIX directory found"
