@@ -1,0 +1,72 @@
+# Don't print a new line at the start of the prompt
+add_newline = false
+
+# Use custom format
+format = """
+[╭─](white)$username$hostname in $directory$package$java$python$git_branch$cmd_duration
+[╰─](white)$character """
+
+# Wait 10 milliseconds for starship to check files under the current directory.
+scan_timeout = 10
+
+# Username settings
+[username]
+show_always = true
+style_root = "bold red"
+style_user = "bold yellow"
+format = "[$user]($style) "
+disabled = false
+
+# Hostname settings
+[hostname]
+ssh_only = false
+format =  "[phoenixbyrd](bold yellow) @ [termux](bold red)"
+trim_at = ".companyname.com"
+disabled = false
+
+# Directory indicator
+[directory]
+read_only = "🔒"
+style = "bold cyan"
+read_only_style = "red"
+truncation_length = 8
+truncation_symbol = "…/"
+format = "[$read_only]($read_only_style)[$path]($style) "
+disabled = false
+
+# Package Version Config
+[package]
+format = "via [🎁 $version](208 bold) "
+
+# Java settings
+[java]
+symbol = "☕ "
+style = "red dimmed"
+format = "via [${symbol}${version}]($style) "
+
+# Python settings
+[python]
+symbol = "🐍 "
+style = "yellow bold"
+python_binary = "python3"
+pyenv_version_name = true
+
+# git settings
+[git_branch]
+symbol = "🌱 "
+truncation_length = 4
+truncation_symbol = ""
+
+# cmd_duration config
+[cmd_duration]
+show_milliseconds = true
+style = "bold yellow"
+format = "took [$duration]($style)"
+
+# Charakter config
+[character]
+format = "$symbol"
+success_symbol = "[❯](bold green)"
+error_symbol = "[✗](bold red) "
+vicmd_symbol = "[❮](bold green)"
+disabled = false
