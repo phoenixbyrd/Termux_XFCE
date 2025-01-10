@@ -190,11 +190,11 @@ alias debian='proot-distro login debian --user $username --shared-tmp'
 alias ls='eza -lF --icons'
 alias cat='bat '
 
-eval "$(starship init bash)"
+#eval "$(starship init bash)"
 " >> $PREFIX/etc/bash.bashrc
 
 # Download starship theme
-curl -o ~/.config/starship.toml https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/refs/heads/main/starship.toml
+#curl -o ~/.config/starship.toml https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/refs/heads/main/starship.toml
 
 # Download Wallpaper
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/dark_waves.png
@@ -376,7 +376,7 @@ echo "
 alias ls='eza -lF --icons'
 alias cat='bat '
 
-eval "$(starship init bash)"
+#eval "$(starship init bash)"
 " >> $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
 # Set proot timezone
