@@ -396,5 +396,5 @@ pd login debian --shared-tmp -- env DISPLAY=:0 sudo apt install -y ./mesa-vulkan
 # Start installation
 main
 
-source .bashrc
-termux-reload-settings
+#source .bashrc
+#termux-reload-settings
