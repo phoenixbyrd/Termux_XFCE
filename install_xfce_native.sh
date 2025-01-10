@@ -395,3 +395,6 @@ curl -o $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.con
 
 # Start installation
 main
+
+source .bashrc
+termux-reload-settings
