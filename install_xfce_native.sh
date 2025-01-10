@@ -208,7 +208,7 @@ mv Fluent-icon-theme-2023-02-01/cursors/dist-dark $PREFIX/share/icons/
 rm -rf $HOME//Fluent*
 rm 2023-02-01.zip
 
-#Setup Fonts
+# Setup Fonts
 wget https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip
 unzip CascadiaCode-2111.01.zip
 mv otf/static/* .fonts/ && rm -rf otf
@@ -349,36 +349,47 @@ pd login debian --user $varname --shared-tmp -- env DISPLAY=:0 MESA_LOADER_DRIVE
 EOF
 chmod +x $PREFIX/bin/zrunhud
 
-#Install Debian proot
+# Install Debian proot
 pkgs_proot=('sudo' 'onboard')
 
-#Install Debian proot
+# Install Debian proot
 pd install debian
 pd login debian --shared-tmp -- env DISPLAY=:0 apt update
 pd login debian --shared-tmp -- env DISPLAY=:0 apt upgrade -y
 pd login debian --shared-tmp -- env DISPLAY=:0 apt install "${pkgs_proot[@]}" -y -o Dpkg::Options::="--force-confold"
 
-#Create user
+# Create user
 pd login debian --shared-tmp -- env DISPLAY=:0 groupadd storage
 pd login debian --shared-tmp -- env DISPLAY=:0 groupadd wheel
 pd login debian --shared-tmp -- env DISPLAY=:0 useradd -m -g users -G wheel,audio,video,storage -s /bin/bash "$username"
 
-#Add user to sudoers
+# Add user to sudoers
 chmod u+rw $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 echo "$username ALL=(ALL) NOPASSWD:ALL" | tee -a $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers > /dev/null
 chmod u-w  $PREFIX/var/lib/proot-distro/installed-rootfs/debian/etc/sudoers
 
-#Set proot DISPLAY
+# Set proot DISPLAY
 echo "export DISPLAY=:0" >> $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
 
-#Set proot timezone
+# Set aliases
+echo "
+alias ls='eza -lF --icons'
+alias cat='bat '
+
+eval "$(starship init bash)"
+" >> $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.bashrc
+
+# Set proot timezone
 timezone=$(getprop persist.sys.timezone)
 pd login debian --shared-tmp -- env DISPLAY=:0 rm /etc/localtime
 pd login debian --shared-tmp -- env DISPLAY=:0 cp /usr/share/zoneinfo/$timezone /etc/localtime
 
-#Setup Hardware Acceleration in proot
+# Setup Hardware Acceleration in proot
 pd login debian --shared-tmp -- env DISPLAY=:0 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb
 pd login debian --shared-tmp -- env DISPLAY=:0 sudo apt install -y ./mesa-vulkan-kgsl_24.1.0-devel-20240120_arm64.deb
+
+# Download proot starship theme
+curl -o $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config/starship.toml https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/refs/heads/main/starship_proot.toml
 
 }
 
