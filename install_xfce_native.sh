@@ -175,7 +175,7 @@ if [ "${#missing_deps[@]}" -gt 0 ]; then
 fi
 
 # Create default directories
-mkdir -p "$HOME/Desktop" "$HOME/Downloads" "$HOME/.fonts" "$HOME/.config" "$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/" "$HOME/.config/autostart/" "$HOME/.config/gtk-3.0/" "$HOME/.config/xfce4/terminal/"
+mkdir -p "$HOME/Desktop" "$HOME/Downloads" "$HOME/.fonts" "$HOME/.config" "$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/" "$HOME/.config/autostart/" "$HOME/.config/gtk-3.0/" "$HOME/.config/xfce4/terminal/" "$HOME/.config/xfce4/panel/" "$HOME/.config/xfce4/panel/launcher-7" "$HOME/.config/xfce4/panel/launcher-10" "$HOME/.config/xfce4/panel/launcher-11"
 #ln -s /storage/emulated/0/Music $HOME/Music
 #ln -s /storage/emulated/0/Pictures $HOME/Pictures
 
@@ -267,7 +267,6 @@ cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
     <property name="SyncThemes" type="bool" value="true"/>
   </property>
 </channel>
-
 EOF
 
 cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
@@ -359,12 +358,12 @@ cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
     </property>
   </property>
 </channel>
-
 EOF
 
 # Create xfce4-desktop.xml with wallpaper setting
 cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.1" encoding="UTF-8"?>
+
 <channel name="xfce4-desktop" version="1.0">
   <property name="backdrop" type="empty">
     <property name="screen0" type="empty">
@@ -374,6 +373,19 @@ cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
         </property>
       </property>
     </property>
+  </property>
+  <property name="last-settings-migration-version" type="uint" value="1"/>
+  <property name="desktop-icons" type="empty">
+    <property name="file-icons" type="empty">
+      <property name="show-filesystem" type="bool" value="false"/>
+      <property name="show-home" type="bool" value="false"/>
+      <property name="show-trash" type="bool" value="false"/>
+      <property name="show-removable" type="bool" value="false"/>
+    </property>
+  </property>
+  <property name="last" type="empty">
+    <property name="window-width" type="int" value="676"/>
+    <property name="window-height" type="int" value="502"/>
   </property>
 </channel>
 EOF
@@ -397,11 +409,14 @@ cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
       <property name="plugin-ids" type="array">
         <value type="int" value="1"/>
         <value type="int" value="3"/>
+        <value type="int" value="10"/>
+        <value type="int" value="11"/>
         <value type="int" value="9"/>
         <value type="int" value="8"/>
         <value type="int" value="5"/>
         <value type="int" value="6"/>
         <value type="int" value="2"/>
+        <value type="int" value="7"/>
       </property>
       <property name="background-style" type="uint" value="1"/>
       <property name="background-rgba" type="array">
@@ -435,6 +450,7 @@ cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
     <property name="plugin-1" type="string" value="applicationsmenu">
       <property name="button-title" type="string" value="Menu "/>
       <property name="button-icon" type="string" value="start-here"/>
+      <property name="show-button-title" type="bool" value="true"/>
     </property>
     <property name="plugin-3" type="string" value="separator">
       <property name="expand" type="bool" value="false"/>
@@ -475,9 +491,23 @@ cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
       <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
       <property name="known-players" type="string" value="firefox-default"/>
     </property>
+    <property name="plugin-7" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="17367087851.desktop"/>
+      </property>
+    </property>
+    <property name="plugin-10" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="17367088062.desktop"/>
+      </property>
+    </property>
+    <property name="plugin-11" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="17367088133.desktop"/>
+      </property>
+    </property>
   </property>
 </channel>
-
 EOF
 
 # Create gtk.css with panel styling
@@ -488,25 +518,13 @@ cat <<'EOF' > $HOME/.config/gtk-3.0/gtk.css
 }
 EOF
 
-cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
-<?xml version="1.0" encoding="UTF-8"?>
-<channel name="xfwm4" version="1.0">
-  <property name="general" type="empty">
-    <property name="theme" type="string" value="WhiteSur-Dark"/>
-    <property name="title_alignment" type="string" value="center"/>
-    <property name="button_layout" type="string" value="O|HMC"/>
-    <property name="workspace_count" type="int" value="1"/>
-  </property>
-</channel>
-EOF
-
 # Create bookmarks with custom name
 cat <<EOF > $HOME/.config/gtk-3.0/bookmarks
 file:///data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/debian/home/$username Debian Home
 file:////data/data/com.termux/files/home/storage/shared/ Android Storage
 EOF
 
-# Create gtk.css with panel styling
+# Setup xfce4-terminal theme
 cat <<'EOF' > $HOME/.config/xfce4/terminal/terminalrc
 [Configuration]
 MiscAlwaysShowTabs=FALSE
@@ -545,6 +563,58 @@ TitleMode=TERMINAL_TITLE_HIDE
 ScrollingUnlimited=TRUE
 ScrollingBar=TERMINAL_SCROLLBAR_NONE
 FontName=Cascadia Mono PL 12
+EOF
+
+# launcher-7
+cat <<EOF > $HOME/.config/xfce4/panel/launcher-7/17367087851.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Kill Termux X11
+Comment=
+Exec=kill_termux_x11
+Icon=system-shutdown
+Categories=System;
+Path=
+StartupNotify=false
+X-XFCE-Source=file:///data/data/com.termux/files/home/Desktop/kill_termux_x11.desktop
+EOF
+
+# launcher-10
+cat <<EOF > $HOME/.config/xfce4/panel/launcher-10/17367088062.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Exec=exo-open --launch FileManager %u
+Icon=user-blue-home
+StartupNotify=true
+Terminal=false
+Categories=Utility;X-XFCE;X-Xfce-Toplevel;
+Keywords=file;manager;explorer;browse;filesystem;directory;folder;xfce;
+OnlyShowIn=XFCE;
+X-XFCE-MimeType=inode/directory;x-scheme-handler/trash;
+X-AppStream-Ignore=True
+Name=File Manager
+Comment=Browse the file system
+X-XFCE-Source=file:///data/data/com.termux/files/home/Desktop/xfce4-file-manager.desktop
+EOF
+
+#launcher-11
+cat <<EOF > $HOME/.config/xfce4/panel/launcher-11/17367088133.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Exec=exo-open --launch TerminalEmulator
+Icon=org.xfce.terminalemulator
+StartupNotify=true
+Terminal=false
+Categories=Utility;X-XFCE;X-Xfce-Toplevel;
+Keywords=terminal;command line;shell;console;xfce;
+OnlyShowIn=XFCE;
+X-AppStream-Ignore=True
+Name=Terminal Emulator
+Comment=Use the command line
+X-XFCE-Source=file:///data/data/com.termux/files/home/Desktop/xfce4-terminal-emulator.desktop
 EOF
 
 # Setup Fonts
@@ -659,7 +729,7 @@ Path=
 StartupNotify=false
 " > $HOME/Desktop/kill_termux_x11.desktop
 chmod +x $HOME/Desktop/kill_termux_x11.desktop
-cp $HOME/Desktop/kill_termux_x11.desktop $PREFIX/share/applications
+mv $HOME/Desktop/kill_termux_x11.desktop $PREFIX/share/applications
 
 # Create prun script
 cat <<'EOF' > $PREFIX/bin/prun
