@@ -521,6 +521,7 @@ EOF
 
 # Create bookmarks with custom name
 cat <<EOF > $HOME/.config/gtk-3.0/bookmarks
+file:////data/data/com.termux/files/home/Downloads
 file:///data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/debian/home/$username Debian Home
 file:////data/data/com.termux/files/home/storage/shared/ Android Storage
 EOF
