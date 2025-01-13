@@ -197,6 +197,7 @@ eval "$(starship init bash)"
 
 # Download starship theme
 curl -o $HOME/.config/starship.toml https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/refs/heads/main/starship.toml
+sed -i "s/phoenixbyrd/$username/" $HOME/.config/starship.toml
 
 # Download Wallpaper
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/dark_waves.png
@@ -801,6 +802,7 @@ mkdir -p $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.co
 
 # Download proot starship theme
 curl -o $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config/starship.toml https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/refs/heads/main/starship_proot.toml
+sed -i "s/phoenixbyrd/$username/" $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config/starship.toml
 
 # Apply cursor theme
 cat <<'EOF' > $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.Xresources
