@@ -139,6 +139,12 @@ if ! termux-change-repo; then
     exit 1
 fi
 
+# Setup Termux Storage Access 
+if ! termux-setup-storage; then
+    echo "Failed to set up Termux storage. Exiting."
+    exit 1
+fi
+
 # Upgrade packages
 if ! pkg upgrade -y -o Dpkg::Options::="--force-confold"; then
     echo "Failed to upgrade packages. Exiting."
@@ -150,12 +156,6 @@ if [ -f "$HOME/.termux/termux.properties" ]; then
     sed -i '12s/^#//' $HOME/.termux/termux.properties
 else
     echo "Warning: termux.properties file not found. Skipping update."
-fi
-
-# Setup Termux Storage Access 
-if ! termux-setup-storage; then
-    echo "Failed to set up Termux storage. Exiting."
-    exit 1
 fi
 
 # Install core dependencies
@@ -760,7 +760,7 @@ EOF
 chmod +x $PREFIX/bin/zrunhud
 
 # Install Debian proot
-pkgs_proot=('sudo' 'onboard')
+pkgs_proot=('sudo' 'onboard' 'conky-all' 'flameshot')
 
 # Install Debian proot
 pd install debian
@@ -809,6 +809,21 @@ cat <<'EOF' > $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$usernam
 Xcursor.theme: dist-dark
 EOF
 
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/conky.tar.gz
+tar -xvzf conky.tar.gz
+rm conky.tar.gz
+mv $HOME/.config/conky/ $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config/
+
+#Conky
+cp $PREFIX/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/conky.desktop $HOME/.config/autostart/
+sed -i 's|^Exec=.*$|Exec=prun conky -c .config/conky/Alterf/Alterf.conf|' $HOME/.config/autostart/conky.desktop
+
+#Flameshot
+cp $PREFIX/var/lib/proot-distro/installed-rootfs/debian/usr/share/applications/org.flameshot.Flameshot.desktop $HOME/.config/autostart/
+sed -i 's|^Exec=.*$|Exec=prun flameshot|' $HOME/.config/autostart/org.flameshot.Flameshot.desktop
+
+chmod +x $HOME/.config/autostart/*.desktop
+
 }
 
 # Start installation
@@ -846,3 +861,4 @@ echo -e "${YELLOW}Installation complete! Use 'start' to launch your desktop envi
 
 source $PREFIX/etc/bash.bashrc
 termux-reload-settings
+rm install_xfce_native.sh
