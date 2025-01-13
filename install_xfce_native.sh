@@ -180,7 +180,7 @@ mkdir -p "$HOME/Desktop" "$HOME/Downloads" "$HOME/.fonts" "$HOME/.config" "$HOME
 #ln -s /storage/emulated/0/Pictures $HOME/Pictures
 
 # Install XFCE desktop environment
-xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'starship' 'termux-x11-nightly' 'virglrenderer-android' 'papirus-icon-theme' 'eza' 'bat')
+xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'starship' 'termux-x11-nightly' 'virglrenderer-android' 'mesa-vulkan-icd-freedreno-dri3' 'neofetch' 'papirus-icon-theme' 'eza' 'bat')
 if ! pkg install -y "${xfce_packages[@]}" -o Dpkg::Options::="--force-confold"; then
     echo "Failed to install XFCE packages. Exiting."
     exit 1
