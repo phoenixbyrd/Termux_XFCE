@@ -188,72 +188,11 @@ fi
 
 # Set aliases
 echo "
-alias debian='proot-distro login debian --user $uername --shared-tmp'
+alias debian='proot-distro login debian --user $username --shared-tmp'
+alias ls='eza -lF --icons'
 alias cat='bat '
-alias ls='dir'
 
 eval "$(starship init bash)"
-
-cd() {
-  # Check if no argument is passed, or the path is invalid
-  if [ -z "$1" ]; then
-    command cd "$HOME"
-  else
-    # Check if the path starts with any of the special directories
-    case "$1" in
-      /* )  # If path starts with /
-        if echo "$1" | grep -q "^/\(bin\|etc\|opt\|var\|share\)"; then
-          # Add quotes around the path to handle spaces and special characters
-          command cd "${PREFIX}${1}"
-        else
-          command cd "$1"
-        fi
-        ;;
-      *)  # For all other paths
-        command cd "$1"
-        ;;
-    esac
-  fi
-}
-
-nano() {
-  # Check if the path starts with any of the special directories
-  case "$1" in
-    /* )  # If path starts with /
-      if echo "$1" | grep -q "^/\(bin\|etc\|opt\|var\|share\)"; then
-        # Add quotes around the path to handle spaces and special characters
-        command nano "${PREFIX}${1}"
-      else
-        command nano "$1"
-      fi
-      ;;
-    *)  # For all other paths
-      command nano "$1"
-      ;;
-  esac
-}
-
-dir() {
-  # Check if no argument is passed, or the path is invalid
-  if [ -z "$1" ]; then
-    command eza -lF --icons
-  else
-    # Check if the path starts with any of the special directories
-    case "$1" in
-      /* )  # If path starts with /
-        if echo "$1" | grep -q "^/\(bin\|etc\|opt\|var\|share\)"; then
-          # Add quotes around the path to handle spaces and special characters
-          command eza -lF --icons "${PREFIX}${1}"
-        else
-          command eza -lF --icons "$1"
-        fi
-        ;;
-      *)  # For all other paths
-        command eza -lF --icons "$1"
-        ;;
-    esac
-  fi
-}
 " >> $PREFIX/etc/bash.bashrc
 
 # Download starship theme
