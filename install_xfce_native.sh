@@ -142,6 +142,7 @@ fi
 # Setup Termux Storage Access 
 if ! termux-setup-storage; then
     echo "Failed to set up Termux storage. Exiting."
+    echo "${YELLOW}Please clear termux data in app info setting and run setup again${NC}"
     exit 1
 fi
 
