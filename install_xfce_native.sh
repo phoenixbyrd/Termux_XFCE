@@ -786,6 +786,25 @@ StartupNotify=false
 chmod +x $HOME/Desktop/App-Installer.desktop
 cp $HOME/Desktop/App-Installer.desktop $PREFIX/share/applications
 
+# cp2menu
+
+wget https://github.com/phoenixbyrd/Termux_XFCE/raw/refs/heads/main/cp2menu -O $PREFIX/bin/cp2menu
+chmod +x $PREFIX/bin/cp2menu
+
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=cp2menu
+Comment=
+Exec=cp2menu
+Icon=edit-move
+Categories=System;
+Path=
+Terminal=false
+StartupNotify=false
+" > $PREFIX/share/applications/cp2menu.desktop
+chmod +x $PREFIX/share/applications/cp2menu.desktop
+
 # Install Debian proot
 pkgs_proot=('sudo' 'onboard' 'conky-all' 'flameshot')
 
