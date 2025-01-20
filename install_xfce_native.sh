@@ -766,6 +766,26 @@ pd login debian --user $varname --shared-tmp -- env DISPLAY=:0 MESA_LOADER_DRIVE
 EOF
 chmod +x $PREFIX/bin/zrunhud
 
+# App Installer
+
+git clone https://github.com/phoenixbyrd/App-Installer.git $HOME/.config/App-Installer
+chmod +x $HOME/.config/App-Installer/*
+
+echo "[Desktop Entry]
+Version=1.0
+Type=Application
+Name=App Installer
+Comment=
+Exec=/data/data/com.termux/files/home/.config/App-Installer/run
+Icon=package-install
+Categories=System;
+Path=
+Terminal=false
+StartupNotify=false
+" > $HOME/Desktop/App-Installer.desktop
+chmod +x $HOME/Desktop/App-Installer.desktop
+cp $HOME/Desktop/App-Installer.desktop $PREFIX/share/applications
+
 # Install Debian proot
 pkgs_proot=('sudo' 'onboard' 'conky-all' 'flameshot')
 
