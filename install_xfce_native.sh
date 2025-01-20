@@ -139,11 +139,16 @@ if ! termux-change-repo; then
     exit 1
 fi
 
-# Setup Termux Storage Access 
-if ! termux-setup-storage; then
-    echo "Failed to set up Termux storage. Exiting."
-    echo "${YELLOW}Please clear termux data in app info setting and run setup again${NC}"
-    exit 1
+# Check if storage access is already granted
+if [ -d ~/storage ]; then
+    echo "Storage access is already granted"
+else
+    # Setup Termux Storage Access only if not already granted
+    if ! termux-setup-storage; then
+        echo "Failed to set up Termux storage. Exiting."
+        echo "${YELLOW}Please clear termux data in app info setting and run setup again${NC}"
+        exit 1
+    fi
 fi
 
 # Upgrade packages
