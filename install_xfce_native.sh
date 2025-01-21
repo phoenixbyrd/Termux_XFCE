@@ -671,17 +671,22 @@ export XDG_RUNTIME_DIR=${TMPDIR}
 termux-x11 :0 -ac  & > /dev/null 2>&1
 
 # Wait a bit until termux-x11 gets started.
-sleep 3
+sleep 2
 
 # Launch Termux X11 main activity
 am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
 sleep 1
 
-MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 LIBGL_DRI3_DISABLE=1 virgl_test_server_android --angle-gl & > /dev/null 2>&1
+MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android --angle-gl & > /dev/null 2>&1
+sleep 1
 
 # Run XFCE4 Desktop
 dbus-daemon --session --address=unix:path=$PREFIX/var/run/dbus-session & > /dev/null 2>&1
 env DISPLAY=:0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
+
+sleep 5
+process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
+kill "$process_id" > /dev/null 2>&1
 
 exit 0
 EOF
