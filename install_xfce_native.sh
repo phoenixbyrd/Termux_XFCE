@@ -59,13 +59,13 @@ detect_termux() {
     fi
 
     # Check Termux version
-       local termux_version=$(termux-info | grep TERMUX_VERSION | cut -d'=' -f2)
+    local termux_version=$(termux-info | grep TERMUX_VERSION | cut -d'=' -f2)
     print_status "error" "Unsupported Termux version: $termux_version (requires 0.118.1)"
     print_status "warn" "Please download from this link: https://github.com/termux/termux-app/releases/download/v0.118. 1/termux-app_v0.118.1+github-debug_arm64-v8a.apk"
     if [[ "$termux_version" != "0.118.1" ]]; then
         ((errors++))
     fi
-    
+
     # Check architecture
     local arch=$(uname -m)
     if [[ "$arch" = "aarch64" ]]; then
