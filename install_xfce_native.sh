@@ -63,7 +63,9 @@ detect_termux() {
     if [[ "$termux_version" == "0.118.1" ]]; then
         print_status "ok" "Termux version: $termux_version"
     else
-        print_status "error" "Unsupported Termux version: $termux_version (requires 0.118.1) \nPlease download from this link: https://github.com/termux/termux-app/releases/download/v0.118.1/termux-app_v0.118.1+github-debug_arm64-v8a.apk"        ((errors++))
+        print_status "error" "Unsupported Termux version: $termux_version (requires 0.118.1)"
+        print_status "Please download from this link: https://github.com/termux/termux-app/releases/download/v0.118.1/termux-app_v0.118.1+github-debug_arm64-v8a.apk"
+        ((errors++))
     fi
 
     # Check architecture
