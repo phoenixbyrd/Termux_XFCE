@@ -657,44 +657,168 @@ mv font.ttf .termux/font.ttf
 cat <<'EOF' > $PREFIX/bin/start
 #!/bin/bash
 
-# Kill open X11 processes
-kill -9 $(pgrep -f "termux.x11") > /dev/null 2>&1
+# Unofficial Bash Strict Mode
+set -euo pipefail
+IFS=$'\n\t'
 
-# Get the phone manufacturer
-MANUFACTURER=$(getprop ro.product.manufacturer | tr '[:upper:]' '[:lower:]')
+# Configuration
+PULSE_SERVER="127.0.0.1"
+DISPLAY=":0"
+XDG_RUNTIME_DIR="${TMPDIR}"
+SLEEP_SHORT=1
+ENABLE_VIRGL=true # Default to enabling VirGL
 
-# Check the manufacturer
-if [[ "$MANUFACTURER" == "samsung" ]]; then
-    [ -d ~/.config/pulse ] && rm -rf ~/.config/pulse
-    LD_PRELOAD=/system/lib64/libskcodec.so pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 > /dev/null 2>&1
-else
-   pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 > /dev/null 2>&1
+# Logging levels
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
+}
+
+log_info() {
+    log "[INFO] $1"
+}
+
+log_warn() {
+    log "[WARN] $1"
+}
+
+log_error() {
+    log "[ERROR] $1"
+    exit 1
+}
+
+# Function to check if a command exists
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+# Function to kill processes safely
+kill_processes() {
+    local processes=("$@")
+    for process in "${processes[@]}"; do
+        pkill -f "$process" || true
+    done
+}
+
+# Function to check if the device is a Samsung device
+is_samsung_device() {
+    local manufacturer
+    manufacturer=$(getprop ro.product.manufacturer | tr '[:upper:]' '[:lower:]')
+    if [[ "$manufacturer" == "samsung" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# Display usage information
+usage() {
+    echo "Usage: $0 [--no-virgl] [--help]"
+    echo "Start XFCE4 desktop environment on Termux with optional hardware acceleration."
+    echo "  --no-virgl    Disable VirGL (hardware acceleration)."
+    echo "  --help        Display this help message."
+    exit 0
+}
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        --no-virgl)
+            ENABLE_VIRGL=false
+            shift
+            ;;
+        --help)
+            usage
+            ;;
+        *)
+            log_error "Unknown argument: $1"
+            ;;
+    esac
+done
+
+# Validate environment and dependencies
+if ! command_exists termux-x11; then
+    log_error "This script is intended to run in Termux. Exiting..."
 fi
 
-# Set audio server
-export PULSE_SERVER=127.0.0.1 > /dev/null 2>&1
+for cmd in pulseaudio termux-x11 dbus-daemon xfce4-session; do
+    if ! command_exists "$cmd"; then
+        log_error "Required command '$cmd' not found. Exiting..."
+    fi
+done
 
-# Prepare termux-x11 session
-export XDG_RUNTIME_DIR=${TMPDIR}
-termux-x11 :0 -ac  & > /dev/null 2>&1
+# Kill existing processes
+log_info "Killing existing processes..."
+kill_processes "termux.x11" "xfce4-session" "virgl_test_server_android"
 
-# Wait a bit until termux-x11 gets started.
-sleep 2
+# Start PulseAudio
+log_info "Starting PulseAudio..."
+pulseaudio --kill >/dev/null 2>&1 || true
 
-# Launch Termux X11 main activity
-am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
-sleep 1
+# Check if the device is a Samsung device
+if is_samsung_device; then
+    log_info "Detected Samsung device. Applying Samsung-specific PulseAudio settings..."
+    [ -d ~/.config/pulse ] && rm -rf ~/.config/pulse
+    LD_PRELOAD=/system/lib64/libskcodec.so pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 >/dev/null 2>&1
+else
+    pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 >/dev/null 2>&1
+fi
 
-MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android --angle-gl & > /dev/null 2>&1
-sleep 1
+export PULSE_SERVER
 
-# Run XFCE4 Desktop
-dbus-daemon --session --address=unix:path=$PREFIX/var/run/dbus-session & > /dev/null 2>&1
-env DISPLAY=:0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
+# Start Termux-X11 server
+log_info "Starting Termux-X11 server..."
+termux-x11 "$DISPLAY" -ac >/dev/null 2>&1 &
+sleep "$SLEEP_SHORT"
 
-sleep 5
-process_id=$(ps -aux | grep '[x]fce4-screensaver' | awk '{print $2}')
-kill "$process_id" > /dev/null 2>&1
+# Launch Termux-X11 app
+log_info "Launching Termux-X11 app..."
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity >/dev/null 2>&1
+sleep "$SLEEP_SHORT"
+
+# Start VirGL server (if enabled)
+if $ENABLE_VIRGL; then
+    log_info "Starting VirGL server for hardware acceleration..."
+    MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android --angle-gl >/dev/null 2>&1 &
+    sleep "$SLEEP_SHORT"
+
+    # Detect and configure GPU
+    detect_gpu() {
+        local gpu_info
+        gpu_info=$(dmesg | grep -i -e "adreno" -e "mali" -e "powervr" -e "lima" || true)
+
+        if echo "$gpu_info" | grep -qi "adreno"; then
+            log_info "Detected Adreno GPU. Enabling Adreno-specific optimizations..."
+            export GALLIUM_DRIVER=virpipe
+            export MESA_LOADER_DRIVER_OVERRIDE=zink
+        elif echo "$gpu_info" | grep -qi "mali"; then
+            log_info "Detected Mali GPU. Enabling Mali-specific optimizations..."
+            export GALLIUM_DRIVER=lima
+            export MESA_LOADER_DRIVER_OVERRIDE=lima
+        elif echo "$gpu_info" | grep -qi "powervr"; then
+            log_info "Detected PowerVR GPU. Enabling PowerVR-specific optimizations..."
+            export GALLIUM_DRIVER=virpipe
+            export MESA_LOADER_DRIVER_OVERRIDE=zink
+        else
+            log_warn "No specific GPU detected. Using default VirGL driver."
+            export GALLIUM_DRIVER=virpipe
+        fi
+    }
+
+    detect_gpu
+else
+    log_info "VirGL (hardware acceleration) is disabled."
+    export GALLIUM_DRIVER=swrast # Use software rendering
+fi
+
+# Start XFCE4 session
+log_info "Starting XFCE4 session..."
+dbus-daemon --session --address=unix:path=$PREFIX/var/run/dbus-session >/dev/null 2>&1 &
+sleep "$SLEEP_SHORT"
+env DISPLAY="$DISPLAY" GALLIUM_DRIVER="$GALLIUM_DRIVER" dbus-launch --exit-with-session xfce4-session >/dev/null 2>&1 &
+
+log_info "XFCE4 desktop environment started successfully!"
+echo "You can now use your XFCE4 desktop on Termux."
+echo "To exit, use the 'Kill Termux X11' option or close the Termux-X11 app."
 
 exit 0
 EOF
