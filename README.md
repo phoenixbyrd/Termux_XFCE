@@ -32,8 +32,6 @@ This setup is optimized for use on devices like the Samsung Galaxy Fold 3, funct
 
 ## Starting the Desktop
 
-During installation, you will receive a prompt to allow installations from Termux, which will open the Termux-X11 Android app. If you choose not to allow installations, you can manually install the APK from your downloads folder.
-
 To start the desktop, use the following command:
 
 ```bash
