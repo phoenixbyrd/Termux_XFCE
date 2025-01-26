@@ -63,9 +63,7 @@ Several aliases are provided to simplify launching applications:
 - `zink`: Launch applications with hardware acceleration.
 - `hud`: Display FPS HUD.
 
-To enter the Debian proot environment, use the `debian` command. From there, you can install additional software using `apt`. Use `cp2menu` in Termux to copy `.desktop` files from Debian proot to the Termux XFCE menu.
-
-Nala is configured as the front-end for `apt` in Debian proot, allowing you to run commands like `apt update` and `apt upgrade` without requiring `sudo`.
+To enter the Debian proot environment, use the `debian` command. From there, you can install additional software using `apt`.
 
 ## Additional Scripts
 
