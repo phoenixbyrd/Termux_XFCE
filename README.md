@@ -83,4 +83,3 @@ adb shell "/system/bin/device_config put activity_manager max_phantom_processes 
 
 You can also run `adb shell` directly from Termux by following the guide in this video:  
 [YouTube Guide](https://www.youtube.com/watch?v=BHc7uvX34bM)
-```
