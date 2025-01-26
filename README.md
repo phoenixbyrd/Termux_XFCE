@@ -1,4 +1,3 @@
-```markdown
 # Termux XFCE Desktop Setup
 
 This repository provides a script to set up an XFCE desktop environment and a Debian proot installation within Termux. The setup utilizes the Termux-X11 server, which will be installed during the process. You will be prompted to allow Termux to install the corresponding Android APK.
