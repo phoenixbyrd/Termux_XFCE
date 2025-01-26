@@ -55,20 +55,17 @@ Note: The display is pre-configured in the Debian proot environment, allowing yo
 Several aliases are provided to simplify launching applications:
 
 ### Termux XFCE:
+- `prun`: Execute commands from the Debian proot environment directly in the Termux terminal without entering the proot shell.
 - `zrun`: Launch applications in Debian proot with hardware acceleration.
 - `zrunhud`: Launch applications with hardware acceleration and FPS HUD.
-- `hud`: Display FPS HUD for games in Termux.
 
 ### Debian Proot:
-- `zink`: Launch applications with hardware acceleration.
-- `hud`: Display FPS HUD.
+`debian` To enter the Debian proot environment, from there, you can install additional software using `sudo apt`.
 
-To enter the Debian proot environment, use the `debian` command. From there, you can install additional software using `apt`.
+## Additional Utilities
 
-## Additional Scripts
-
-- `prun`: Execute commands from the Debian proot environment directly in the Termux terminal without entering the proot shell.
 - `cp2menu`: Copy `.desktop` files from Debian proot to the Termux XFCE menu for easy access.
+- `app-installer`: Easy to use GUI app to manage installing additional apps not available in Termux or Debian repositories.
 
 ## Troubleshooting
 
