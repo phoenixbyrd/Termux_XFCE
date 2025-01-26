@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Termux XFCE Desktop Setup</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <nav>
+            <div class="container">
+                <a href="#" class="logo">Termux XFCE</a>
+                <div class="menu-toggle" id="mobile-menu">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#installation">Installation</a></li>
+                    <li><a href="#usage">Usage</a></li>
+                    <li><a href="#screenshots">Screenshots</a></li>
+                </ul>
+                <!-- Image Placeholder -->
+                <div class="header-image"></div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Transform Termux into a Full XFCE Desktop</h1>
+            <p>Lightweight, customizable, and powerful. Bring the XFCE desktop experience to your Android device with Termux.</p>
+            <a href="#installation" class="cta-button">Get Started</a>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2>Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>XFCE Desktop</h3>
+                    <p>A lightweight and customizable desktop environment tailored for performance.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Hardware Acceleration</h3>
+                    <p>Hardware acceleration is enabled for smoother performance and better graphics.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Debian Proot</h3>
+                    <p>Run a Debian environment alongside Termux for additional software compatibility.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>App Installer</h3>
+                    <p>Easily install and manage your favorite applications with the built-in App Installer.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section id="installation" class="installation">
+        <div class="container">
+            <h2>Installation</h2>
+            <p>Follow these steps to install the XFCE desktop environment on Termux:</p>
+            <div class="steps">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <p>Ensure you have Termux installed from the > <a href="https://github.com/termux/termux-app/releases/download/v0.118.1/termux-app_v0.118.1+github-debug_arm64-v8a.apk" >GitHub v0.118.1 release</a></p>
+                </div>
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <p>Install Termux-X11 from the > </p>
+                    <a href="https://github.com/termux/termux-x11/releases/download/nightly/app-arm64-v8a-debug.apk">GitHub nightly release</a>
+                </div>
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <p>Install </p>
+                    <pre><code id="curl-command">curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/install_xfce_native.sh -o install_xfce_native.sh && chmod +x install_xfce_native.sh && ./install_xfce_native.sh</code></pre>
+                    <button onclick="copyCurlCommand()" class="copy-button">Copy</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Section -->
+    <section id="usage" class="usage">
+        <div class="container">
+            <h2>Usage</h2>
+            <p>After installation, use the following commands to manage your XFCE desktop environment:</p>
+            <div class="commands">
+                <div class="command-card">
+                    <h3>Start XFCE</h3>
+                    <pre><code>start</code></pre>
+		    <p>Starts Termux native XFCE Desktop</p>
+                </div>
+                <div class="command-card">
+                    <h3>Enter Debian Proot</h3>
+                    <pre><code>debian</code></pre>
+		    <p>Logs into the Debian proot-distro</p>
+                </div>
+                <div class="command-card">
+                    <h3>Run Debian Apps</h3>
+                    <pre><code>prun &lt;application&gt;</code></pre>
+		    <p>Example: prun /opt/vesktop/vesktop --no-sandbox</p>
+                </div>
+                <div class="command-card">
+                    <h3>Run apps with zink</h3>
+                    <pre><code>zrun &lt;application&gt;</code></pre>
+		    <p>Example: zrun /opt/minecraft/AppRun</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Screenshots Section -->
+    <section id="screenshots" class="screenshots">
+        <div class="container">
+            <h2>Screenshots</h2>
+            <div class="screenshot-grid">
+                <div class="screenshot-card">
+                    <img src="screenshot1.png" alt="XFCE Desktop Screenshot 1" onclick="openLightbox('screenshot1.png')">
+                </div>
+                <div class="screenshot-card">
+                    <img src="screenshot2.png" alt="XFCE Desktop Screenshot 2" onclick="openLightbox('screenshot2.png')">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <img src="" alt="Zoomed Screenshot" id="lightbox-img">
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="https://www.youtube.com/@phoenixbyrd79" target="_blank"><i class="fab fa-youtube"></i> YouTube</a>
+                <a href="https://github.com/phoenixbyrd/Termux_XFCE" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+                <a href="https://discord.gg/pNMVrZu5dm" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for Mobile Menu -->
+    <script>
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+
+        function copyCurlCommand() {
+            const curlCommand = document.getElementById('curl-command').innerText;
+            navigator.clipboard.writeText(curlCommand).then(() => {
+            }).catch(err => {
+                console.error('Failed to copy command: ', err);
+            });
+        }
+
+        // Lightbox functionality
+        function openLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = imageSrc;
+            lightbox.classList.add('active');
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
