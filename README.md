@@ -1,98 +1,92 @@
-# Termux_XFCE
+```markdown
+# Termux XFCE Desktop Setup
 
-Sets up a termux XFCE desktop and a Debian proot install. This setup uses Termux-X11, the termux-x11 server will be installed and you will be prompted to allow termux to install the Android APK.
+This repository provides a script to set up an XFCE desktop environment and a Debian proot installation within Termux. The setup utilizes the Termux-X11 server, which will be installed during the process. You will be prompted to allow Termux to install the corresponding Android APK.
 
-You only need to pick your username and follow the prompts. This will take roughly 4GB of storage space. Please note, this can be a lengthy process. Keep in mind that as you install applications, they will consume more storage space. 
+## Key Features
+- **User-Friendly Setup**: Simply choose your username and follow the on-screen prompts.
+- **Storage Requirements**: Approximately 4GB of storage space is required. Note that additional applications will consume more space.
+- **Detailed Documentation**: Please review the full README for comprehensive information about this setup.
 
-Please read the whole Readme for more information about this setup.  
+## Installation
 
-# Install
+To install, execute the following command in Termux:
 
-To install run this command in termux
-
-```
+```bash
 curl -sL https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/install_xfce_native.sh -o install.sh && bash install.sh
 ```
-&nbsp;
 
+## Support and Community
 
-Join the Discord for any questions, help, suggestions, etc. [https://discord.gg/pNMVrZu5dm](https://discord.gg/pNMVrZu5dm)  
+For questions, assistance, or suggestions, join our Discord community:  
+[Discord Invite Link](https://discord.gg/pNMVrZu5dm)
 
-&nbsp;
+## Screenshots
 
 ![Desktop Screenshot](desktop.png)
-  
-  
-# Use Case
-  
-This is is how I personally use Termux on my Galaxy Fold 3, script was created mainly for personal use but also for others if they wanted to try out my setup. This is my daily driver used with a 15 inch Lepow portable monitor and bluetooth keyboard and mouse. This is mainly intended to be used as a PC/Laptop replacement connected to a monitor, keyboard and mouse and used as you would with any PC/Laptop. I run this on my Samsung Galaxy Fold 3.
 
-![My Samsung Galaxy Fold 3 - Dex Setup](desk.jpg)  
+## Use Case
 
-&nbsp;
+This setup is optimized for use on devices like the Samsung Galaxy Fold 3, functioning as a PC/laptop replacement when connected to a monitor, keyboard, and mouse. It is designed for daily use and serves as a personal daily driver.
 
-# Starting the desktop
+![Samsung Galaxy Fold 3 - Dex Setup](desk.jpg)
 
-During install you will recieve a popup to allow installs from termux, this will open the APK for the Termux-X11 android app. While you do not have to allow installs from termux, you will still need to install manually by using a file browser and finding the APK in your downloads folder. 
-  
-Use the command ```start``` to initiate a Termux-X11 session
-  
-This will start the termux-x11 server, XFCE4 desktop and open the Termux-X11 app right into the desktop. 
+## Starting the Desktop
 
-To enter the Debian proot install from terminal use the command ```debian```
+During installation, you will receive a prompt to allow installations from Termux, which will open the Termux-X11 Android app. If you choose not to allow installations, you can manually install the APK from your downloads folder.
 
-Also note, you do not need to set display in Debian proot as it is already set. This means you can use the terminal to start any GUI application and it will startup.
+To start the desktop, use the following command:
 
-&nbsp;
+```bash
+start
+```
 
-# Hardware Acceleration & Proot
+This command initiates a Termux-X11 session, starts the XFCE4 desktop, and opens the Termux-X11 app directly into the desktop.
 
-Here are some aliases prepared to make launching things just a little easier.
+To access the Debian proot environment from the terminal, use:
 
-Termux XFCE:
+```bash
+debian
+```
 
-zrun - Launch apps in Debian proot with hardware acceleration
+Note: The display is pre-configured in the Debian proot environment, allowing you to launch GUI applications directly from the terminal.
 
-zrunhud - Same thing but with fps hud
+## Hardware Acceleration & Proot
 
-hud - Display fps hud for games in Termux
+Several aliases are provided to simplify launching applications:
 
-Debian proot:
+### Termux XFCE:
+- `zrun`: Launch applications in Debian proot with hardware acceleration.
+- `zrunhud`: Launch applications with hardware acceleration and FPS HUD.
+- `hud`: Display FPS HUD for games in Termux.
 
-zink - Launch apps with hardware accleration
+### Debian Proot:
+- `zink`: Launch applications with hardware acceleration.
+- `hud`: Display FPS HUD.
 
-hud - Display fps hud
-    
-To enter proot use the command ```debian```, from there you can install aditional software with apt and use cp2menu in termux to copy the menu items over to termux xfce menu. 
+To enter the Debian proot environment, use the `debian` command. From there, you can install additional software using `apt`. Use `cp2menu` in Termux to copy `.desktop` files from Debian proot to the Termux XFCE menu.
 
-Nala has been chosen as a front end in Debian proot. As it is currently setup, you do not need to issue sudo prior to running apt. This allows for you to just run apt update, apt upgrade, etc without also using sudo. This is setup similar in Termux as well and works just the same.
+Nala is configured as the front-end for `apt` in Debian proot, allowing you to run commands like `apt update` and `apt upgrade` without requiring `sudo`.
 
-&nbsp;
+## Additional Scripts
 
-There are two scripts available for this setup as well
-  
-```prun```  Running this followed by a command you want to run from the debian proot install will allow you to run stuff from the termux terminal without running ```debian``` to get into the proot itself.
-  
-```cp2menu``` Running this will pop up a window allowing you to copy .desktop files from debian proot into the termux xfce "start" menu so you won't need to launch them from terminal. A launcher is available in the System menu section.
+- `prun`: Execute commands from the Debian proot environment directly in the Termux terminal without entering the proot shell.
+- `cp2menu`: Copy `.desktop` files from Debian proot to the Termux XFCE menu for easy access.
 
-&nbsp;
+## Troubleshooting
 
-# Process completed (signal 9) - press Enter
+### Process Completed (Signal 9) - Press Enter
 
-install LADB from playstore or from here https://github.com/hyperio546/ladb-builds/releases
+1. Install LADB from the Play Store or download it from [here](https://github.com/hyperio546/ladb-builds/releases).
+2. Connect to Wi-Fi.
+3. Enable wireless debugging in Developer Settings and note the port number and pairing code.
+4. Enter these values in LADB.
+5. Once connected, run the following command:
 
-connect to wifi   
-  
-In split screen have one side LADB and the other side showing developer settings.
-  
-In developer settings, enable wireless debugging then click into there to get the port number then click pair device to get the pairing code.
-  
-Enter both those values into LADB
-  
-Once it connects run this command
-  
-```adb shell "/system/bin/device_config put activity_manager max_phantom_processes 2147483647"```
+```bash
+adb shell "/system/bin/device_config put activity_manager max_phantom_processes 2147483647"
+```
 
-You can also run adb shell from termux directly by following the guide found in this video
-
-[https://www.youtube.com/watch?v=BHc7uvX34bM](https://www.youtube.com/watch?v=BHc7uvX34bM)
+You can also run `adb shell` directly from Termux by following the guide in this video:  
+[YouTube Guide](https://www.youtube.com/watch?v=BHc7uvX34bM)
+```
