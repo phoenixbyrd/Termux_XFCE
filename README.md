@@ -22,7 +22,7 @@ For questions, assistance, or suggestions, join our Discord community:
 
 ## Screenshots
 
-![Desktop Screenshot](screenshot1.png)
+![Desktop Screenshot](screenshot2.png)
 
 ## Use Case
 
