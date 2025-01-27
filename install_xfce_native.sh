@@ -600,4 +600,4 @@ echo -e "${YELLOW}Installation complete! Use 'start' to launch your desktop envi
 
 source $PREFIX/etc/bash.bashrc
 termux-reload-settings
-rm install_xfce_native.sh
+rm install.sh
