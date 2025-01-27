@@ -181,12 +181,12 @@ if [ "${#missing_deps[@]}" -gt 0 ]; then
 fi
 
 # Create default directories
-mkdir -p "$HOME/Desktop" "$HOME/Downloads" "$HOME/.fonts" "$HOME/.config" "$HOME/.config/autostart/" "$HOME/.config/gtk-3.0/" "$HOME/.config/xfce4/terminal/"
+mkdir -p "$HOME/Desktop" "$HOME/Downloads" "$HOME/.fonts" "$HOME/.config" "$HOME/.config/autostart/" "$HOME/.config/gtk-3.0/"
 #ln -s /storage/emulated/0/Music $HOME/Music
 #ln -s /storage/emulated/0/Pictures $HOME/Pictures
 
 # Install XFCE desktop environment
-xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'starship' 'termux-x11-nightly' 'virglrenderer-android' 'mesa-vulkan-icd-freedreno-dri3' 'fastfetch' 'papirus-icon-theme' 'eza' 'bat')
+xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'starship' 'termux-x11-nightly' 'virglrenderer-android' 'fastfetch' 'papirus-icon-theme' 'eza' 'bat')
 if ! pkg install -y "${xfce_packages[@]}" -o Dpkg::Options::="--force-confold"; then
     echo "Failed to install XFCE packages. Exiting."
     exit 1
@@ -209,69 +209,11 @@ sed -i "s/phoenixbyrd/$username/" $HOME/.config/starship.toml
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/dark_waves.png
 mv dark_waves.png $PREFIX/share/backgrounds/xfce/
 
-# Install WhiteSur-Dark Theme
-wget https://github.com/vinceliuice/WhiteSur-gtk-theme/archive/refs/tags/2023-04-26.zip
-unzip 2023-04-26.zip
-tar -xf WhiteSur-gtk-theme-2023-04-26/release/WhiteSur-Dark-44-0.tar.xz
-mv WhiteSur-Dark/ $PREFIX/share/themes/
-rm -rf WhiteSur*
-rm 2023-04-26.zip
-
-# Install Fluent Cursor Icon Theme
-wget https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-01.zip
-unzip 2023-02-01.zip
-mv Fluent-icon-theme-2023-02-01/cursors/dist $PREFIX/share/icons/ 
-mv Fluent-icon-theme-2023-02-01/cursors/dist-dark $PREFIX/share/icons/
-rm -rf $HOME//Fluent*
-rm 2023-02-01.zip
-
-
 # Create bookmarks with custom name
 cat <<EOF > $HOME/.config/gtk-3.0/bookmarks
 file:////data/data/com.termux/files/home/Downloads
 file:///data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/debian/home/$username Debian Home
 file:////data/data/com.termux/files/home/storage/shared/ Android Storage
-EOF
-
-# Setup xfce4-terminal theme
-cat <<'EOF' > $HOME/.config/xfce4/terminal/terminalrc
-[Configuration]
-MiscAlwaysShowTabs=FALSE
-MiscBell=FALSE
-MiscBellUrgent=FALSE
-MiscBordersDefault=TRUE
-MiscCursorBlinks=FALSE
-MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK
-MiscDefaultGeometry=80x24
-MiscInheritGeometry=FALSE
-MiscMenubarDefault=TRUE
-MiscMouseAutohide=FALSE
-MiscMouseWheelZoom=TRUE
-MiscToolbarDefault=FALSE
-MiscConfirmClose=TRUE
-MiscCycleTabs=TRUE
-MiscTabCloseButtons=TRUE
-MiscTabCloseMiddleClick=TRUE
-MiscTabPosition=GTK_POS_TOP
-MiscHighlightUrls=TRUE
-MiscMiddleClickOpensUri=FALSE
-MiscCopyOnSelect=FALSE
-MiscShowRelaunchDialog=TRUE
-MiscRewrapOnResize=TRUE
-MiscUseShiftArrowsToScroll=FALSE
-MiscSlimTabs=FALSE
-MiscNewTabAdjacent=FALSE
-MiscSearchDialogOpacity=100
-MiscShowUnsafePasteDialog=TRUE
-MiscRightClickAction=TERMINAL_RIGHT_CLICK_ACTION_CONTEXT_MENU
-BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
-BackgroundDarkness=0.900000
-ColorPalette=#000000;#cc0000;#4e9a06;#c4a000;#3465a4;#75507b;#06989a;#d3d7cf;#555753;#ef2929;#8ae234;#fce94f;#739fcf;#ad7fa8;#34e2e2;#eeeeec
-ColorBackground=#291f291f340d
-TitleMode=TERMINAL_TITLE_HIDE
-ScrollingUnlimited=TRUE
-ScrollingBar=TERMINAL_SCROLLBAR_NONE
-FontName=Cascadia Mono PL 12
 EOF
 
 # Setup Fonts
