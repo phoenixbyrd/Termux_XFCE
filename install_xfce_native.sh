@@ -401,7 +401,7 @@ env DISPLAY="$DISPLAY" GALLIUM_DRIVER="$GALLIUM_DRIVER" dbus-launch --exit-with-
 
 log_info "XFCE4 desktop environment started successfully!"
 echo "You can now use your XFCE4 desktop on Termux."
-echo "To exit, use the 'Kill Termux X11' option or close the Termux-X11 app."
+echo "To exit, use the 'kill_termux_x11' command in terminal or use the kill_termux_x11 icon on the desktop."
 
 exit 0
 EOF
