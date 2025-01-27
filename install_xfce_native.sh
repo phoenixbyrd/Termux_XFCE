@@ -236,6 +236,9 @@ mv NotoColorEmoji-Regular.ttf .fonts
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/font.ttf
 mv font.ttf .termux/font.ttf
 
+# Set icon theme
+gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
+
 # Create start script
 cat <<'EOF' > $PREFIX/bin/start
 #!/bin/bash
