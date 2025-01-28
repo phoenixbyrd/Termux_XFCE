@@ -285,6 +285,12 @@ kill_processes() {
     done
 }
 
+# Remove .ICEauthority file if it exists
+if [ -f ~/.ICEauthority ]; then
+    log_info "Removing existing .ICEauthority file..."
+    rm ~/.ICEauthority
+fi
+
 # Function to check if the device is a Samsung device
 is_samsung_device() {
     local manufacturer
@@ -294,6 +300,13 @@ is_samsung_device() {
     else
         return 1
     fi
+}
+
+# Function to check Android version
+get_android_version() {
+    local version
+    version=$(getprop ro.build.version.release)
+    echo "$version"
 }
 
 # Display usage information
@@ -344,7 +357,16 @@ pulseaudio --kill >/dev/null 2>&1 || true
 if is_samsung_device; then
     log_info "Detected Samsung device. Applying Samsung-specific PulseAudio settings..."
     [ -d ~/.config/pulse ] && rm -rf ~/.config/pulse
-    LD_PRELOAD=/system/lib64/libskcodec.so pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 >/dev/null 2>&1
+
+    # Get Android version
+    android_version=$(get_android_version)
+    if [[ "$android_version" -le 13 ]]; then
+        log_info "Android version is 13 or below. Loading PulseAudio normally..."
+        pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 >/dev/null 2>&1
+    else
+        log_info "Android version is above 13. Using LD_PRELOAD..."
+        LD_PRELOAD=/system/lib64/libskcodec.so pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 >/dev/null 2>&1
+    fi
 else
     pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 >/dev/null 2>&1
 fi
@@ -404,7 +426,7 @@ env DISPLAY="$DISPLAY" GALLIUM_DRIVER="$GALLIUM_DRIVER" dbus-launch --exit-with-
 
 log_info "XFCE4 desktop environment started successfully!"
 echo "You can now use your XFCE4 desktop on Termux."
-echo "To exit, use the 'kill_termux_x11' command in terminal or use the kill_termux_x11 icon on the desktop."
+echo "To exit, use the 'Kill Termux X11' option or close the Termux-X11 app."
 
 exit 0
 EOF
