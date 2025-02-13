@@ -146,7 +146,7 @@ else
     # Setup Termux Storage Access only if not already granted
     if ! termux-setup-storage; then
         echo "Failed to set up Termux storage. Exiting."
-        echo -e "${YELLOW}Please clear termux data in app info setting and run setup again${NC}"
+        echo "${YELLOW}Please clear termux data in app info setting and run setup again${NC}"
         exit 1
     fi
 fi
@@ -181,12 +181,12 @@ if [ "${#missing_deps[@]}" -gt 0 ]; then
 fi
 
 # Create default directories
-mkdir -p "$HOME/Desktop" "$HOME/Downloads" "$HOME/.fonts" "$HOME/.config" "$HOME/.config/autostart/" "$HOME/.config/gtk-3.0/"
+mkdir -p "$HOME/Desktop" "$HOME/Downloads" "$HOME/.fonts" "$HOME/.config" "$HOME/.config/xfce4/xfconf/xfce-perchannel-xml/" "$HOME/.config/autostart/" "$HOME/.config/gtk-3.0/" "$HOME/.config/xfce4/terminal/" "$HOME/.config/xfce4/panel/" "$HOME/.config/xfce4/panel/launcher-7" "$HOME/.config/xfce4/panel/launcher-10" "$HOME/.config/xfce4/panel/launcher-11"
 #ln -s /storage/emulated/0/Music $HOME/Music
 #ln -s /storage/emulated/0/Pictures $HOME/Pictures
 
 # Install XFCE desktop environment
-xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'starship' 'termux-x11-nightly' 'virglrenderer-android' 'fastfetch' 'papirus-icon-theme' 'eza' 'bat')
+xfce_packages=('xfce4' 'xfce4-goodies' 'xfce4-pulseaudio-plugin' 'firefox' 'starship' 'termux-x11-nightly' 'virglrenderer-android' 'mesa-vulkan-icd-freedreno-dri3' 'fastfetch' 'papirus-icon-theme' 'eza' 'bat')
 if ! pkg install -y "${xfce_packages[@]}" -o Dpkg::Options::="--force-confold"; then
     echo "Failed to install XFCE packages. Exiting."
     exit 1
@@ -209,11 +209,420 @@ sed -i "s/phoenixbyrd/$username/" $HOME/.config/starship.toml
 wget https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/main/dark_waves.png
 mv dark_waves.png $PREFIX/share/backgrounds/xfce/
 
+# Install WhiteSur-Dark Theme
+wget https://github.com/vinceliuice/WhiteSur-gtk-theme/archive/refs/tags/2023-04-26.zip
+unzip 2023-04-26.zip
+tar -xf WhiteSur-gtk-theme-2023-04-26/release/WhiteSur-Dark-44-0.tar.xz
+mv WhiteSur-Dark/ $PREFIX/share/themes/
+rm -rf WhiteSur*
+rm 2023-04-26.zip
+
+# Install Fluent Cursor Icon Theme
+wget https://github.com/vinceliuice/Fluent-icon-theme/archive/refs/tags/2023-02-01.zip
+unzip 2023-02-01.zip
+mv Fluent-icon-theme-2023-02-01/cursors/dist $PREFIX/share/icons/ 
+mv Fluent-icon-theme-2023-02-01/cursors/dist-dark $PREFIX/share/icons/
+rm -rf $HOME//Fluent*
+rm 2023-02-01.zip
+
+# Create xsettings.xml for Termux
+cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xsettings.xml
+<?xml version="1.1" encoding="UTF-8"?>
+
+<channel name="xsettings" version="1.0">
+  <property name="Net" type="empty">
+    <property name="ThemeName" type="string" value="WhiteSur-Dark"/>
+    <property name="IconThemeName" type="string" value="Papirus-Dark"/>
+    <property name="DoubleClickTime" type="empty"/>
+    <property name="DoubleClickDistance" type="empty"/>
+    <property name="DndDragThreshold" type="empty"/>
+    <property name="CursorBlink" type="empty"/>
+    <property name="CursorBlinkTime" type="empty"/>
+    <property name="SoundThemeName" type="empty"/>
+    <property name="EnableEventSounds" type="empty"/>
+    <property name="EnableInputFeedbackSounds" type="empty"/>
+  </property>
+  <property name="Xft" type="empty">
+    <property name="DPI" type="empty"/>
+    <property name="Antialias" type="empty"/>
+    <property name="Hinting" type="empty"/>
+    <property name="HintStyle" type="empty"/>
+    <property name="RGBA" type="empty"/>
+  </property>
+  <property name="Gtk" type="empty">
+    <property name="CanChangeAccels" type="empty"/>
+    <property name="ColorPalette" type="empty"/>
+    <property name="FontName" type="empty"/>
+    <property name="MonospaceFontName" type="empty"/>
+    <property name="IconSizes" type="empty"/>
+    <property name="KeyThemeName" type="empty"/>
+    <property name="MenuImages" type="empty"/>
+    <property name="ButtonImages" type="empty"/>
+    <property name="MenuBarAccel" type="empty"/>
+    <property name="CursorThemeName" type="string" value="dist-dark"/>
+    <property name="CursorThemeSize" type="int" value="28"/>
+    <property name="DecorationLayout" type="string" value="icon,menu:minimize,maximize,close"/>
+    <property name="DialogsUseHeader" type="empty"/>
+    <property name="TitlebarMiddleClick" type="empty"/>
+    <property name="ThemeName" type="string" value="WhiteSur-Dark"/>
+    <property name="IconThemeName" type="string" value="Papirus-Dark"/>
+  </property>
+  <property name="Gdk" type="empty">
+    <property name="WindowScalingFactor" type="empty"/>
+  </property>
+  <property name="Xfce" type="empty">
+    <property name="SyncThemes" type="bool" value="true"/>
+  </property>
+</channel>
+EOF
+
+cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml
+<?xml version="1.1" encoding="UTF-8"?>
+
+<channel name="xfwm4" version="1.0">
+  <property name="general" type="empty">
+    <property name="theme" type="string" value="WhiteSur-Dark"/>
+    <property name="title_alignment" type="string" value="center"/>
+    <property name="button_layout" type="string" value="O|HMC"/>
+    <property name="workspace_count" type="int" value="1"/>
+    <property name="activate_action" type="string" value="bring"/>
+    <property name="borderless_maximize" type="bool" value="true"/>
+    <property name="box_move" type="bool" value="false"/>
+    <property name="box_resize" type="bool" value="false"/>
+    <property name="button_offset" type="int" value="0"/>
+    <property name="button_spacing" type="int" value="0"/>
+    <property name="click_to_focus" type="bool" value="true"/>
+    <property name="cycle_apps_only" type="bool" value="false"/>
+    <property name="cycle_draw_frame" type="bool" value="true"/>
+    <property name="cycle_raise" type="bool" value="false"/>
+    <property name="cycle_hidden" type="bool" value="true"/>
+    <property name="cycle_minimum" type="bool" value="true"/>
+    <property name="cycle_minimized" type="bool" value="false"/>
+    <property name="cycle_preview" type="bool" value="true"/>
+    <property name="cycle_tabwin_mode" type="int" value="0"/>
+    <property name="cycle_workspaces" type="bool" value="false"/>
+    <property name="double_click_action" type="string" value="maximize"/>
+    <property name="double_click_distance" type="int" value="5"/>
+    <property name="double_click_time" type="int" value="250"/>
+    <property name="easy_click" type="string" value="Alt"/>
+    <property name="focus_delay" type="int" value="250"/>
+    <property name="focus_hint" type="bool" value="true"/>
+    <property name="focus_new" type="bool" value="true"/>
+    <property name="frame_opacity" type="int" value="100"/>
+    <property name="frame_border_top" type="int" value="0"/>
+    <property name="full_width_title" type="bool" value="true"/>
+    <property name="horiz_scroll_opacity" type="bool" value="false"/>
+    <property name="inactive_opacity" type="int" value="100"/>
+    <property name="maximized_offset" type="int" value="0"/>
+    <property name="mousewheel_rollup" type="bool" value="true"/>
+    <property name="move_opacity" type="int" value="100"/>
+    <property name="placement_mode" type="string" value="center"/>
+    <property name="placement_ratio" type="int" value="20"/>
+    <property name="popup_opacity" type="int" value="100"/>
+    <property name="prevent_focus_stealing" type="bool" value="false"/>
+    <property name="raise_delay" type="int" value="250"/>
+    <property name="raise_on_click" type="bool" value="true"/>
+    <property name="raise_on_focus" type="bool" value="false"/>
+    <property name="raise_with_any_button" type="bool" value="true"/>
+    <property name="repeat_urgent_blink" type="bool" value="false"/>
+    <property name="resize_opacity" type="int" value="100"/>
+    <property name="scroll_workspaces" type="bool" value="true"/>
+    <property name="shadow_delta_height" type="int" value="0"/>
+    <property name="shadow_delta_width" type="int" value="0"/>
+    <property name="shadow_delta_x" type="int" value="0"/>
+    <property name="shadow_delta_y" type="int" value="-3"/>
+    <property name="shadow_opacity" type="int" value="50"/>
+    <property name="show_app_icon" type="bool" value="false"/>
+    <property name="show_dock_shadow" type="bool" value="false"/>
+    <property name="show_frame_shadow" type="bool" value="true"/>
+    <property name="show_popup_shadow" type="bool" value="false"/>
+    <property name="snap_resist" type="bool" value="false"/>
+    <property name="snap_to_border" type="bool" value="true"/>
+    <property name="snap_to_windows" type="bool" value="false"/>
+    <property name="snap_width" type="int" value="10"/>
+    <property name="vblank_mode" type="string" value="auto"/>
+    <property name="tile_on_move" type="bool" value="true"/>
+    <property name="title_font" type="string" value="Sans Bold 9"/>
+    <property name="title_horizontal_offset" type="int" value="0"/>
+    <property name="titleless_maximize" type="bool" value="false"/>
+    <property name="title_shadow_active" type="string" value="false"/>
+    <property name="title_shadow_inactive" type="string" value="false"/>
+    <property name="title_vertical_offset_active" type="int" value="0"/>
+    <property name="title_vertical_offset_inactive" type="int" value="0"/>
+    <property name="toggle_workspaces" type="bool" value="false"/>
+    <property name="unredirect_overlays" type="bool" value="true"/>
+    <property name="urgent_blink" type="bool" value="false"/>
+    <property name="use_compositing" type="bool" value="true"/>
+    <property name="wrap_cycle" type="bool" value="true"/>
+    <property name="wrap_layout" type="bool" value="true"/>
+    <property name="wrap_resistance" type="int" value="10"/>
+    <property name="wrap_windows" type="bool" value="false"/>
+    <property name="wrap_workspaces" type="bool" value="false"/>
+    <property name="zoom_desktop" type="bool" value="true"/>
+    <property name="zoom_pointer" type="bool" value="true"/>
+    <property name="workspace_names" type="array">
+      <value type="string" value="Workspace 1"/>
+    </property>
+  </property>
+</channel>
+EOF
+
+# Create xfce4-desktop.xml with wallpaper setting
+cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-desktop.xml
+<?xml version="1.1" encoding="UTF-8"?>
+
+<channel name="xfce4-desktop" version="1.0">
+  <property name="backdrop" type="empty">
+    <property name="screen0" type="empty">
+      <property name="monitorDexDisplay" type="empty">
+        <property name="workspace0" type="empty">
+          <property name="last-image" type="string" value="/data/data/com.termux/files/usr/share/backgrounds/xfce/dark_waves.png"/>
+        </property>
+      </property>
+    </property>
+  </property>
+  <property name="last-settings-migration-version" type="uint" value="1"/>
+  <property name="desktop-icons" type="empty">
+    <property name="file-icons" type="empty">
+      <property name="show-filesystem" type="bool" value="false"/>
+      <property name="show-home" type="bool" value="false"/>
+      <property name="show-trash" type="bool" value="false"/>
+      <property name="show-removable" type="bool" value="false"/>
+    </property>
+  </property>
+  <property name="last" type="empty">
+    <property name="window-width" type="int" value="676"/>
+    <property name="window-height" type="int" value="502"/>
+  </property>
+</channel>
+EOF
+
+# Create xfce4-panel.xml
+cat <<'EOF' > $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml
+<?xml version="1.1" encoding="UTF-8"?>
+
+<channel name="xfce4-panel" version="1.0">
+  <property name="configver" type="int" value="2"/>
+  <property name="panels" type="array">
+    <value type="int" value="1"/>
+    <value type="int" value="2"/>
+    <property name="dark-mode" type="bool" value="true"/>
+    <property name="panel-1" type="empty">
+      <property name="position" type="string" value="p=6;x=0;y=0"/>
+      <property name="length" type="uint" value="100"/>
+      <property name="position-locked" type="bool" value="true"/>
+      <property name="icon-size" type="uint" value="0"/>
+      <property name="size" type="uint" value="34"/>
+      <property name="plugin-ids" type="array">
+        <value type="int" value="1"/>
+        <value type="int" value="3"/>
+        <value type="int" value="10"/>
+        <value type="int" value="11"/>
+        <value type="int" value="9"/>
+        <value type="int" value="8"/>
+        <value type="int" value="5"/>
+        <value type="int" value="6"/>
+        <value type="int" value="2"/>
+        <value type="int" value="7"/>
+      </property>
+      <property name="background-style" type="uint" value="1"/>
+      <property name="background-rgba" type="array">
+        <value type="double" value="0"/>
+        <value type="double" value="0"/>
+        <value type="double" value="0"/>
+        <value type="double" value="0"/>
+      </property>
+    </property>
+    <property name="panel-2" type="empty">
+      <property name="autohide-behavior" type="uint" value="1"/>
+      <property name="position" type="string" value="p=10;x=0;y=0"/>
+      <property name="length" type="uint" value="1"/>
+      <property name="position-locked" type="bool" value="true"/>
+      <property name="size" type="uint" value="64"/>
+      <property name="plugin-ids" type="array">
+        <value type="int" value="12"/>
+        <value type="int" value="4"/>
+        <value type="int" value="17"/>
+      </property>
+      <property name="background-style" type="uint" value="1"/>
+      <property name="background-rgba" type="array">
+        <value type="double" value="0.14117647058823529"/>
+        <value type="double" value="0.14117647058823529"/>
+        <value type="double" value="0.14117647058823529"/>
+        <value type="double" value="1"/>
+      </property>
+    </property>
+  </property>
+  <property name="plugins" type="empty">
+    <property name="plugin-1" type="string" value="applicationsmenu">
+      <property name="button-title" type="string" value="Menu "/>
+      <property name="button-icon" type="string" value="start-here"/>
+      <property name="show-button-title" type="bool" value="true"/>
+    </property>
+    <property name="plugin-3" type="string" value="separator">
+      <property name="expand" type="bool" value="false"/>
+      <property name="style" type="uint" value="2"/>
+    </property>
+    <property name="plugin-5" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="true"/>
+    </property>
+    <property name="plugin-6" type="string" value="systray">
+      <property name="square-icons" type="bool" value="true"/>
+      <property name="known-legacy-items" type="array">
+        <value type="string" value="vesktop"/>
+        <value type="string" value="onboard"/>
+      </property>
+    </property>
+    <property name="plugin-8" type="string" value="clock">
+      <property name="digital-layout" type="uint" value="3"/>
+      <property name="digital-time-format" type="string" value="%b %d  %I:%M %p"/>
+      <property name="digital-time-font" type="string" value="Sans Bold 12"/>
+    </property>
+    <property name="plugin-9" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+      <property name="expand" type="bool" value="true"/>
+    </property>
+    <property name="plugin-12" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-17" type="string" value="separator">
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-4" type="string" value="tasklist">
+      <property name="show-handle" type="bool" value="false"/>
+      <property name="show-labels" type="bool" value="false"/>
+      <property name="sort-order" type="uint" value="0"/>
+    </property>
+    <property name="plugin-2" type="string" value="pulseaudio">
+      <property name="enable-keyboard-shortcuts" type="bool" value="true"/>
+      <property name="known-players" type="string" value="firefox-default"/>
+    </property>
+    <property name="plugin-7" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="17367087851.desktop"/>
+      </property>
+    </property>
+    <property name="plugin-10" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="17367088062.desktop"/>
+      </property>
+    </property>
+    <property name="plugin-11" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="17367088133.desktop"/>
+      </property>
+    </property>
+  </property>
+</channel>
+EOF
+
+# Create gtk.css with panel styling
+cat <<'EOF' > $HOME/.config/gtk-3.0/gtk.css
+.xfce4-panel {
+   border-top-left-radius: 10px;
+   border-top-right-radius: 10px;
+}
+EOF
+
 # Create bookmarks with custom name
 cat <<EOF > $HOME/.config/gtk-3.0/bookmarks
 file:////data/data/com.termux/files/home/Downloads
 file:///data/data/com.termux/files/usr/var/lib/proot-distro/installed-rootfs/debian/home/$username Debian Home
 file:////data/data/com.termux/files/home/storage/shared/ Android Storage
+EOF
+
+# Setup xfce4-terminal theme
+cat <<'EOF' > $HOME/.config/xfce4/terminal/terminalrc
+[Configuration]
+MiscAlwaysShowTabs=FALSE
+MiscBell=FALSE
+MiscBellUrgent=FALSE
+MiscBordersDefault=TRUE
+MiscCursorBlinks=FALSE
+MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK
+MiscDefaultGeometry=80x24
+MiscInheritGeometry=FALSE
+MiscMenubarDefault=TRUE
+MiscMouseAutohide=FALSE
+MiscMouseWheelZoom=TRUE
+MiscToolbarDefault=FALSE
+MiscConfirmClose=TRUE
+MiscCycleTabs=TRUE
+MiscTabCloseButtons=TRUE
+MiscTabCloseMiddleClick=TRUE
+MiscTabPosition=GTK_POS_TOP
+MiscHighlightUrls=TRUE
+MiscMiddleClickOpensUri=FALSE
+MiscCopyOnSelect=FALSE
+MiscShowRelaunchDialog=TRUE
+MiscRewrapOnResize=TRUE
+MiscUseShiftArrowsToScroll=FALSE
+MiscSlimTabs=FALSE
+MiscNewTabAdjacent=FALSE
+MiscSearchDialogOpacity=100
+MiscShowUnsafePasteDialog=TRUE
+MiscRightClickAction=TERMINAL_RIGHT_CLICK_ACTION_CONTEXT_MENU
+BackgroundMode=TERMINAL_BACKGROUND_TRANSPARENT
+BackgroundDarkness=0.900000
+ColorPalette=#000000;#cc0000;#4e9a06;#c4a000;#3465a4;#75507b;#06989a;#d3d7cf;#555753;#ef2929;#8ae234;#fce94f;#739fcf;#ad7fa8;#34e2e2;#eeeeec
+ColorBackground=#291f291f340d
+TitleMode=TERMINAL_TITLE_HIDE
+ScrollingUnlimited=TRUE
+ScrollingBar=TERMINAL_SCROLLBAR_NONE
+FontName=Cascadia Mono PL 12
+EOF
+
+# launcher-7
+cat <<EOF > $HOME/.config/xfce4/panel/launcher-7/17367087851.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Kill Termux X11
+Comment=
+Exec=kill_termux_x11
+Icon=system-shutdown
+Categories=System;
+Path=
+StartupNotify=false
+X-XFCE-Source=file:///data/data/com.termux/files/home/Desktop/kill_termux_x11.desktop
+EOF
+
+# launcher-10
+cat <<EOF > $HOME/.config/xfce4/panel/launcher-10/17367088062.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Exec=exo-open --launch FileManager %u
+Icon=user-blue-home
+StartupNotify=true
+Terminal=false
+Categories=Utility;X-XFCE;X-Xfce-Toplevel;
+Keywords=file;manager;explorer;browse;filesystem;directory;folder;xfce;
+OnlyShowIn=XFCE;
+X-XFCE-MimeType=inode/directory;x-scheme-handler/trash;
+X-AppStream-Ignore=True
+Name=File Manager
+Comment=Browse the file system
+X-XFCE-Source=file:///data/data/com.termux/files/home/Desktop/xfce4-file-manager.desktop
+EOF
+
+#launcher-11
+cat <<EOF > $HOME/.config/xfce4/panel/launcher-11/17367088133.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Exec=exo-open --launch TerminalEmulator
+Icon=org.xfce.terminalemulator
+StartupNotify=true
+Terminal=false
+Categories=Utility;X-XFCE;X-Xfce-Toplevel;
+Keywords=terminal;command line;shell;console;xfce;
+OnlyShowIn=XFCE;
+X-AppStream-Ignore=True
+Name=Terminal Emulator
+Comment=Use the command line
+X-XFCE-Source=file:///data/data/com.termux/files/home/Desktop/xfce4-terminal-emulator.desktop
 EOF
 
 # Setup Fonts
@@ -236,197 +645,65 @@ mv NotoColorEmoji-Regular.ttf .fonts
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/font.ttf
 mv font.ttf .termux/font.ttf
 
-# Set icon theme
-gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark'
-
 # Create start script
 cat <<'EOF' > $PREFIX/bin/start
 #!/bin/bash
 
-# Unofficial Bash Strict Mode
-set -euo pipefail
-IFS=$'\n\t'
+# Kill open X11 processes
+kill -9 $(pgrep -f "termux.x11") 2>/dev/null
 
-# Configuration
-PULSE_SERVER="127.0.0.1"
-DISPLAY=":0"
-XDG_RUNTIME_DIR="${TMPDIR}"
-SLEEP_SHORT=1
-ENABLE_VIRGL=true # Default to enabling VirGL
+# Get the phone manufacturer
+MANUFACTURER=$(getprop ro.product.manufacturer | tr '[:upper:]' '[:lower:]')
 
-# Logging levels
-log() {
-    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1"
-}
-
-log_info() {
-    log "[INFO] $1"
-}
-
-log_warn() {
-    log "[WARN] $1"
-}
-
-log_error() {
-    log "[ERROR] $1"
-    exit 1
-}
-
-# Function to check if a command exists
-command_exists() {
-    command -v "$1" >/dev/null 2>&1
-}
-
-# Function to kill processes safely
-kill_processes() {
-    local processes=("$@")
-    for process in "${processes[@]}"; do
-        pkill -f "$process" || true
-    done
-}
-
-# Remove .ICEauthority file if it exists
-if [ -f ~/.ICEauthority ]; then
-    log_info "Removing existing .ICEauthority file..."
-    rm ~/.ICEauthority
-fi
-
-# Function to check if the device is a Samsung device
-is_samsung_device() {
-    local manufacturer
-    manufacturer=$(getprop ro.product.manufacturer | tr '[:upper:]' '[:lower:]')
-    if [[ "$manufacturer" == "samsung" ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
-
-# Function to check Android version
-get_android_version() {
-    local version
-    version=$(getprop ro.build.version.release)
-    echo "$version"
-}
-
-# Display usage information
-usage() {
-    echo "Usage: $0 [--no-virgl] [--help]"
-    echo "Start XFCE4 desktop environment on Termux with optional hardware acceleration."
-    echo "  --no-virgl    Disable VirGL (hardware acceleration)."
-    echo "  --help        Display this help message."
-    exit 0
-}
-
-# Parse arguments
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        --no-virgl)
-            ENABLE_VIRGL=false
-            shift
-            ;;
-        --help)
-            usage
-            ;;
-        *)
-            log_error "Unknown argument: $1"
-            ;;
-    esac
-done
-
-# Validate environment and dependencies
-if ! command_exists termux-x11; then
-    log_error "This script is intended to run in Termux. Exiting..."
-fi
-
-for cmd in pulseaudio termux-x11 dbus-daemon xfce4-session; do
-    if ! command_exists "$cmd"; then
-        log_error "Required command '$cmd' not found. Exiting..."
-    fi
-done
-
-# Kill existing processes
-log_info "Killing existing processes..."
-kill_processes "termux.x11" "xfce4-session" "virgl_test_server_android"
-
-# Start PulseAudio
-log_info "Starting PulseAudio..."
-pulseaudio --kill >/dev/null 2>&1 || true
-
-# Check if the device is a Samsung device
-if is_samsung_device; then
-    log_info "Detected Samsung device. Applying Samsung-specific PulseAudio settings..."
+# Check the manufacturer
+if [[ "$MANUFACTURER" == "samsung" ]]; then
     [ -d ~/.config/pulse ] && rm -rf ~/.config/pulse
+    LD_PRELOAD=/system/lib64/libskcodec.so pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1
+else
+   pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1
+fi
 
-    # Get Android version
-    android_version=$(get_android_version)
-    if [[ "$android_version" -le 13 ]]; then
-        log_info "Android version is 13 or below. Loading PulseAudio normally..."
-        pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 >/dev/null 2>&1
+# Set audio server
+export PULSE_SERVER=127.0.0.1
+
+# Prepare termux-x11 session
+export XDG_RUNTIME_DIR=${TMPDIR}
+termux-x11 :0 >/dev/null &
+
+# Wait a bit until termux-x11 gets started.
+sleep 3
+
+# Launch Termux X11 main activity
+am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity > /dev/null 2>&1
+sleep 1
+
+# Function to check the GPU type
+gpu_check() {
+    # Attempt to detect GPU using getprop
+    gpu_egl=$(getprop ro.hardware.egl)
+    gpu_vulkan=$(getprop ro.hardware.vulkan)
+
+    # Combine unique GPU information
+    detected_gpu="$(echo -e "$gpu_egl\n$gpu_vulkan" | sort -u | tr '\n' ' ' | sed 's/ $//')"
+
+    if echo "$detected_gpu" | grep -iq "adreno"; then
+        echo "GPU detected: $detected_gpu"
+        MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 LIBGL_DRI3_DISABLE=1 virgl_test_server_android & > /dev/null 2>&1
+    elif echo "$detected_gpu" | grep -iq "mali"; then
+        echo "GPU detected: $detected_gpu"
+        MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 LIBGL_DRI3_DISABLE=1 virgl_test_server_android --angle-gl & > /dev/null 2>&1
     else
-        log_info "Android version is above 13. Using LD_PRELOAD..."
-        LD_PRELOAD=/system/lib64/libskcodec.so pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 >/dev/null 2>&1
+        echo "Unknown GPU type detected: $detected_gpu"
+        exit 1
     fi
-else
-    pulseaudio --start --load="module-native-protocol-tcp auth-ip-acl=127.0.0.1 auth-anonymous=1" --exit-idle-time=-1 >/dev/null 2>&1
-fi
+}
 
-export PULSE_SERVER
+# Run the GPU check function
+gpu_check
 
-# Start Termux-X11 server
-log_info "Starting Termux-X11 server..."
-termux-x11 "$DISPLAY" -ac >/dev/null 2>&1 &
-sleep "$SLEEP_SHORT"
-
-# Launch Termux-X11 app
-log_info "Launching Termux-X11 app..."
-am start --user 0 -n com.termux.x11/com.termux.x11.MainActivity >/dev/null 2>&1
-sleep "$SLEEP_SHORT"
-
-# Start VirGL server (if enabled)
-if $ENABLE_VIRGL; then
-    log_info "Starting VirGL server for hardware acceleration..."
-    MESA_NO_ERROR=1 MESA_GL_VERSION_OVERRIDE=4.3COMPAT MESA_GLES_VERSION_OVERRIDE=3.2 virgl_test_server_android --angle-gl >/dev/null 2>&1 &
-    sleep "$SLEEP_SHORT"
-
-    # Detect and configure GPU
-    detect_gpu() {
-        local gpu_info
-        gpu_info=$(dmesg | grep -i -e "adreno" -e "mali" -e "powervr" -e "lima" || true)
-
-        if echo "$gpu_info" | grep -qi "adreno"; then
-            log_info "Detected Adreno GPU. Enabling Adreno-specific optimizations..."
-            export GALLIUM_DRIVER=virpipe
-            export MESA_LOADER_DRIVER_OVERRIDE=zink
-        elif echo "$gpu_info" | grep -qi "mali"; then
-            log_info "Detected Mali GPU. Enabling Mali-specific optimizations..."
-            export GALLIUM_DRIVER=lima
-            export MESA_LOADER_DRIVER_OVERRIDE=lima
-        elif echo "$gpu_info" | grep -qi "powervr"; then
-            log_info "Detected PowerVR GPU. Enabling PowerVR-specific optimizations..."
-            export GALLIUM_DRIVER=virpipe
-            export MESA_LOADER_DRIVER_OVERRIDE=zink
-        else
-            log_warn "No specific GPU detected. Using default VirGL driver."
-            export GALLIUM_DRIVER=virpipe
-        fi
-    }
-
-    detect_gpu
-else
-    log_info "VirGL (hardware acceleration) is disabled."
-    export GALLIUM_DRIVER=swrast # Use software rendering
-fi
-
-# Start XFCE4 session
-log_info "Starting XFCE4 session..."
-dbus-daemon --session --address=unix:path=$PREFIX/var/run/dbus-session >/dev/null 2>&1 &
-sleep "$SLEEP_SHORT"
-env DISPLAY="$DISPLAY" GALLIUM_DRIVER="$GALLIUM_DRIVER" dbus-launch --exit-with-session xfce4-session >/dev/null 2>&1 &
-
-log_info "XFCE4 desktop environment started successfully!"
-echo "You can now use your XFCE4 desktop on Termux."
-echo "To exit, use the 'Kill Termux X11' option or close the Termux-X11 app."
+# Run XFCE4 Desktop
+dbus-daemon --session --address=unix:path=$PREFIX/var/run/dbus-session &
+env DISPLAY=:0 GALLIUM_DRIVER=virpipe dbus-launch --exit-with-session xfce4-session & > /dev/null 2>&1
 
 exit 0
 EOF
@@ -499,7 +776,7 @@ Version=1.0
 Type=Application
 Name=App Installer
 Comment=
-Exec=/data/data/com.termux/files/home/.config/App-Installer/app-installer
+Exec=/data/data/com.termux/files/home/.config/App-Installer/run
 Icon=package-install
 Categories=System;
 Path=
@@ -573,6 +850,12 @@ mkdir -p $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.co
 curl -o $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config/starship.toml https://raw.githubusercontent.com/phoenixbyrd/Termux_XFCE/refs/heads/main/starship_proot.toml
 sed -i "s/phoenixbyrd/$username/" $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.config/starship.toml
 
+# Apply cursor theme
+cp -r $PREFIX/share/icons/dist-dark $PREFIX/var/lib/proot-distro/installed-rootfs/debian/usr/share/icons/dist-dark
+cat <<'EOF' > $PREFIX/var/lib/proot-distro/installed-rootfs/debian/home/$username/.Xresources
+Xcursor.theme: dist-dark
+EOF
+
 wget https://github.com/phoenixbyrd/Termux_XFCE/raw/main/conky.tar.gz
 tar -xvzf conky.tar.gz
 rm conky.tar.gz
@@ -625,4 +908,4 @@ echo -e "${YELLOW}Installation complete! Use 'start' to launch your desktop envi
 
 source $PREFIX/etc/bash.bashrc
 termux-reload-settings
-rm install.sh
+rm install_xfce_native.sh
